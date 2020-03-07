@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c9b9438f55da477b9ebd6d4e6b425900" Name="Diagram1" ZoomLevel="88">
+        <EntityTypeShape EntityType="ViajesModel.CTL_ACCESO_PERSONA" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_COSTO" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_DIRECCIONES" Width="1.5" PointX="5.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_LOCAL" Width="1.5" PointX="4.5" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_PERSONA" Width="1.5" PointX="0.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_PRODUCTO" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_TIPO_LOCAL" Width="1.5" PointX="8.375" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.R_PERSONA_PRODUCTO_FAVORITO" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.sysdiagrams" Width="1.5" PointX="16.625" PointY="6" IsExpanded="true" />
+        <AssociationConnector Association="ViajesModel.FK__CTL_ACCES__id_pe__34C8D9D1" ManuallyRouted="false" />
+        <AssociationConnector Association="ViajesModel.FK__CTL_ACCES__id_pe__36B12243" ManuallyRouted="false" />
+        <AssociationConnector Association="ViajesModel.FK_CTL_LOCAL_CTL_COSTO" ManuallyRouted="false" />
+        <AssociationConnector Association="ViajesModel.FK_CTL_LOCAL_CTL_TIPO_LOCAL" ManuallyRouted="false" />
+        <AssociationConnector Association="ViajesModel.FK_CTL_PRODUCTO_CTL_LOCAL" ManuallyRouted="false" />
+        <AssociationConnector Association="ViajesModel.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PERSONA" ManuallyRouted="false" />
+        <AssociationConnector Association="ViajesModel.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PRODUCTO" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ViajesModel.M_DETALLE_PEDIDO" Width="1.5" PointX="8.5" PointY="7" />
+        <EntityTypeShape EntityType="ViajesModel.M_PEDIDO" Width="1.5" PointX="8.5" PointY="2.25" />
+        <AssociationConnector Association="ViajesModel.FK_M_PEDIDO_CTL_DIRECCIONES" />
+        <AssociationConnector Association="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_LOCAL" />
+        <AssociationConnector Association="ViajesModel.FK_M_PEDIDO_CTL_PERSONA" />
+        <AssociationConnector Association="ViajesModel.FK_M_PEDIDO_CTL_PERSONA1" />
+        <AssociationConnector Association="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" />
+        <AssociationConnector Association="ViajesModel.FK_M_DETALLE_PEDIDO_M_PEDIDO" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_ESTATUS_PEDIDO" Width="1.5" PointX="6.25" PointY="14.25" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_METODO_PAGO" Width="1.5" PointX="10.375" PointY="11" />
+        <AssociationConnector Association="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" />
+        <AssociationConnector Association="ViajesModel.FK_M_PEDIDO_CTL_METODO_PAGO" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_CONDUCTOR" Width="1.5" PointX="3" PointY="18.625" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_COORDENADAS_CONDUCTOR" Width="1.5" PointX="5.25" PointY="19" />
+        <AssociationConnector Association="ViajesModel.FK_CTL_CONDUCTOR_CTL_PERSONA" />
+        <AssociationConnector Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" />
+        <AssociationConnector Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_QR_TIENDA" Width="1.5" PointX="11.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

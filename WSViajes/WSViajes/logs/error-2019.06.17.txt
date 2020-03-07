@@ -1,0 +1,31 @@
+2019-06-17 22:31:03,973 [7] ERROR WSViajes.Controllers.ArchivosController [(null)] ID=(null) - [WSViajes - Img/Upload ][SID:7434ca07-0b19-4267-8d65-a4352da617ab]Error Interno del Servicio [GUID: 239b08e7-d254-4360-8648-f4ba0280aece].
+System.FormatException: La entrada no es una cadena Base 64 válida porque contiene un carácter que no es Base 64, más de dos caracteres de relleno o un carácter no válido entre los caracteres de relleno. 
+   en System.Convert.FromBase64_Decode(Char* startInputPtr, Int32 inputLength, Byte* startDestPtr, Int32 destLength)
+   en System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   en System.Convert.FromBase64String(String s)
+   en WSViajes.Controllers.ArchivosController.ImgUpload(UploadFileRequest pUploadRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ArchivosController.cs:línea 43
+2019-06-17 22:38:36,629 [7] ERROR WSViajes.Controllers.ArchivosController [(null)] ID=(null) - [WSViajes - Img/Upload ][SID:25d7b1bc-6178-4832-8bf2-f64b988359d0]Error Interno del Servicio [GUID: 5b68fe51-ffd5-4df4-9106-72e326d8dddb].
+System.FormatException: La entrada no es una cadena Base 64 válida porque contiene un carácter que no es Base 64, más de dos caracteres de relleno o un carácter no válido entre los caracteres de relleno. 
+   en System.Convert.FromBase64_Decode(Char* startInputPtr, Int32 inputLength, Byte* startDestPtr, Int32 destLength)
+   en System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   en System.Convert.FromBase64String(String s)
+   en WSViajes.Controllers.ArchivosController.ImgUpload(UploadFileRequest pUploadRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ArchivosController.cs:línea 43
+2019-06-17 22:40:16,658 [6] ERROR WSViajes.Controllers.ArchivosController [(null)] ID=(null) - [WSViajes - Img/Upload ][SID:0c4127fd-f401-42f7-b681-543eba1bccfa]Error Interno del Servicio [GUID: f17b18c4-00d7-4338-87be-85d539731954].
+System.FormatException: La entrada no es una cadena Base 64 válida porque contiene un carácter que no es Base 64, más de dos caracteres de relleno o un carácter no válido entre los caracteres de relleno. 
+   en System.Convert.FromBase64_Decode(Char* startInputPtr, Int32 inputLength, Byte* startDestPtr, Int32 destLength)
+   en System.Convert.FromBase64CharPtr(Char* inputPtr, Int32 inputLength)
+   en System.Convert.FromBase64String(String s)
+   en WSViajes.Controllers.ArchivosController.ImgUpload(UploadFileRequest pUploadRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ArchivosController.cs:línea 43
+2019-06-17 22:44:43,473 [8] ERROR WSViajes.Controllers.ArchivosController [(null)] ID=(null) - [WSViajes - Img/Upload ][SID:9465a196-d36e-48d8-9c6e-4dc1ddd42476]Error Interno del Servicio [GUID: afd6940d-584d-4faa-a3ed-9ff43a9b6988].
+System.Runtime.InteropServices.ExternalException (0x80004005): Error genérico en GDI+.
+   en System.Drawing.Image.Save(String filename, ImageCodecInfo encoder, EncoderParameters encoderParams)
+   en System.Drawing.Image.Save(String filename, ImageFormat format)
+   en WSViajes.Controllers.ArchivosController.ImgUpload(UploadFileRequest pUploadRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ArchivosController.cs:línea 51
+2019-06-17 22:56:28,465 [7] ERROR WSViajes.Controllers.ArchivosController [(null)] ID=(null) - [WSViajes - Img/Upload ][SID:6d1a83b2-5e6d-44be-b9d3-db8b5699c2ed]Error Interno del Servicio [GUID: ff18fe5e-bff4-4905-b920-2a1b920726d8].
+System.IO.DirectoryNotFoundException: No se puede encontrar una parte de la ruta de acceso 'C:\Program Files (x86)\IIS Express\Assets\Img\0a816dc9-4ac6-4f4e-b96c-02060f8b1ee8.png'.
+   en System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   en System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   en System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   en System.IO.File.InternalWriteAllBytes(String path, Byte[] bytes, Boolean checkHost)
+   en System.IO.File.WriteAllBytes(String path, Byte[] bytes)
+   en WSViajes.Controllers.ArchivosController.ImgUpload(UploadFileRequest pUploadRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ArchivosController.cs:línea 48

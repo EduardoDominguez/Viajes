@@ -1,0 +1,20 @@
+2019-09-28 00:10:21,237 [5] ERROR WSViajes.Controllers.PedidoController [(null)] ID=(null) - [WSViajes - CreaPedido ][SID:196f31f9-3e1d-4f13-ab1f-d0780b93a246]Error Interno del Servicio [GUID: da2097f4-283b-464b-9671-79fb24960f97].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en Viajes.BL.Pedido.PedidoNegocio.Agregar(E_PEDIDO Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Pedido\PedidoNegocio.cs:línea 28
+   en WSViajes.Controllers.PedidoController.Crea(InsertaActualizaPedidoRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\PedidoController.cs:línea 49
+2019-09-28 00:11:34,071 [5] ERROR WSViajes.Controllers.PedidoController [(null)] ID=(null) - [WSViajes - CreaPedido ][SID:ad3bae36-af1e-4d7f-8d7e-2ff9cecd0476]Error Interno del Servicio [GUID: 5a184fb6-a3f7-462f-950c-bbedc5d75786].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en Viajes.BL.Pedido.PedidoNegocio.Agregar(E_PEDIDO Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Pedido\PedidoNegocio.cs:línea 28
+   en WSViajes.Controllers.PedidoController.Crea(InsertaActualizaPedidoRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\PedidoController.cs:línea 49
+2019-09-28 00:18:08,692 [6] ERROR WSViajes.Controllers.PedidoController [(null)] ID=(null) - [WSViajes - CreaPedido ][SID:ad304ba6-e4ee-4fe2-a657-970f3f956bbc]Error Interno del Servicio [GUID: 7cc32088-d86d-467b-8822-10e52e4febc3].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en Viajes.BL.Pedido.PedidoNegocio.Agregar(E_PEDIDO Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Pedido\PedidoNegocio.cs:línea 28
+   en WSViajes.Controllers.PedidoController.Crea(InsertaActualizaPedidoRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\PedidoController.cs:línea 49
+2019-09-28 00:19:07,155 [6] ERROR WSViajes.Controllers.PedidoController [(null)] ID=(null) - [WSViajes - CreaPedido ][SID:6bc56a2d-7f22-49ea-a75f-d13d86d7b9fb]Error Interno del Servicio [GUID: 8f4dca0a-b279-477f-bb59-0d6a0c0211b7].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en Viajes.BL.Pedido.PedidoNegocio.Agregar(E_PEDIDO Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Pedido\PedidoNegocio.cs:línea 28
+   en WSViajes.Controllers.PedidoController.Crea(InsertaActualizaPedidoRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\PedidoController.cs:línea 49
+2019-09-28 00:19:19,484 [6] ERROR WSViajes.Controllers.PedidoController [(null)] ID=(null) - [WSViajes - CreaPedido ][SID:a16f3248-766b-476c-bb09-51b0c6afd456]Error Interno del Servicio [GUID: 91c00885-4b4b-4661-895f-971ece053077].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en Viajes.BL.Pedido.PedidoNegocio.Agregar(E_PEDIDO Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Pedido\PedidoNegocio.cs:línea 28
+   en WSViajes.Controllers.PedidoController.Crea(InsertaActualizaPedidoRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\PedidoController.cs:línea 49

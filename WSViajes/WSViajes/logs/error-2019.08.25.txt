@@ -1,0 +1,174 @@
+2019-08-25 14:40:27,500 [8] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - CreaProducto ][SID:f175b869-b529-42d1-a4db-bd39266a9ccd]Error Interno del Servicio [GUID: 7f3baf8c-c245-4176-aae6-903393c067a1].
+System.NotImplementedException: No se puede implementar el método o la operación.
+   en Viajes.BL.Producto.ProductoNegocio.Agregar(E_PRODUCTO Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 15
+   en WSViajes.Controllers.ProductoController.CreaProducto(InsertaActualizaProducto pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 60
+2019-08-25 18:32:36,026 [9] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - CreaProductoFavorito ][SID:67088e56-728c-41d6-940e-200b0a8e557a]Error Interno del Servicio [GUID: d709e636-7f14-40c4-9dbc-0532dcd2901f].
+System.Data.Entity.Infrastructure.DbUpdateException: Error retrieving values from ObjectStateEntry. See inner exception for details. ---> System.Data.Entity.Core.UpdateException: Error retrieving values from ObjectStateEntry. See inner exception for details. ---> System.Data.Entity.Core.MappingException: 
+Modelo.ModeloViajes.msl(3,4) : error 3027: No mapping specified for the following EntitySet/AssociationSet - R_PERSONA_PRODUCTO_FAVORITO, CTL_PERSONA_PRODUCTO.
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGenerateViews(EntityContainerMapping entityContainerMap, Dictionary`2 resultDictionary)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGetGeneratedViews(EntityContainer container)
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.<>c__DisplayClass2.<Evaluate>b__0()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Result.GetValue()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Evaluate(TArg arg)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.GetGeneratedView(EntitySetBase extent, MetadataWorkspace workspace, StorageMappingItemCollection storageMappingItemCollection)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ViewLoader.InitializeEntitySet(EntitySetBase entitySetBase, MetadataWorkspace workspace)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ViewLoader.SyncInitializeEntitySet[TArg,TResult](EntitySetBase entitySetBase, MetadataWorkspace workspace, Func`2 evaluate, TArg arg)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractorMetadata..ctor(EntitySetBase entitySetBase, StructuralType type, UpdateTranslator translator)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.GetExtractorMetadata(EntitySetBase entitySetBase, StructuralType type)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractorMetadata.ExtractResultFromRecord(IEntityStateEntry stateEntry, Boolean isModified, IExtendedDataRecord record, Boolean useCurrentValues, UpdateTranslator translator, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   en System.Data.Entity.Core.Mapping.Update.Internal.RecordConverter.ConvertStateEntryToPropagatorResult(IEntityStateEntry stateEntry, Boolean useCurrentValues, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en System.Data.Entity.Core.Mapping.Update.Internal.RecordConverter.ConvertStateEntryToPropagatorResult(IEntityStateEntry stateEntry, Boolean useCurrentValues, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractedStateEntry..ctor(UpdateTranslator translator, IEntityStateEntry stateEntry)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.LoadStateEntry(IEntityStateEntry stateEntry)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.PullModifiedEntriesFromStateManager()
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.ProduceCommands()
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.Update()
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.<Update>b__2(UpdateTranslator ut)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.Update[T](T noChangesResult, Func`2 updateFunction)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.Update()
+   en System.Data.Entity.Core.Objects.ObjectContext.<SaveChangesToStore>b__35()
+   en System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChangesToStore(SaveOptions options, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction)
+   en System.Data.Entity.Core.Objects.ObjectContext.<>c__DisplayClass2a.<SaveChangesInternal>b__27()
+   en System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute[TResult](Func`1 operation)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChangesInternal(SaveOptions options, Boolean executeInExistingTransaction)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   en System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en Viajes.BL.Producto.ProductoNegocio.AgregarProductoFavorito(Int32 pIdPersona, Int32 pIdProducto) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 101
+   en WSViajes.Controllers.ProductoController.CreaProductoFavorito(InsertaActualizaProductoFavorito pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 329
+2019-08-25 18:33:40,771 [9] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - CreaProductoFavorito ][SID:eae4c020-9a6f-497d-a6f5-a71cbc685aea]Error Interno del Servicio [GUID: 7b18208a-fb69-40fb-b3b0-e3e83222fd9d].
+System.Data.Entity.Infrastructure.DbUpdateException: Error retrieving values from ObjectStateEntry. See inner exception for details. ---> System.Data.Entity.Core.UpdateException: Error retrieving values from ObjectStateEntry. See inner exception for details. ---> System.Data.Entity.Core.MappingException: 
+Modelo.ModeloViajes.msl(3,4) : error 3027: No mapping specified for the following EntitySet/AssociationSet - R_PERSONA_PRODUCTO_FAVORITO, CTL_PERSONA_PRODUCTO.
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGenerateViews(EntityContainerMapping entityContainerMap, Dictionary`2 resultDictionary)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGetGeneratedViews(EntityContainer container)
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.<>c__DisplayClass2.<Evaluate>b__0()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Result.GetValue()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Evaluate(TArg arg)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.GetGeneratedView(EntitySetBase extent, MetadataWorkspace workspace, StorageMappingItemCollection storageMappingItemCollection)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ViewLoader.InitializeEntitySet(EntitySetBase entitySetBase, MetadataWorkspace workspace)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ViewLoader.SyncInitializeEntitySet[TArg,TResult](EntitySetBase entitySetBase, MetadataWorkspace workspace, Func`2 evaluate, TArg arg)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractorMetadata..ctor(EntitySetBase entitySetBase, StructuralType type, UpdateTranslator translator)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.GetExtractorMetadata(EntitySetBase entitySetBase, StructuralType type)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractorMetadata.ExtractResultFromRecord(IEntityStateEntry stateEntry, Boolean isModified, IExtendedDataRecord record, Boolean useCurrentValues, UpdateTranslator translator, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   en System.Data.Entity.Core.Mapping.Update.Internal.RecordConverter.ConvertStateEntryToPropagatorResult(IEntityStateEntry stateEntry, Boolean useCurrentValues, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en System.Data.Entity.Core.Mapping.Update.Internal.RecordConverter.ConvertStateEntryToPropagatorResult(IEntityStateEntry stateEntry, Boolean useCurrentValues, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractedStateEntry..ctor(UpdateTranslator translator, IEntityStateEntry stateEntry)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.LoadStateEntry(IEntityStateEntry stateEntry)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.PullModifiedEntriesFromStateManager()
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.ProduceCommands()
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.Update()
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.<Update>b__2(UpdateTranslator ut)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.Update[T](T noChangesResult, Func`2 updateFunction)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.Update()
+   en System.Data.Entity.Core.Objects.ObjectContext.<SaveChangesToStore>b__35()
+   en System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChangesToStore(SaveOptions options, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction)
+   en System.Data.Entity.Core.Objects.ObjectContext.<>c__DisplayClass2a.<SaveChangesInternal>b__27()
+   en System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute[TResult](Func`1 operation)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChangesInternal(SaveOptions options, Boolean executeInExistingTransaction)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   en System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en Viajes.BL.Producto.ProductoNegocio.AgregarProductoFavorito(Int32 pIdPersona, Int32 pIdProducto) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 101
+   en WSViajes.Controllers.ProductoController.CreaProductoFavorito(InsertaActualizaProductoFavorito pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 329
+2019-08-25 18:39:32,627 [8] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - CreaProductoFavorito ][SID:5bd7f285-a128-4aae-a046-97886d73d314]Error Interno del Servicio [GUID: ff1e8df6-f9d2-4f24-8f0f-a3391be2c4ea].
+System.Data.Entity.Infrastructure.DbUpdateException: Error retrieving values from ObjectStateEntry. See inner exception for details. ---> System.Data.Entity.Core.UpdateException: Error retrieving values from ObjectStateEntry. See inner exception for details. ---> System.Data.Entity.Core.MappingException: 
+Modelo.ModeloViajes.msl(3,4) : error 3027: No mapping specified for the following EntitySet/AssociationSet - R_PERSONA_PRODUCTO_FAVORITO, CTL_PERSONA_PRODUCTO.
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGenerateViews(EntityContainerMapping entityContainerMap, Dictionary`2 resultDictionary)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGetGeneratedViews(EntityContainer container)
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.<>c__DisplayClass2.<Evaluate>b__0()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Result.GetValue()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Evaluate(TArg arg)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.GetGeneratedView(EntitySetBase extent, MetadataWorkspace workspace, StorageMappingItemCollection storageMappingItemCollection)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ViewLoader.InitializeEntitySet(EntitySetBase entitySetBase, MetadataWorkspace workspace)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ViewLoader.SyncInitializeEntitySet[TArg,TResult](EntitySetBase entitySetBase, MetadataWorkspace workspace, Func`2 evaluate, TArg arg)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractorMetadata..ctor(EntitySetBase entitySetBase, StructuralType type, UpdateTranslator translator)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.GetExtractorMetadata(EntitySetBase entitySetBase, StructuralType type)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractorMetadata.ExtractResultFromRecord(IEntityStateEntry stateEntry, Boolean isModified, IExtendedDataRecord record, Boolean useCurrentValues, UpdateTranslator translator, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   en System.Data.Entity.Core.Mapping.Update.Internal.RecordConverter.ConvertStateEntryToPropagatorResult(IEntityStateEntry stateEntry, Boolean useCurrentValues, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en System.Data.Entity.Core.Mapping.Update.Internal.RecordConverter.ConvertStateEntryToPropagatorResult(IEntityStateEntry stateEntry, Boolean useCurrentValues, ModifiedPropertiesBehavior modifiedPropertiesBehavior)
+   en System.Data.Entity.Core.Mapping.Update.Internal.ExtractedStateEntry..ctor(UpdateTranslator translator, IEntityStateEntry stateEntry)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.LoadStateEntry(IEntityStateEntry stateEntry)
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.PullModifiedEntriesFromStateManager()
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.ProduceCommands()
+   en System.Data.Entity.Core.Mapping.Update.Internal.UpdateTranslator.Update()
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.<Update>b__2(UpdateTranslator ut)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.Update[T](T noChangesResult, Func`2 updateFunction)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityAdapter.Update()
+   en System.Data.Entity.Core.Objects.ObjectContext.<SaveChangesToStore>b__35()
+   en System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChangesToStore(SaveOptions options, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction)
+   en System.Data.Entity.Core.Objects.ObjectContext.<>c__DisplayClass2a.<SaveChangesInternal>b__27()
+   en System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute[TResult](Func`1 operation)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChangesInternal(SaveOptions options, Boolean executeInExistingTransaction)
+   en System.Data.Entity.Core.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   en System.Data.Entity.Internal.InternalContext.SaveChanges()
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en Viajes.BL.Producto.ProductoNegocio.AgregarProductoFavorito(Int32 pIdPersona, Int32 pIdProducto) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 101
+   en WSViajes.Controllers.ProductoController.CreaProductoFavorito(InsertaActualizaProductoFavorito pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 329
+2019-08-25 18:41:23,041 [7] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - GetProductosFavorito ][SID:aa14d211-3f89-4bfb-a3f2-63beee54fd5f]Error Interno del Servicio [GUID: 3b6ec3c5-0fcc-45fb-b521-1294b4191a16].
+System.Data.Entity.Core.EntityCommandCompilationException: An error occurred while preparing the command definition. See the inner exception for details. ---> System.Data.Entity.Core.MappingException: 
+Modelo.ModeloViajes.msl(3,4) : error 3027: No mapping specified for the following EntitySet/AssociationSet - R_PERSONA_PRODUCTO_FAVORITO, CTL_PERSONA_PRODUCTO.
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGenerateViews(EntityContainerMapping entityContainerMap, Dictionary`2 resultDictionary)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.SerializedGetGeneratedViews(EntityContainer container)
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.<>c__DisplayClass2.<Evaluate>b__0()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Result.GetValue()
+   en System.Data.Entity.Core.Common.Utils.Memoizer`2.Evaluate(TArg arg)
+   en System.Data.Entity.Core.Mapping.StorageMappingItemCollection.ViewDictionary.GetGeneratedView(EntitySetBase extent, MetadataWorkspace workspace, StorageMappingItemCollection storageMappingItemCollection)
+   en System.Data.Entity.Core.Metadata.Edm.MetadataWorkspace.GetGeneratedView(EntitySetBase extent)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.ExpandView(ScanTableOp scanTableOp, IsOfOp& typeFilter)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.ProcessScanTable(Node scanTableNode, ScanTableOp scanTableOp, IsOfOp& typeFilter)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.Visit(ScanTableOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.ScanTableOp.Accept[TResultType](BasicOpVisitorOfT`1 v, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.VisitNode(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitChildren(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.ProcessJoinOp(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.VisitJoinOp(JoinBaseOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.Visit(InnerJoinOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.InnerJoinOp.Accept[TResultType](BasicOpVisitorOfT`1 v, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.VisitNode(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitChildren(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitRelOpDefault(RelOp op, Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.Visit(ProjectOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.ProjectOp.Accept[TResultType](BasicOpVisitorOfT`1 v, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.VisitNode(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitChildren(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitRelOpDefault(RelOp op, Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.Visit(FilterOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.FilterOp.Accept[TResultType](BasicOpVisitorOfT`1 v, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.VisitNode(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitChildren(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitRelOpDefault(RelOp op, Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.Visit(ProjectOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.ProjectOp.Accept[TResultType](BasicOpVisitorOfT`1 v, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.VisitNode(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.SubqueryTrackingVisitor.VisitChildren(Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfNode.VisitDefault(Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfNode.VisitPhysicalOpDefault(PhysicalOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.Visit(PhysicalProjectOp op, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.PhysicalProjectOp.Accept[TResultType](BasicOpVisitorOfT`1 v, Node n)
+   en System.Data.Entity.Core.Query.InternalTrees.BasicOpVisitorOfT`1.VisitNode(Node n)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.Process(Dictionary`2& tvfResultKeys)
+   en System.Data.Entity.Core.Query.PlanCompiler.PreProcessor.Process(PlanCompiler planCompilerState, StructuredTypeInfo& typeInfo, Dictionary`2& tvfResultKeys)
+   en System.Data.Entity.Core.Query.PlanCompiler.PlanCompiler.Compile(List`1& providerCommands, ColumnMap& resultColumnMap, Int32& columnCount, Set`1& entitySets)
+   en System.Data.Entity.Core.Query.PlanCompiler.PlanCompiler.Compile(DbCommandTree ctree, List`1& providerCommands, ColumnMap& resultColumnMap, Int32& columnCount, Set`1& entitySets)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition..ctor(DbProviderFactory storeProviderFactory, DbCommandTree commandTree, DbInterceptionContext interceptionContext, IDbDependencyResolver resolver, BridgeDataReaderFactory bridgeDataReaderFactory, ColumnMapFactory columnMapFactory)
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en Viajes.BL.Producto.ProductoNegocio.ConsultarFavoritos(Int32 pIdPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 139
+   en WSViajes.Controllers.ProductoController.GetProductosFavorito(Int32 idPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 424
+2019-08-25 19:18:39,926 [5] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - GetProductosFavorito ][SID:0068c749-2acd-40d1-af75-dc20cb0ef978]Error Interno del Servicio [GUID: 452cae58-0ffa-4232-b6ad-1e32e94ff529].
+System.InvalidOperationException: When executing a command, parameters must be exclusively database parameters or values.
+   en Viajes.BL.Producto.ProductoNegocio.ConsultarFavoritos(Int32 pIdPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 139
+   en WSViajes.Controllers.ProductoController.GetProductosFavorito(Int32 idPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 424
+2019-08-25 19:21:05,927 [9] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - GetProductosFavorito ][SID:5aa89c51-e4de-4593-b438-a51ee332df12]Error Interno del Servicio [GUID: 1db25a7d-0e16-42ad-bc5f-af26131a7621].
+System.ArgumentException: No hay ninguna asignación de tipo de objeto System.Data.Entity.Core.Objects.ObjectParameter a un tipo nativo de un proveedor administrado conocido.
+   en Viajes.BL.Producto.ProductoNegocio.ConsultarFavoritos(Int32 pIdPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 139
+   en WSViajes.Controllers.ProductoController.GetProductosFavorito(Int32 idPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 424
+2019-08-25 21:24:04,165 [6] ERROR WSViajes.Controllers.ProductoController [(null)] ID=(null) - [WSViajes - GetProductosFavorito ][SID:35f2e1ae-86d4-431d-bf33-9a6dc8179b15]Error Interno del Servicio [GUID: 74e3d91d-c4bb-4b40-83f1-cdd2742a4ae8].
+System.InvalidOperationException: No connection string named 'ViajesEntities1' could be found in the application config file.
+   en Viajes.BL.Producto.ProductoNegocio.ConsultarFavoritos(Int32 pIdPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Producto\ProductoNegocio.cs:línea 139
+   en WSViajes.Controllers.ProductoController.GetProductosFavorito(Int32 idPersona) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\ProductoController.cs:línea 424

@@ -1,0 +1,60 @@
+2019-10-16 13:36:31,913 [19] ERROR WSViajes.Controllers.LocalController [(null)] ID=(null) - [ WSViajes - ActualizaLocal ][SID:267e340e-02d8-49e0-8e8c-f3aa1a08333e]Error Interno del Servicio [GUID: 036c10f5-0feb-4896-8a1c-d3bc890c7131].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en WSViajes.Comunes.Funciones.uploadImagen(String pBase64, String pDirectorio, String pSubDirectorio, String pNombre, String pExtencion, String pCarpeta, String pComplementoRuta) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Comunes\Funciones.cs:línea 44
+   en WSViajes.Controllers.LocalController.ActualizaLocal(InsertaActualizaLocalRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\LocalController.cs:línea 150
+2019-10-16 13:39:06,870 [24] ERROR WSViajes.Controllers.LocalController [(null)] ID=(null) - [ WSViajes - ActualizaLocal ][SID:77ab0b43-b154-42a7-8d5b-be01073d9398]Error Interno del Servicio [GUID: 8fad95ef-11f9-49a8-8d4a-135540102702].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en WSViajes.Comunes.Funciones.uploadImagen(String pBase64, String pDirectorio, String pSubDirectorio, String pNombre, String pExtencion, String pCarpeta, String pComplementoRuta) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Comunes\Funciones.cs:línea 44
+   en WSViajes.Controllers.LocalController.ActualizaLocal(InsertaActualizaLocalRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\LocalController.cs:línea 150
+2019-10-16 13:42:33,865 [18] ERROR WSViajes.Controllers.LocalController [(null)] ID=(null) - [ WSViajes - ActualizaLocal ][SID:ad0cc613-3dd1-4c10-ad28-ea5fa8b8af99]Error Interno del Servicio [GUID: f367fd4f-e5bb-42f6-887c-449f51dccad3].
+System.NullReferenceException: Referencia a objeto no establecida como instancia de un objeto.
+   en WSViajes.Comunes.Funciones.uploadImagen(String pBase64, String pDirectorio, String pSubDirectorio, String pNombre, String pExtencion, String pCarpeta, String pComplementoRuta)
+   en WSViajes.Controllers.LocalController.ActualizaLocal(InsertaActualizaLocalRequest pRequest)
+2019-10-16 14:08:45,839 [22] ERROR WSViajes.Controllers.LocalController [(null)] ID=(null) - [ WSViajes - ActualizaLocal ][SID:3067e70b-c6df-448e-8f46-2f4f01ed4bd8]Error Interno del Servicio [GUID: cceb0342-5733-4190-8287-d7f840daafff].
+System.Data.Entity.Core.EntityCommandExecutionException: An error occurred while executing the command definition. See the inner exception for details. ---> System.Data.SqlClient.SqlException: Cannot find either column "dbo" or the user-defined function or aggregate "dbo.TRIM", or the name is ambiguous.
+   en System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   en System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   en System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   en System.Data.SqlClient.SqlDataReader.get_MetaData()
+   en System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   en System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   en System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   en System.Data.Common.DbCommand.ExecuteReader(CommandBehavior behavior)
+   en System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.<>c.<Reader>b__6_0(DbCommand t, DbCommandInterceptionContext`1 c)
+   en System.Data.Entity.Infrastructure.Interception.InternalDispatcher`1.Dispatch[TTarget,TInterceptionContext,TResult](TTarget target, Func`3 operation, TInterceptionContext interceptionContext, Action`3 executing, Action`3 executed)
+   en System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.Reader(DbCommand command, DbCommandInterceptionContext interceptionContext)
+   en System.Data.Entity.Internal.InterceptableDbCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   en System.Data.Common.DbCommand.ExecuteReader(CommandBehavior behavior)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en Viajes.BL.Local.LocalNegocio.Editar(E_LOCAL Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Local\LocalNegocio.cs:línea 101
+   en WSViajes.Controllers.LocalController.<ActualizaLocal>d__2.MoveNext() en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\LocalController.cs:línea 165
+2019-10-16 14:09:18,867 [8] ERROR WSViajes.Controllers.LocalController [(null)] ID=(null) - [ WSViajes - ActualizaLocal ][SID:44a769c6-c509-4fe9-ab94-d1d43fbdc453]Error Interno del Servicio [GUID: 9c2bf615-70fe-456e-accd-cfa5c160009f].
+System.Data.Entity.Core.EntityCommandExecutionException: An error occurred while executing the command definition. See the inner exception for details. ---> System.Data.SqlClient.SqlException: Cannot find either column "dbo" or the user-defined function or aggregate "dbo.TRIM", or the name is ambiguous.
+   en System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   en System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   en System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   en System.Data.SqlClient.SqlDataReader.get_MetaData()
+   en System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   en System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   en System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   en System.Data.Common.DbCommand.ExecuteReader(CommandBehavior behavior)
+   en System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.<>c.<Reader>b__6_0(DbCommand t, DbCommandInterceptionContext`1 c)
+   en System.Data.Entity.Infrastructure.Interception.InternalDispatcher`1.Dispatch[TTarget,TInterceptionContext,TResult](TTarget target, Func`3 operation, TInterceptionContext interceptionContext, Action`3 executing, Action`3 executed)
+   en System.Data.Entity.Infrastructure.Interception.DbCommandDispatcher.Reader(DbCommand command, DbCommandInterceptionContext interceptionContext)
+   en System.Data.Entity.Internal.InterceptableDbCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   en System.Data.Common.DbCommand.ExecuteReader(CommandBehavior behavior)
+   en System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.ExecuteStoreCommands(EntityCommand entityCommand, CommandBehavior behavior)
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en Viajes.BL.Local.LocalNegocio.Editar(E_LOCAL Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Local\LocalNegocio.cs:línea 101
+   en WSViajes.Controllers.LocalController.<ActualizaLocal>d__2.MoveNext() en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\LocalController.cs:línea 165
