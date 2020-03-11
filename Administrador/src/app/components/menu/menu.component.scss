@@ -1,0 +1,306 @@
+/****************************************************************************************
+        $IMPORTS
+****************************************************************************************/
+@import '../../../colors.scss';
+
+
+/****************************************************************************************
+        $CLASES
+****************************************************************************************/
+
+.sidebar {
+    /*border-radius: 0;
+    position: relative;
+    z-index: 1000;
+    /*top: 56px;
+    top: 0;
+    left: 235px;
+    width: 235px;
+    margin-left: -235px;
+    margin-bottom: 48px;
+    border: none;
+    border-radius: 0;
+    overflow-y: auto;
+    background-color: $primary-color;
+    bottom: 0;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+    white-space: nowrap;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    box-shadow: -3px 1px 20px 0px;*/
+    border-radius: 0;
+    position: fixed;
+    /*z-index: 10;*/
+    left: 0;
+    bottom: 0;
+    top: 71px;
+    /*border: none;
+    border-radius: 0;*/
+    /* max-width: 250px;*/
+    width: 250px;
+    animation-name: open-menu;
+    animation-duration: 0.3s;
+    overflow-y: auto;
+    background-color: $primary-color;
+    overflow-x: hidden;
+    /*white-space: nowrap;*/
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    /*box-shadow: -3px 1px 20px 0px;*/
+    box-shadow: 1px 2px 9px 0px;
+    height: 100%;
+    .list-group {
+      a {
+        &.list-group-item {
+          background: $primary-color;
+          /*border-bottom:  #fff;*/
+          border-radius: 0;
+          color: #fff;
+          text-decoration: none;
+          .fa {
+            margin-right: 10px;
+          }
+        }
+        &:hover {
+          /*background: $secundary-color;*/
+          text-decoration: none;
+          color: #fff;
+        }
+        &.router-link-active {
+          background: #e38176;
+          border-left: 3px solid $secundary-color;
+          border-radius: 3px;
+          color: #fff;
+        }
+      }
+      .header-fields {
+        padding-top: 10px;
+        > .list-group-item:first-child {
+          border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+    .sidebar-dropdown {
+      *:focus {
+        border-radius: none;
+        border: none;
+      }
+      .panel-title {
+        font-size: 1rem;
+        height: 50px;
+        margin-bottom: 0;
+        a {
+          color: #999;
+          text-decoration: none;
+          font-weight: 400;
+          background: $primary-color;
+          span {
+            position: relative;
+            display: block;
+            /*padding: 0.75rem 1.5rem;*/
+            padding: 0.75rem 1.5rem;
+            padding-top: 1rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .list-group-item {
+    padding: .75rem 1rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+  }
+  
+  .sidebar .sidebar-dropdown {
+    .panel-title {
+      a {
+        &:hover, &:focus {
+          color: #fff;
+          outline: none;
+          outline-offset: -2px;
+        }
+      }
+      &:hover {
+        background: $secundary-color;
+      }
+    }
+    .panel-collapse {
+      border-radius: 0;
+      border: none;
+      .panel-body .list-group-item {
+        border-radius: 0;
+        background-color: $primary-color;
+        border: 0 solid transparent;
+        a {
+          color: #999;
+          &:hover {
+            color: #fff;
+          }
+        }
+        &:hover {
+          background: $secundary-color;
+        }
+      }
+    }
+  }
+  
+  .nested-menu {
+    .list-group-item {
+      cursor: pointer;
+    }
+    .nested {
+      list-style-type: none;
+    }
+    ul.submenu {
+      display: none;
+      height: 0;
+    }
+    .expand ul.submenu {
+      display: block;
+      list-style-type: none;
+      height: auto;
+      padding-left: 8px;
+      li a {
+        color: #fff;
+        padding: 15px;
+        display: block;
+      }
+    }
+  }
+  
+  .angle-expand {
+    float: right;
+    margin-top: 4px;
+  }
+  
+  li > a > i {
+    padding-right: 10px;
+  }
+  
+  @media screen and (max-width: 992px) {
+    .sidebar {
+      /*top: 54px;*/
+      left: 0px;
+    }
+  }
+  
+  @media print {
+    .sidebar {
+      display: none !important;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    /*.header-fields {
+      display: none;
+    }*/
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0px rgba(255, 255, 255, 1);
+    -webkit-box-shadow: inset 0 0 0px rgba(255, 255, 255, 1);
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    box-shadow: inset 0 0 3px rgba(255, 255, 255, 1);
+    -webkit-box-shadow: inset 0 0 3px rgba(255, 255, 255, 1);
+  }
+  
+  .toggle-button {
+    position: relative;
+    /*width: 236px;*/
+    width: 200px;
+    cursor: pointer;
+    padding: 12px;
+    bottom: 0;
+    color: #999;
+    background: #333435;
+    border-top: 1px solid #999;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    box-shadow: -3px 1px 20px 0px;
+    i {
+      font-size: 23px;
+    }
+    &:hover {
+      background: $secundary-color;
+      color: #fff;
+    }
+  }
+  
+  .collapsed {
+    width: 50px;
+    animation-name: close-menu;
+    animation-duration: 0.3s;
+    -webkit-transition: width;
+    /* For Safari 3.1 to 6.0 */
+    transition: width 0.3s;
+    span, .angle-expand {
+      display: none;
+    }
+  }
+  
+
+/****************************************************************************************
+        $ANIMACIONES
+****************************************************************************************/
+  @keyframes close-menu {
+    0% {
+      width: 250px;
+    }
+  
+    25% {
+      width: 200px;
+    }
+  
+    50% {
+      width: 150px;
+    }
+  
+    75% {
+      width: 100px;
+    }
+  
+    100% {
+      width: 50px;
+    }
+  }
+  
+  
+  @keyframes open-menu {
+    100% {
+      width: 250px;
+    }
+  
+    75% {
+      width: 200px;
+    }
+  
+    50% {
+      width: 150px;
+    }
+  
+    25% {
+      width: 100px;
+    }
+  
+    0% {
+      width: 50px;
+    }
+  }

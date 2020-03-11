@@ -1,0 +1,24 @@
+<!-- Container for sidebar(s) + page content -->
+<ng-sidebar-container (onBackdropClicked)="_onBackdropClicked()" [backdropClass]="'top-backdrop'">
+    <!-- A sidebar -->
+    <!--<ng-sidebar [(opened)]="_opened" [(closeOnClickOutside)]="_closeOnClickOutSide" [(mode)]="_mode" #sidebar>-->
+    <ng-sidebar (onClosed)="onClosed($event)"
+        [(opened)]="_opened"
+        [mode]="_mode" [dock]="_dock"
+        [dockedSize]="_dockedSize" [showBackdrop]="_showBackdrop"
+        [closeOnClickOutside]="_showBackdrop"
+        [closeOnClickBackdrop]="_showBackdrop"
+        [ngClass]="{'sidebar-movil':_showBackdrop, 'sidebar-desktop': !_showBackdrop}"
+        #sidebar>
+        <app-menu #menu></app-menu>
+    </ng-sidebar>
+
+    <!-- Page content -->
+    <div ng-sidebar-content class="contenido" [ngClass]="{'sidebar-open':_opened && !_isMobile, 'sidebar-close': !_opened}">
+        <div >
+            <app-header></app-header>
+        </div>
+        <router-outlet></router-outlet>
+        <ngx-loading [show]="loading"></ngx-loading>
+    </div>
+</ng-sidebar-container>

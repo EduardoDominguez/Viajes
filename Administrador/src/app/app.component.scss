@@ -1,0 +1,89 @@
+/****************************************************************************************
+        $IMPORTS
+****************************************************************************************/
+@import '../colors.scss';
+
+
+/****************************************************************************************
+        $GENERALES
+****************************************************************************************/
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  ng-sidebar-container{
+    height: 100vh;
+  }
+
+  /*ng-sidebar {
+    z-index: 20 !important;
+    position: relative;
+  }*/
+
+  aside {
+    transform: initial !important;
+    width: 100%;
+    min-width: 50px;
+  }
+  
+  ng-sidebar {
+    width: 100%;
+    min-width: 50px;
+  }
+  
+  app-menu {
+    position: relative;
+    width: 100%;
+  }
+
+/****************************************************************************************
+        $CLASES
+****************************************************************************************/
+  .contenido {
+    /*position: relative !important;*/
+    margin-top: 105px;
+    width: 100%;
+    /*
+    padding-top: 15px;
+    overflow: auto;*/
+  }
+  
+  .pointer {
+    cursor: pointer;
+  }
+  
+  .sidebar-open {
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    padding: 0px 0px 0px 250px;
+  }
+  
+  .sidebar-close {
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    padding: initial;
+  }
+  
+  .notrasnform {
+    transform: initial !important;
+  }
+
+  .top-backdrop{
+    top: 71px !important;
+  }
+
+  .sidebar-movil{
+    /*position: absolute;*/
+  }
+
+  .sidebar-desktop{
+    z-index: 20 !important;
+    position: relative;
+  }
