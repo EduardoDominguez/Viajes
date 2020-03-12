@@ -18,7 +18,7 @@ export class ProductoService {
   private objPeticion: any = {};
 
   constructor(private http: HttpClient, private globales: globals) {
-    this.basePath = `${environment.IP_SERVER}Producto/`;
+    this.basePath = `${environment.BACKEND_BASE_URI}Producto/`;
   }
 
   /**

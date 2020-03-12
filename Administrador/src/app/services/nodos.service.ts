@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 //Globales
 import { globals } from '../globals/globals';
 import { environment } from '../../environments/environment';
-import { ConsultaNodosResponse } from '../classes/Response/ConsultaNodosResponse';
+import { ConsultaNodosResponse } from '../classes/response/ConsultaNodosResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +16,12 @@ export class NodosService {
   private basePath: string;
 
   constructor(private http: HttpClient, private globales: globals) {
-    this.basePath = `${environment.IP_SERVER}nodos/`;
+    this.basePath = `${environment.BACKEND_BASE_URI}nodos/`;
   }
 
   /**
  * Comsume Web service para consultar nodos
- * @pIdNodo Indica el nodo del cual se quieren consultar las estrategias. 
+ * @pIdNodo Indica el nodo del cual se quieren consultar las estrategias.
  * @param pSoloActivos - Indica si consultar solo activos o no
  * @returns Observable de tipo ConsultaNodosResponse
  */

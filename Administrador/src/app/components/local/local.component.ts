@@ -3,10 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Nodo } from '../../classes/Nodo';
 import { AlertService } from "../../services/alert.service";
-import { NodosService } from "../../services/nodos.service";
-import { ActualizaEstatusGenericoRequest } from '../../classes/Request/ActualizaEstatusGenericoRequest';
+import { ActualizaEstatusGenericoRequest } from '../../classes/request/ActualizaEstatusGenericoRequest';
 import { ComunService } from '../../services/comun.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { globals } from '../../globals/globals';
@@ -20,7 +18,7 @@ import { Local } from 'src/app/classes/Local';
   styleUrls: ['./local.component.scss']
 })
 export class LocalComponent implements OnInit {
-  displayedColumns: string[] = ['IdLocal', 'Nombre', 'Calle', 'Colonia', 'estatus', 'acciones'];
+  displayedColumns: string[] = ['acciones', 'estatus', 'IdLocal', 'Nombre', 'Calle', 'Colonia'];
   dataSource : any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -30,7 +28,7 @@ export class LocalComponent implements OnInit {
     private mensajes: AlertService,
     private comunesService: ComunService,
     private storageService: StorageService,
-    public globales: globals, 
+    public globales: globals,
      ) { }
 
   ngOnInit() {
@@ -40,7 +38,7 @@ export class LocalComponent implements OnInit {
   }
 
   /**
-   * Función para filtrar contenido de la tabla 
+   * Función para filtrar contenido de la tabla
    */
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -56,8 +54,8 @@ export class LocalComponent implements OnInit {
 
   /**
    * Cambia el estatus de un registro
-   * @param pElement 
-   * @param pId 
+   * @param pElement
+   * @param pId
    */
   onChangeEstatus(pElement: any, pId: number) {
     //let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked, this.storageService.getCurrentSession().user.idpersona, 'nodo');

@@ -29,7 +29,7 @@
       margin: 0;
     }
   }
-  
+
   .nav-item {
     .dropdown-toggle {
       background-color: transparent;
@@ -45,11 +45,11 @@
       background-color: rgba(24, 75, 159, 0.3);
     }
   }
-  
+
   .navbar-brand {
     margin-left: 15px;
   }
-  
+
   .icono-navbar {
     font-size: 20px;
     padding: 3px;
@@ -65,7 +65,7 @@
     cursor: pointer;
     color: #000 !important;
   }
-  
+
   .rotate-left {
     -webkit-transform: rotate(180deg) scale(1);
     -moz-transform: rotate(180deg) scale(1);
@@ -82,10 +82,17 @@
     font-family: "Conv_FS_Joey-Heavy";
     /*text-shadow: -1px 1px 0px #ccc3c3;*/
   }
-  
+
   .nombre-usuario {
     font-family: "Conv_FS_Joey-Bold";
   }
+
+  .contenedor-sesion {
+    border: 1px solid #b5b5b5;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 0 2px 0;
+}
 
 /****************************************************************************************
         $GENERALES

@@ -18,7 +18,7 @@ export class LocalService {
   private objPeticion: any = {};
 
   constructor(private http: HttpClient, private globales: globals) {
-    this.basePath = `${environment.IP_SERVER}Local/`;
+    this.basePath = `${environment.BACKEND_BASE_URI}Local/`;
   }
 
   /**

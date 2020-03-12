@@ -23,7 +23,7 @@ export class AppComponent {
   public _mode: string;
   public _dock: boolean;
   public _dockedSize: string;
-  //public _colapsarMenu :boolean = false; //Controla la vista del menú  
+  //public _colapsarMenu :boolean = false; //Controla la vista del menú
   public _showBackdrop: boolean;
   /**Para mostrar o no cotenido en la página inicio */
   public _rutaActiva: boolean;
@@ -38,7 +38,7 @@ export class AppComponent {
   ) {
 
     this.sesion = new Sesion();
-    this.sesion.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Ik1hcmlvIEVkdWFyZG8gRG9taW5ndWV6IE1lbGVuZGV6IiwibmJmIjoxNTcwNTA0ODU2LCJleHAiOjE1NzkxNDQ4NTYsImlhdCI6MTU3MDUwNDg1NiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MTE1NyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTExNTcifQ.PTYvSwtqnxUK3iaMxIUSyzTgP519FAC2X06-2lgWrsk";
+    this.sesion.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Ik1hcmlvIEVkdWFyZG8gRG9taW5ndWV6IE1lbGVuZGV6IiwibmJmIjoxNTg0MDIzODk2LCJleHAiOjE1OTI2NjM4OTYsImlhdCI6MTU4NDAyMzg5NiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MTE1NyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTExNTcifQ.J4Q2B9d0IwugLyl6ynXnEhg-AS0gbV_a6gx1AW9S970";
     this._storageService.setCurrentSession(this.sesion);
 
     router.events.subscribe((val) => {

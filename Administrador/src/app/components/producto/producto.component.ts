@@ -17,7 +17,7 @@ import { Producto } from 'src/app/classes/Producto';
   styleUrls: ['./producto.component.scss']
 })
 export class ProductoComponent implements OnInit {
-  displayedColumns: string[] = ['IdProducto', 'Nombre', 'Descripcion', 'Precio', 'estatus', 'acciones'];
+  displayedColumns: string[] = [ 'acciones', 'estatus', 'IdProducto', 'Nombre', 'Descripcion', 'Precio'];
   dataSource : any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -26,7 +26,7 @@ export class ProductoComponent implements OnInit {
     private _productoService: ProductoService,
     private mensajes: AlertService,
     private storageService: StorageService,
-    public globales: globals, 
+    public globales: globals,
      ) { }
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class ProductoComponent implements OnInit {
   }
 
   /**
-   * Función para filtrar contenido de la tabla 
+   * Función para filtrar contenido de la tabla
    */
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -52,8 +52,8 @@ export class ProductoComponent implements OnInit {
 
   /**
    * Cambia el estatus de un registro
-   * @param pElement 
-   * @param pId 
+   * @param pElement
+   * @param pId
    */
   onChangeEstatus(pElement: any, pId: number) {
     //let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked, this.storageService.getCurrentSession().user.idpersona, 'nodo');

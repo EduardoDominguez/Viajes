@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  //IP_SERVER : "http://localhost:3030",
-  //IP_SERVER: 'http://localhost:51156/api/'
-  IP_SERVER: 'http://servicios.reddam.online/servicios/WSViajes/api/'
-
+  //BACKEND_BASE_URI : "http://localhost:3030",
+  //BACKEND_BASE_URI: 'http://localhost:51156/api/'
+  // BACKEND_BASE_URI: 'http://servicios.reddam.online/servicios/WSViajes/api/',
+  BACKEND_BASE_URI: 'https://www.reddam.mx/servicios/WSViajes/api/'
 };
 
 /*

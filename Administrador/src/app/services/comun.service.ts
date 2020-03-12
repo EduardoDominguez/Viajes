@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { globals } from '../globals/globals';
 import { environment } from '../../environments/environment';
 import { IngresaMenuResponse } from '../classes/response/IngresaMenuResponse';
-import { ActualizaEstatusGenericoRequest } from '../classes/Request/ActualizaEstatusGenericoRequest';
+import { ActualizaEstatusGenericoRequest } from '../classes/request/ActualizaEstatusGenericoRequest';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +17,7 @@ export class ComunService {
   private basePath: string;
 
   constructor(private http: HttpClient, private globales: globals) {
-    this.basePath = `${environment.IP_SERVER}comunes/`;
+    this.basePath = `${environment.BACKEND_BASE_URI}comunes/`;
   }
   /**
 * Comsume Web service para actualizar estatus del menu
