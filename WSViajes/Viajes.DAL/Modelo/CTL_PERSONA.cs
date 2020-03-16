@@ -22,6 +22,8 @@ namespace Viajes.DAL.Modelo
             this.R_PERSONA_PRODUCTO_FAVORITO = new HashSet<R_PERSONA_PRODUCTO_FAVORITO>();
             this.M_PEDIDO = new HashSet<M_PEDIDO>();
             this.M_PEDIDO1 = new HashSet<M_PEDIDO>();
+            this.TBL_BANNERS = new HashSet<TBL_BANNERS>();
+            this.TBL_BANNERS1 = new HashSet<TBL_BANNERS>();
         }
     
         public int id_persona { get; set; }
@@ -47,5 +49,9 @@ namespace Viajes.DAL.Modelo
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_PEDIDO> M_PEDIDO1 { get; set; }
         public virtual CTL_CONDUCTOR CTL_CONDUCTOR { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TBL_BANNERS> TBL_BANNERS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TBL_BANNERS> TBL_BANNERS1 { get; set; }
     }
 }

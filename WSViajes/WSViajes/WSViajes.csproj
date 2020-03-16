@@ -191,7 +191,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Comunes\Funciones.cs" />
+    <Compile Include="Comunes\Mailer.cs" />
     <Compile Include="Controllers\ArchivosController.cs" />
+    <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\DireccionesController.cs" />
     <Compile Include="Controllers\LocalController.cs" />
     <Compile Include="Controllers\MetodoPagoController.cs" />

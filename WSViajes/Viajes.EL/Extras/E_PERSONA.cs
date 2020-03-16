@@ -19,6 +19,8 @@ namespace Viajes.EL.Extras
         public string Fotografia { get; set; }
         public byte Estatus { get; set; }
 
+        public E_ACCESO_PERSONA Acceso { get; set; }
+
         /*public string NOMBRE_COMPLETO {
             get {
                 return $"{ this.NOMBRE} { this.APE_PATERNO} { this.APE_MATERNO} ";

@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Banner\BannerOperaciones.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Direccion\DireccionOperaciones.cs" />
     <Compile Include="Local\CostoLocalOperaciones.cs" />
@@ -118,6 +119,9 @@
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
     <Compile Include="Modelo\sysdiagrams.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\TBL_BANNERS.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
     <Compile Include="Modelo\TBL_COORDENADAS_CONDUCTOR.cs">

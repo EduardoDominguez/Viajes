@@ -6,6 +6,8 @@ import { LocalComponent } from './components/local/local.component';
 import { LocalAddComponent } from './components/local-add/local-add.component';
 import { ProductoComponent } from './components/producto/producto.component';
 import { ProductoAddComponent } from './components/producto-add/producto-add.component';
+import { RepartidorComponent } from './components/repartidor/repartidor.component';
+import { RepartidorAddComponent } from './components/repartidor-add/repartidor-add.component';
 
 
 const routes: Routes = [
@@ -17,6 +19,8 @@ const routes: Routes = [
   { path: 'administracion/productos', component: ProductoComponent },
   { path: 'administracion/productos/agregar', component: ProductoAddComponent },
   { path: 'administracion/productos/:id', component: ProductoAddComponent },
+  { path: 'administracion/repartidor', component: RepartidorComponent },
+  { path: 'administracion/repartidor/agregar', component: RepartidorAddComponent },
   { path: 'no-encontrado',  component: NotfoundComponent},
   { path: '**', redirectTo: '/no-encontrado', pathMatch: 'full'},
   

@@ -11,6 +11,7 @@ using Viajes.BL.Persona;
 using WSViajes.Exceptions;
 using WSViajes.Models;
 using WSViajes.Models.Request;
+using WSViajes.Comunes; 
 
 namespace WSViajes.Controllers
 {

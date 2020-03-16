@@ -55,7 +55,17 @@ namespace WSViajes.Controllers
             return Ok(true);
 
         }
-        
+
+
+        [HttpGet]
+        [Route("mail/send")]
+        public IHttpActionResult SendMailTest()
+        {
+            var mailer = new Mailer();
+            mailer.Send("mario.ed.domm@gmail.com", "Prueba", "<b>Este es un correo de prueba</b>");
+            return Ok(true);
+        }
+
 
     }
 }

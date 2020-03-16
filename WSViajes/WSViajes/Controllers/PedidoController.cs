@@ -11,6 +11,7 @@ using WSViajes.Models;
 using WSViajes.Models.Request;
 using WSViajes.Models.Response;
 using WSViajes.Comunes;
+using Viajes.BL.Persona;
 
 
 namespace WSViajes.Controllers
@@ -154,8 +155,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<IdEstatus>> no puede estar vacío ni igual a cero.";
                 else
                 {
-                    var negocio = new PedidoNegocio();
-                    var respuestaDireccion = negocio.ActualizaEstatus(pRequest.Pedido);
+                    var pedidoNegocio = new PedidoNegocio();
+                    var respuestaDireccion = pedidoNegocio.ActualizaEstatus(pRequest.Pedido);
 
                     if (respuestaDireccion.RET_NUMEROERROR == 0)
                     {
@@ -163,10 +164,15 @@ namespace WSViajes.Controllers
                         if(!string.IsNullOrEmpty(mensaje))
                         {
                             var enviarMensaje = new NotificacionesController();
-                            var pedido = await negocio.ConsultarPorId(pRequest.Pedido.IdPedido);
+                            var mailer = new Mailer();
+                            var pedido = await pedidoNegocio.ConsultarPorId(pRequest.Pedido.IdPedido);
                             var token = await enviarMensaje.GetTokenUser(pedido.PersonaPide.IdPersona);
+                            var persona = await new PersonaNegocio().ConsultarPorId(pedido.PersonaPide.IdPersona);
                             if (!string.IsNullOrEmpty(token))
                                 await enviarMensaje.SendMessage(token, "FastRun", mensaje);
+
+                            mailer.Send(persona.Acceso.Email, "Novedades en tu pedido", mensaje, persona.Nombre);
+
                         }
                         respuesta.Exito = true;
                         respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;

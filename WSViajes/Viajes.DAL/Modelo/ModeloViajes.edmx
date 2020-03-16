@@ -207,6 +207,19 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="TBL_BANNERS">
+          <Key>
+            <PropertyRef Name="id_banner" />
+          </Key>
+          <Property Name="id_banner" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="fotografia" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="id_persona_alta" Type="int" Nullable="false" />
+          <Property Name="fecha_alta" Type="datetime" Nullable="false" />
+          <Property Name="id_persona_mod" Type="int" />
+          <Property Name="fech_mod" Type="varchar" MaxLength="1" />
+        </EntityType>
         <EntityType Name="TBL_COORDENADAS_CONDUCTOR">
           <Key>
             <PropertyRef Name="id_coordenada" />
@@ -251,6 +264,42 @@
             </Principal>
             <Dependent Role="CTL_ACCESO_PERSONA">
               <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_PRODUCTO">
+          <End Role="CTL_PRODUCTO" Type="Self.CTL_PRODUCTO" Multiplicity="1" />
+          <End Role="TBL_BANNERS" Type="Self.TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PRODUCTO">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_USUARIO_ALTA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="TBL_BANNERS" Type="Self.TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_USUARIO_MOD">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="0..1" />
+          <End Role="TBL_BANNERS" Type="Self.TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_persona_mod" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -584,6 +633,7 @@
           <EntitySet Name="M_PEDIDO" EntityType="Self.M_PEDIDO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_PERSONA_PRODUCTO_FAVORITO" EntityType="Self.R_PERSONA_PRODUCTO_FAVORITO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_BANNERS" EntityType="Self.TBL_BANNERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_COORDENADAS_CONDUCTOR" EntityType="Self.TBL_COORDENADAS_CONDUCTOR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_QR_TIENDA" EntityType="Self.TBL_QR_TIENDA" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CTL_ACCES__id_pe__34C8D9D1" Association="Self.FK__CTL_ACCES__id_pe__34C8D9D1">
@@ -593,6 +643,18 @@
           <AssociationSet Name="FK__CTL_ACCES__id_pe__36B12243" Association="Self.FK__CTL_ACCES__id_pe__36B12243">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_ACCESO_PERSONA" EntitySet="CTL_ACCESO_PERSONA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_PRODUCTO" Association="Self.FK_BANNER_PRODUCTO">
+            <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_USUARIO_ALTA" Association="Self.FK_BANNER_USUARIO_ALTA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_USUARIO_MOD" Association="Self.FK_BANNER_USUARIO_MOD">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
           </AssociationSet>
           <AssociationSet Name="FK_CTL_CONDUCTOR_CTL_PERSONA" Association="Self.FK_CTL_CONDUCTOR_CTL_PERSONA">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
@@ -760,6 +822,8 @@
           <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
           <NavigationProperty Name="M_PEDIDO1" Relationship="ViajesModel.FK_M_PEDIDO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
           <NavigationProperty Name="CTL_CONDUCTOR" Relationship="ViajesModel.FK_CTL_CONDUCTOR_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="CTL_CONDUCTOR" />
+          <NavigationProperty Name="TBL_BANNERS" Relationship="ViajesModel.FK_BANNER_USUARIO_ALTA" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
+          <NavigationProperty Name="TBL_BANNERS1" Relationship="ViajesModel.FK_BANNER_USUARIO_MOD" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
         </EntityType>
         <EntityType Name="CTL_PRODUCTO">
           <Key>
@@ -779,6 +843,7 @@
           <NavigationProperty Name="CTL_LOCAL" Relationship="Self.FK_CTL_PRODUCTO_CTL_LOCAL" FromRole="CTL_PRODUCTO" ToRole="CTL_LOCAL" />
           <NavigationProperty Name="R_PERSONA_PRODUCTO_FAVORITO" Relationship="Self.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="R_PERSONA_PRODUCTO_FAVORITO" />
           <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="M_DETALLE_PEDIDO" />
+          <NavigationProperty Name="TBL_BANNERS" Relationship="ViajesModel.FK_BANNER_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="TBL_BANNERS" />
         </EntityType>
         <EntityType Name="CTL_TIPO_LOCAL">
           <Key>
@@ -1108,6 +1173,19 @@
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
           </FunctionImport>
           <EntitySet Name="TBL_QR_TIENDA" EntityType="ViajesModel.TBL_QR_TIENDA" />
+          <EntitySet Name="TBL_BANNERS" EntityType="ViajesModel.TBL_BANNERS" />
+          <AssociationSet Name="FK_BANNER_PRODUCTO" Association="ViajesModel.FK_BANNER_PRODUCTO">
+            <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_USUARIO_ALTA" Association="ViajesModel.FK_BANNER_USUARIO_ALTA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_USUARIO_MOD" Association="ViajesModel.FK_BANNER_USUARIO_MOD">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1360,6 +1438,58 @@
           <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_qr" Type="Guid" Nullable="false" />
         </EntityType>
+        <EntityType Name="TBL_BANNERS">
+          <Key>
+            <PropertyRef Name="id_banner" />
+          </Key>
+          <Property Name="id_banner" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="fotografia" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_persona_mod" Type="Int32" />
+          <Property Name="fech_mod" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CTL_PRODUCTO" Relationship="ViajesModel.FK_BANNER_PRODUCTO" FromRole="TBL_BANNERS" ToRole="CTL_PRODUCTO" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_BANNER_USUARIO_ALTA" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PERSONA1" Relationship="ViajesModel.FK_BANNER_USUARIO_MOD" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
+        </EntityType>
+        <Association Name="FK_BANNER_PRODUCTO">
+          <End Type="ViajesModel.CTL_PRODUCTO" Role="CTL_PRODUCTO" Multiplicity="1" />
+          <End Type="ViajesModel.TBL_BANNERS" Role="TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PRODUCTO">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_USUARIO_ALTA">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
+          <End Type="ViajesModel.TBL_BANNERS" Role="TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_USUARIO_MOD">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="0..1" />
+          <End Type="ViajesModel.TBL_BANNERS" Role="TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_persona_mod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1632,6 +1762,20 @@
                 <ScalarProperty Name="latitud" ColumnName="latitud" />
                 <ScalarProperty Name="ip" ColumnName="ip" />
                 <ScalarProperty Name="dispositivo" ColumnName="dispositivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_BANNERS">
+            <EntityTypeMapping TypeName="ViajesModel.TBL_BANNERS">
+              <MappingFragment StoreEntitySet="TBL_BANNERS">
+                <ScalarProperty Name="fech_mod" ColumnName="fech_mod" />
+                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="fotografia" ColumnName="fotografia" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_banner" ColumnName="id_banner" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -49,6 +49,9 @@ import { MenuService } from './services/menu.service';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AgmCoreModule } from '@agm/core';
+// import { ConductorAddComponent } from './components/conductor-add/conductor-add.component';
+import { RepartidorComponent } from './components/repartidor/repartidor.component';
+import { RepartidorAddComponent } from './components/repartidor-add/repartidor-add.component';
 
 
 @NgModule({
@@ -63,6 +66,9 @@ import { AgmCoreModule } from '@agm/core';
     LocalAddComponent,
     ProductoAddComponent,
     DisableControlDirective,
+    // ConductorAddComponent,
+    RepartidorComponent,
+    RepartidorAddComponent,
   ],
   imports: [
     BrowserModule,

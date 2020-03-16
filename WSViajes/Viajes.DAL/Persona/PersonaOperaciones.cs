@@ -92,7 +92,7 @@ namespace Viajes.DAL.Persona
                                       && (pSoloActivos == null || (pSoloActivos != null && p.estatus == pSoloActivos))
                                      select p).ToListAsync<CTL_PERSONA>();
 
-                    return procesaPersonas(personas);
+                    return await procesaPersonas(personas);
                 }
             }
             catch (Exception ex)
@@ -106,12 +106,13 @@ namespace Viajes.DAL.Persona
         /// <param name="pPersonas">LIsta de personas desde la BD</param>
         /// <returns> Objeto tipo List<E_PERSONA> con los datos solicitados </returns>  
         /// </summary>
-        private List<E_PERSONA> procesaPersonas(List<CTL_PERSONA> pPersonas)
+        private async Task<List<E_PERSONA>> procesaPersonas(List<CTL_PERSONA> pPersonas)
             {
                 var listaPersonas = new List<E_PERSONA>();
 
                 foreach (var persona in pPersonas)
                 {
+                    var accesos = await new AccesoOperaciones().Consultar(persona.id_persona);
                     listaPersonas.Add(new E_PERSONA
                     {
                         IdPersona = persona.id_persona,
@@ -120,7 +121,8 @@ namespace Viajes.DAL.Persona
                         Sexo = persona.sexo,
                         Fotografia = persona.fotografia,
                         Telefono = persona.telefono,
-                        Estatus = persona.estatus
+                        Estatus = persona.estatus,
+                        Acceso = accesos.FirstOrDefault()
                         //IdPersonaAlta = producto.id_persona_alta,
                         //IdPersonaModifica = producto.id_persona_mod ?? 0
                     });

@@ -39,6 +39,10 @@
         <AssociationConnector Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" />
         <AssociationConnector Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" />
         <EntityTypeShape EntityType="ViajesModel.TBL_QR_TIENDA" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_BANNERS" Width="1.5" PointX="3" PointY="13.5" />
+        <AssociationConnector Association="ViajesModel.FK_BANNER_PRODUCTO" />
+        <AssociationConnector Association="ViajesModel.FK_BANNER_USUARIO_ALTA" />
+        <AssociationConnector Association="ViajesModel.FK_BANNER_USUARIO_MOD" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

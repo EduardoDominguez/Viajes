@@ -1,0 +1,72 @@
+2020-03-12 10:49:43,254 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 10:49:43,420 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/robots.txt' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/robots.txt' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 10:49:43,962 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/favicon.ico' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/favicon.ico' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 11:10:18,758 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 11:29:32,044 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 11:29:32,997 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/favicon.ico' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/favicon.ico' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 11:29:48,900 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/api/Test/openpay/create-card-custome' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/api/Test/openpay/create-card-custome' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 11:32:24,978 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
+2020-03-12 11:35:29,329 [Thread Pool Worker] ERROR WSViajes.WebApiApplication [(null)] ID=(null) - 
+_________________________Path '/' was not found.
+ _________________________
+System.Web.HttpException (0x80004005): Path '/' was not found.
+  at System.Web.StaticFileHandler.ProcessRequest (System.Web.HttpContext context) [0x00094] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/StaticFileHandler.cs:77 
+  at System.Web.DefaultHttpHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback callback, System.Object state) [0x0007f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/DefaultHttpHandler.cs:101 
+  at System.Web.HttpApplication+<Pipeline>d__225.MoveNext () [0x008d4] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:1335 
+  at System.Web.HttpApplication.Tick () [0x00000] in /Users/builder/jenkins/workspace/build-package-osx-mono/2019-08/external/bockbuild/builds/mono-x64/mcs/class/System.Web/System.Web/HttpApplication.cs:927 
