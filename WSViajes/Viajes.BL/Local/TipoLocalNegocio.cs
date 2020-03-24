@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Viajes.EL.Extras;
 using Viajes.DAL.Local;
-using System.Threading.Tasks;
 using Viajes.EL.Interfaz;
 
 namespace Viajes.BL.Local

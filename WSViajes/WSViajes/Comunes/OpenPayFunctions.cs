@@ -3,7 +3,7 @@ using Openpay;
 using Openpay.Entities;
 using Openpay.Utils;
 using Openpay.Entities.Request;
-
+using System.Collections.Generic;
 
 namespace WSViajes.Comunes
 {
@@ -70,6 +70,41 @@ namespace WSViajes.Comunes
             request.Address = address;
 
             request = openpayAPI.CardService.Create(customer_id, request);
+        }
+
+        public List<Card> getListCardCustomers(string pCustomerId, int pSearchOffset = 0, int pSearchLimit = 100)
+        {
+            try
+            {
+                SearchParams request = new SearchParams();
+                //request.CreationGte = new Datetime(2014, 5, 1);
+                //request.CreationLte = new DateTime(2014, 5, 15);
+                request.Offset = pSearchOffset;
+                request.Limit = pSearchLimit;
+
+                List<Card> cards = openpayAPI.CardService.List(pCustomerId, request);
+
+                return cards;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
+        }
+
+        public void deleteCustomerCard(string pCustomerId, string pCardId)
+        {
+            try
+            {
+                openpayAPI.CardService.Delete(pCustomerId, pCardId);
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

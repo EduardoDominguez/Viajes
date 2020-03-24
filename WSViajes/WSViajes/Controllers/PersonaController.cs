@@ -10,6 +10,10 @@ using WSViajes.Exceptions;
 using WSViajes.Models;
 using WSViajes.Models.Request;
 using WSViajes.Models.Response;
+using Openpay.Entities;
+using WSViajes.Comunes;
+
+
 
 namespace WSViajes.Controllers
 {
@@ -140,6 +144,94 @@ namespace WSViajes.Controllers
 
                     respuesta.Mensaje = resultado.RET_VALORDEVUELTO;
                 }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("OpenPay/Cliente/{CustomerId}/Tarjeta/Listar")]
+        //public async Task<HttpResponseMessage> ConsultaTarjetasPersona(string CustomerId)
+        public HttpResponseMessage ConsultaTarjetasPersona(string CustomerId)
+        {
+            var respuesta = new ConsultarTodoResponse<Card> { };
+            var strMetodo = "WSViajes - ConsultaTarjetasPersona ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data =  new OpenPayFunctions().getListCardCustomers(CustomerId);
+
+                if (respuesta.Data.Count > 0)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen tarjetas con los parámetros solicitados";
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpDelete]
+        [AllowAnonymous]
+        [Route("OpenPay/Cliente/{CustomerId}/Tarjeta/{CardId}")]
+        //public async Task<HttpResponseMessage> ConsultaTarjetasPersona(string CustomerId)
+        public HttpResponseMessage EliminarTarjetaCliente(string CustomerId, string CardId)
+        {
+            var respuesta = new ConsultarTodoResponse<Card> { };
+            var strMetodo = "WSViajes - EliminarTarjetaCliente ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = new OpenPayFunctions().getListCardCustomers(CustomerId);
+
+                if (respuesta.Data.Count > 0)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen tarjetas con los parámetros solicitados";
+                }
+
             }
             catch (ServiceException Ex)
             {
