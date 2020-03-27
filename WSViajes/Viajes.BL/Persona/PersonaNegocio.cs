@@ -74,6 +74,24 @@ namespace Viajes.BL.Persona
         {
             throw new NotImplementedException();
         }
- 
+
+        /// <summary>
+        /// Método para agregar una relación de cliente openpay con cliente interno
+        /// <param name="pIdPersona">Id de la persona a existente</param>
+        /// /// <param name="pIdCustomerOpenPay">Id generado por OpenPay para el cliente.</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE AgregarClienteOpenPay(int pIdPersona, string pIdCustomerOpenPay)
+        {
+            try
+            {
+                PersonaOperaciones pDatos = new PersonaOperaciones();
+                return pDatos.AgregarClienteOpenPay(pIdPersona, pIdCustomerOpenPay);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

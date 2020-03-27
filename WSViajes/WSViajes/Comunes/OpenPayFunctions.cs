@@ -1,9 +1,9 @@
 ﻿using System;
 using Openpay;
 using Openpay.Entities;
-using Openpay.Utils;
 using Openpay.Entities.Request;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace WSViajes.Comunes
 {
@@ -13,26 +13,34 @@ namespace WSViajes.Comunes
 
         public OpenPayFunctions()
         {
-            openpayAPI = new OpenpayAPI("sk_a896b738bdc541a599e75c52df080bb4", "mes0ipoqxgvxnuyu4kpg", false);
+            bool OPNPY_PROD = Convert.ToBoolean(ConfigurationManager.AppSettings["OPNPY_PROD"]);
+            openpayAPI = new OpenpayAPI(ConfigurationManager.AppSettings["OPNPY_KEY"], ConfigurationManager.AppSettings["OPNPY_MERCHANT"], OPNPY_PROD);
         }
 
-        public void createCustomer()
+        public Customer CreateCustomer(string pNombre, string pApellido, string pCorreo)
         {
-            Customer customer = new Customer();
-            customer.Name = "Net Client";
-            customer.LastName = "C#";
-            customer.Email = "net@c.com";
-            customer.Address = new Address();
-            customer.Address.Line1 = "line 1";
-            customer.Address.PostalCode = "12355";
-            customer.Address.City = "Queretaro";
-            customer.Address.CountryCode = "MX";
-            customer.Address.State = "Queretaro";
+            try
+            {
+                Customer customer = new Customer();
+                customer.Name = pNombre;
+                customer.LastName = pApellido;
+                customer.Email = pCorreo;
+                /*customer.Address = new Address();
+                customer.Address.Line1 = "line 1";
+                customer.Address.PostalCode = "12355";
+                customer.Address.City = "Queretaro";
+                customer.Address.CountryCode = "MX";
+                customer.Address.State = "Queretaro";*/
 
-            Customer customerCreated = openpayAPI.CustomerService.Create(customer);
+                return openpayAPI.CustomerService.Create(customer);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public void createCharge()
+        public void CreateCharge()
         {
             string customer_id = "awzhvjquygrvcinbzvyc";
 
@@ -48,7 +56,7 @@ namespace WSViajes.Comunes
             Charge charge = openpayAPI.ChargeService.Create(customer_id, request);
         }
 
-        public void createCard()
+        public void CreateCard()
         {
             string customer_id = "awzhvjquygrvcinbzvyc";
 
@@ -72,7 +80,7 @@ namespace WSViajes.Comunes
             request = openpayAPI.CardService.Create(customer_id, request);
         }
 
-        public List<Card> getListCardCustomers(string pCustomerId, int pSearchOffset = 0, int pSearchLimit = 100)
+        public List<Card> GetListCardCustomers(string pCustomerId, int pSearchOffset = 0, int pSearchLimit = 100)
         {
             try
             {
@@ -93,7 +101,7 @@ namespace WSViajes.Comunes
             
         }
 
-        public void deleteCustomerCard(string pCustomerId, string pCardId)
+        public void DeleteCustomerCard(string pCustomerId, string pCardId)
         {
             try
             {

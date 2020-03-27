@@ -31,7 +31,7 @@ namespace WSViajes.Controllers
         public IHttpActionResult CreateCustomer()
         {
             var open = new OpenPayFunctions();
-            open.createCustomer();
+            open.CreateCustomer("Mario Eduardo", "Dominguez Meléndez", "mario.ed.domm@gmail.com");
             return Ok(true);
 
         }
@@ -41,7 +41,7 @@ namespace WSViajes.Controllers
         public IHttpActionResult CreateChargeCustomer()
         {
             var open = new OpenPayFunctions();
-            open.createCharge();
+            open.CreateCharge();
             return Ok(true);
 
         }
@@ -51,7 +51,7 @@ namespace WSViajes.Controllers
         public IHttpActionResult CreateCardCustomer()
         {
             var open = new OpenPayFunctions();
-            open.createCard();
+            open.CreateCard();
             return Ok(true);
 
         }

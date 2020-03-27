@@ -163,6 +163,58 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
+        
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("OpenPay/Cliente")]
+        public HttpResponseMessage CreaClienteOpenPay(CreaClienteOpenPayRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - CreaClienteOpenPay ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre.ToString()))
+                    respuesta.Mensaje = "El elemento <<Nombre>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Correo.ToString()))
+                    respuesta.Mensaje = "El elemento <<Correo>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersona.ToString()) || pRequest.IdPersona == 0)
+                    respuesta.Mensaje = "El elemento <<IdPersona>> no puede estar vacío ni igual a cero.";
+
+                else
+                {
+                    var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pRequest.Nombre, pRequest.Apellidos, pRequest.Correo);
+                    var resultado = new PersonaNegocio().AgregarClienteOpenPay(pRequest.IdPersona, creaClienteOpen.Id);
+
+                    if (resultado.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                    }
+
+                    respuesta.Mensaje = resultado.RET_VALORDEVUELTO;
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         [Route("OpenPay/Cliente/{CustomerId}/Tarjeta/Listar")]
@@ -175,7 +227,7 @@ namespace WSViajes.Controllers
 
             try
             {
-                respuesta.Data =  new OpenPayFunctions().getListCardCustomers(CustomerId);
+                respuesta.Data =  new OpenPayFunctions().GetListCardCustomers(CustomerId);
 
                 if (respuesta.Data.Count > 0)
                 {
@@ -187,7 +239,6 @@ namespace WSViajes.Controllers
                     respuesta.CodigoError = 10000;
                     respuesta.Mensaje = $"No existen tarjetas con los parámetros solicitados";
                 }
-
             }
             catch (ServiceException Ex)
             {
@@ -219,7 +270,7 @@ namespace WSViajes.Controllers
 
             try
             {
-                respuesta.Data = new OpenPayFunctions().getListCardCustomers(CustomerId);
+                respuesta.Data = new OpenPayFunctions().GetListCardCustomers(CustomerId);
 
                 if (respuesta.Data.Count > 0)
                 {

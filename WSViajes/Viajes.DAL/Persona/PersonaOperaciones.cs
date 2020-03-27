@@ -107,7 +107,7 @@ namespace Viajes.DAL.Persona
         /// <returns> Objeto tipo List<E_PERSONA> con los datos solicitados </returns>  
         /// </summary>
         private async Task<List<E_PERSONA>> procesaPersonas(List<CTL_PERSONA> pPersonas)
-            {
+        {
                 var listaPersonas = new List<E_PERSONA>();
 
                 foreach (var persona in pPersonas)
@@ -128,6 +128,37 @@ namespace Viajes.DAL.Persona
                     });
                 }
                 return listaPersonas;
+        }
+
+        /// <summary>
+        /// Método para agregar una relación de cliente openpay con cliente interno
+        /// <param name="pIdPersona">Id de la persona a existente</param>
+        /// /// <param name="pIdCustomerOpenPay">Id generado por OpenPay para el cliente.</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>     
+        public E_MENSAJE AgregarClienteOpenPay(int pIdPersona,  string pIdCustomerOpenPay)
+        {
+            try
+            {
+                E_MENSAJE vMensaje;
+                using (context = new ViajesEntities())
+                {
+
+                    var coordenadas = context.Set<R_PERSONA_OPENPAY>();
+                    coordenadas.Add(new R_PERSONA_OPENPAY { pIdPersona, pIdCustomerOpenPay });
+
+                    if (context.SaveChanges() > 0)
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Insertado correctamente", RET_VALORDEVUELTO = "Insertado correctamente" };
+                    else
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -1000, RET_MENSAJEERROR = "No se pudo insertar la coordenada", RET_VALORDEVUELTO = "No se pudo insertar la coordenada" };
+
+                    return vMensaje;
+                }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
