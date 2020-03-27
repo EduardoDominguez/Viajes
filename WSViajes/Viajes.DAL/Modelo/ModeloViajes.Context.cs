@@ -44,7 +44,8 @@ namespace Viajes.DAL.Modelo
         public virtual DbSet<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
         public virtual DbSet<TBL_QR_TIENDA> TBL_QR_TIENDA { get; set; }
         public virtual DbSet<TBL_BANNERS> TBL_BANNERS { get; set; }
-
+        public virtual DbSet<R_PERSONA_OPENPAY> R_PERSONA_OPENPAY { get; set; }
+    
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
             var diagramnameParameter = diagramname != null ?

@@ -145,7 +145,7 @@ namespace Viajes.DAL.Persona
                 {
 
                     var coordenadas = context.Set<R_PERSONA_OPENPAY>();
-                    coordenadas.Add(new R_PERSONA_OPENPAY { pIdPersona, pIdCustomerOpenPay });
+                    coordenadas.Add(new R_PERSONA_OPENPAY { id_persona = pIdPersona, id_customer = pIdCustomerOpenPay });
 
                     if (context.SaveChanges() > 0)
                         vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Insertado correctamente", RET_VALORDEVUELTO = "Insertado correctamente" };

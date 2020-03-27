@@ -188,6 +188,14 @@
           <Property Name="folio" Type="nvarchar" MaxLength="20" />
           <Property Name="id_metodo_pago" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="R_PERSONA_OPENPAY">
+          <Key>
+            <PropertyRef Name="id_persona" />
+            <PropertyRef Name="id_customer" />
+          </Key>
+          <Property Name="id_persona" Type="int" Nullable="false" />
+          <Property Name="id_customer" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="R_PERSONA_PRODUCTO_FAVORITO">
           <Key>
             <PropertyRef Name="id_persona" />
@@ -348,6 +356,18 @@
             </Principal>
             <Dependent Role="CTL_PRODUCTO">
               <PropertyRef Name="id_local" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ID_PERSONA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="R_PERSONA_OPENPAY" Type="Self.R_PERSONA_OPENPAY" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="R_PERSONA_OPENPAY">
+              <PropertyRef Name="id_persona" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -631,6 +651,7 @@
           <EntitySet Name="CTL_TIPO_LOCAL" EntityType="Self.CTL_TIPO_LOCAL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_DETALLE_PEDIDO" EntityType="Self.M_DETALLE_PEDIDO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_PEDIDO" EntityType="Self.M_PEDIDO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="R_PERSONA_OPENPAY" EntityType="Self.R_PERSONA_OPENPAY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_PERSONA_PRODUCTO_FAVORITO" EntityType="Self.R_PERSONA_PRODUCTO_FAVORITO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_BANNERS" EntityType="Self.TBL_BANNERS" Schema="dbo" store:Type="Tables" />
@@ -671,6 +692,10 @@
           <AssociationSet Name="FK_CTL_PRODUCTO_CTL_LOCAL" Association="Self.FK_CTL_PRODUCTO_CTL_LOCAL">
             <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
             <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ID_PERSONA" Association="Self.FK_ID_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="R_PERSONA_OPENPAY" EntitySet="R_PERSONA_OPENPAY" />
           </AssociationSet>
           <AssociationSet Name="FK_M_DETALLE_PEDIDO_CTL_LOCAL" Association="Self.FK_M_DETALLE_PEDIDO_CTL_LOCAL">
             <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
@@ -824,6 +849,7 @@
           <NavigationProperty Name="CTL_CONDUCTOR" Relationship="ViajesModel.FK_CTL_CONDUCTOR_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="CTL_CONDUCTOR" />
           <NavigationProperty Name="TBL_BANNERS" Relationship="ViajesModel.FK_BANNER_USUARIO_ALTA" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
           <NavigationProperty Name="TBL_BANNERS1" Relationship="ViajesModel.FK_BANNER_USUARIO_MOD" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
+          <NavigationProperty Name="R_PERSONA_OPENPAY" Relationship="ViajesModel.FK_ID_PERSONA" FromRole="CTL_PERSONA" ToRole="R_PERSONA_OPENPAY" />
         </EntityType>
         <EntityType Name="CTL_PRODUCTO">
           <Key>
@@ -1186,6 +1212,11 @@
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
           </AssociationSet>
+          <EntitySet Name="R_PERSONA_OPENPAY" EntityType="ViajesModel.R_PERSONA_OPENPAY" />
+          <AssociationSet Name="FK_ID_PERSONA" Association="ViajesModel.FK_ID_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="R_PERSONA_OPENPAY" EntitySet="R_PERSONA_OPENPAY" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1490,6 +1521,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="R_PERSONA_OPENPAY">
+          <Key>
+            <PropertyRef Name="id_persona" />
+            <PropertyRef Name="id_customer" />
+          </Key>
+          <Property Name="id_persona" Type="Int32" Nullable="false" />
+          <Property Name="id_customer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_ID_PERSONA" FromRole="R_PERSONA_OPENPAY" ToRole="CTL_PERSONA" />
+        </EntityType>
+        <Association Name="FK_ID_PERSONA">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
+          <End Type="ViajesModel.R_PERSONA_OPENPAY" Role="R_PERSONA_OPENPAY" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="R_PERSONA_OPENPAY">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1776,6 +1828,14 @@
                 <ScalarProperty Name="fotografia" ColumnName="fotografia" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="id_banner" ColumnName="id_banner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="R_PERSONA_OPENPAY">
+            <EntityTypeMapping TypeName="ViajesModel.R_PERSONA_OPENPAY">
+              <MappingFragment StoreEntitySet="R_PERSONA_OPENPAY">
+                <ScalarProperty Name="id_customer" ColumnName="id_customer" />
+                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -110,6 +110,9 @@
     <Compile Include="Modelo\M_PEDIDO.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\R_PERSONA_OPENPAY.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modelo\R_PERSONA_PRODUCTO_FAVORITO.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>

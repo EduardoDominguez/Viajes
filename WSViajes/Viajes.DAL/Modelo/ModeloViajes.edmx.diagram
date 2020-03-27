@@ -43,6 +43,8 @@
         <AssociationConnector Association="ViajesModel.FK_BANNER_PRODUCTO" />
         <AssociationConnector Association="ViajesModel.FK_BANNER_USUARIO_ALTA" />
         <AssociationConnector Association="ViajesModel.FK_BANNER_USUARIO_MOD" />
+        <EntityTypeShape EntityType="ViajesModel.R_PERSONA_OPENPAY" Width="1.5" PointX="3" PointY="22.5" />
+        <AssociationConnector Association="ViajesModel.FK_ID_PERSONA" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
