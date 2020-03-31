@@ -186,7 +186,7 @@ namespace WSViajes.Controllers
                 else
                 {
 
-                    if(new PersonaNegocio().ConsultarClienteIdOpenPay(pRequest.IdPersona) == null)
+                    if(new PersonaNegocio().ConsultarClienteIdOpenPay(pRequest.IdPersona) != null)
                     {
                         respuesta.Mensaje = "Ya se tiene una relación para esta persona con openpay registrada.";
                     }
