@@ -2,6 +2,7 @@
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WSViajes.Comunes;
+using WSViajes.Models.Request;
 
 namespace WSViajes.Controllers
 {
@@ -51,7 +52,24 @@ namespace WSViajes.Controllers
         public IHttpActionResult CreateCardCustomer()
         {
             var open = new OpenPayFunctions();
-            open.CreateCard();
+            var request = new CreaTarjetaOpenPayRequest();
+            request.HolderName = "Juan Perez Ramirez";
+            request.CardNumber = "4111111111111111";
+            request.Cvv2 = "110";
+            request.ExpirationMonth = "12";
+            request.ExpirationYear = "20";
+            request.DeviceSessionId = "kR1MiQhz2otdIuUlQkbEyitIqVMiI16f";
+            open.CreateCard(request, "awzhvjquygrvcinbzvyc");
+            return Ok(true);
+
+        }
+
+        [HttpGet]
+        [Route("openpay/delete-customer/{id}")]
+        public IHttpActionResult DeleteCustomer(string id)
+        {
+            var open = new OpenPayFunctions();
+            open.DeleteCustomer(id);
             return Ok(true);
 
         }

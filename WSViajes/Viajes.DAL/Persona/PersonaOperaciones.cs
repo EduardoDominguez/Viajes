@@ -160,5 +160,26 @@ namespace Viajes.DAL.Persona
                 throw ex;
             }
         }
+
+
+        public async Task<string> ConsultarClienteIdOpenPay(int pIdPersona)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    var rPersona = await(from p in context.R_PERSONA_OPENPAY
+                                         where
+                                         p.id_persona == pIdPersona
+                                         select p).ToListAsync<R_PERSONA_OPENPAY>();
+
+                    return rPersona.FirstOrDefault().id_customer;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

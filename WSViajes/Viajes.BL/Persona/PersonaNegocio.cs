@@ -93,5 +93,25 @@ namespace Viajes.BL.Persona
                 throw ex;
             }
         }
+
+        
+        /// <summary>
+        /// Método para consultar cliente OpenPay 
+        /// <param name="pIdPersona">Id de la persona a consultar</param>
+        /// <returns> Objeto tipo string con los datos solicitados </returns>  
+        /// </summary>       
+        public async Task<string> ConsultarClienteIdOpenPay(int pIdPersona)
+        {
+            try
+            {
+                PersonaOperaciones pDatos = new PersonaOperaciones();
+                return await pDatos.ConsultarClienteIdOpenPay(pIdPersona: pIdPersona);
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

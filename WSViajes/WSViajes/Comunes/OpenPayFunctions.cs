@@ -4,6 +4,8 @@ using Openpay.Entities;
 using Openpay.Entities.Request;
 using System.Collections.Generic;
 using System.Configuration;
+using WSViajes.Models.Request;
+
 
 namespace WSViajes.Comunes
 {
@@ -40,6 +42,18 @@ namespace WSViajes.Comunes
             }
         }
 
+        public void DeleteCustomer(string pCustomerId)
+        {
+            try
+            {
+                openpayAPI.CustomerService.Delete(pCustomerId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void CreateCharge()
         {
             string customer_id = "awzhvjquygrvcinbzvyc";
@@ -56,28 +70,31 @@ namespace WSViajes.Comunes
             Charge charge = openpayAPI.ChargeService.Create(customer_id, request);
         }
 
-        public void CreateCard()
+        public Card CreateCard(CreaTarjetaOpenPayRequest pRequest, string pCustomerId)
         {
-            string customer_id = "awzhvjquygrvcinbzvyc";
+            //string customer_id = "awzhvjquygrvcinbzvyc";
 
-            Card request = new Card();
-            request.HolderName = "Juan Perez Ramirez";
-            request.CardNumber = "4111111111111111";
-            request.Cvv2 = "110";
-            request.ExpirationMonth = "12";
-            request.ExpirationYear = "20";
-            request.DeviceSessionId = "kR1MiQhz2otdIuUlQkbEyitIqVMiI16f";
-            Address address = new Address();
-            address.City = "Queretaro";
-            address.CountryCode = "MX";
-            address.State = "Queretaro";
-            address.PostalCode = "79125";
-            address.Line1 = "Av. Pie de la cuesta #12";
-            address.Line2 = "Desarrollo San Pablo";
-            address.Line3 = "Qro. Qro.";
-            request.Address = address;
+            Card request = new Card
+            {
+                HolderName = pRequest.HolderName,
+                CardNumber = pRequest.CardNumber,
+                Cvv2 = pRequest.Cvv2,
+                ExpirationMonth = pRequest.ExpirationMonth,
+                ExpirationYear = pRequest.ExpirationYear
+            };
+            
+            request.DeviceSessionId = pRequest.DeviceSessionId;
+            //Address address = new Address();
+            //address.City = "Queretaro";
+            //address.CountryCode = "MX";
+            //address.State = "Queretaro";
+            //address.PostalCode = "79125";
+            //address.Line1 = "Av. Pie de la cuesta #12";
+            //address.Line2 = "Desarrollo San Pablo";
+            //address.Line3 = "Qro. Qro.";
+            //request.Address = address;
 
-            request = openpayAPI.CardService.Create(customer_id, request);
+            return openpayAPI.CardService.Create(pCustomerId, request);
         }
 
         public List<Card> GetListCardCustomers(string pCustomerId, int pSearchOffset = 0, int pSearchLimit = 100)

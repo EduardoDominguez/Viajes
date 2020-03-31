@@ -11,7 +11,7 @@ using Viajes.EL.Extras;
 using WSViajes.Exceptions;
 using WSViajes.Models.Request;
 using WSViajes.Models.Response;
-
+using WSViajes.Comunes;
 
 namespace WSViajes.Controllers
 {
@@ -108,6 +108,8 @@ namespace WSViajes.Controllers
                     var pNegocio = new LoginNegocio();
                     var respuestaCrearPersona = pNegocio.CreaPersona(objPersona, objAcceso);
 
+                    if (respuestaCrearPersona.RET_NUMEROERROR >= 0)
+                        new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
 
                     respuesta.Exito = respuestaCrearPersona.RET_NUMEROERROR >= 0;
                     respuesta.Mensaje = respuestaCrearPersona.RET_VALORDEVUELTO;
