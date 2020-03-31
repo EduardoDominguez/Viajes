@@ -49,6 +49,25 @@ namespace Viajes.BL.Persona
         }
 
         /// <summary>
+        /// Método para consultar personas por id
+        /// <param name="pCorreo">Correo de la persona a consultar</param>
+        /// <returns> Objeto tipo E_PERSONA con los datos solicitados </returns>  
+        /// </summary>       
+        public async Task<E_ACCESO_PERSONA> ConsultaPorCorreo(string pCorreo)
+        {
+            try
+            {
+                AccesoOperaciones pDatos = new AccesoOperaciones();
+                var pResultado = await pDatos.Consultar(pCorreo: pCorreo);
+                return pResultado.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Método para consultar accesos personas
         /// <param name="SoloActivos">Consultar solo activos o no</param>
         /// <returns> Objeto tipo E_ACCESO_PERSONA con los datos solicitados </returns>  

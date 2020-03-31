@@ -80,7 +80,7 @@ namespace Viajes.DAL.Persona
         /// <param name="pSoloActivos">Indica si deben de consultarse solo personas activas</param>
         /// <returns> Objeto tipo List<E_ACCESO_PERSONA> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_ACCESO_PERSONA>> Consultar(int? pIdPersona = null, byte? pSoloActivos = null)
+        public async Task<List<E_ACCESO_PERSONA>> Consultar(int? pIdPersona = null, byte? pSoloActivos = null, string pCorreo = null)
         {
             try
             {
@@ -91,6 +91,7 @@ namespace Viajes.DAL.Persona
                                     where
                                      (pIdPersona == null || (pIdPersona != null && a.id_persona == pIdPersona))
                                      && (pSoloActivos == null || (pSoloActivos != null && p.estatus == pSoloActivos))
+                                     && (string.IsNullOrEmpty(pCorreo) || (!string.IsNullOrEmpty(pCorreo) && a.email == pCorreo))
                                     select a).ToListAsync<CTL_ACCESO_PERSONA>();
 
                     return procesaAccesos(accesos);

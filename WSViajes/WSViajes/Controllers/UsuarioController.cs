@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Viajes.BL.Login;
+using Viajes.BL.Persona;
 using Viajes.EL.Extras;
 using WSViajes.Exceptions;
 using WSViajes.Models.Request;
@@ -109,10 +110,17 @@ namespace WSViajes.Controllers
                     var respuestaCrearPersona = pNegocio.CreaPersona(objPersona, objAcceso);
 
                     if (respuestaCrearPersona.RET_NUMEROERROR >= 0)
-                        new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
+                    {
+                        
+                        var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
+                        new PersonaNegocio().AgregarClienteOpenPay(new AccesoNegocio().ConsultaPorCorreo(pInsertaPersonaRequest.Email.Trim()).Id, creaClienteOpen.Id);
+
+                    }
 
                     respuesta.Exito = respuestaCrearPersona.RET_NUMEROERROR >= 0;
                     respuesta.Mensaje = respuestaCrearPersona.RET_VALORDEVUELTO;
+
+                    new Mailer().Send(pInsertaPersonaRequest.Email, "Bienvenido a nuestra plataforma FASTRUN", "Te damos la bienvenida a nuestra plataforma de pedidos y compras a través de tu aplicación. <br/> <b>¡¡Ha empezar a ordenar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", pInsertaPersonaRequest.Nombre);
                 }
             }
             catch (ServiceException Ex)

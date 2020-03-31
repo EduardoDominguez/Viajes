@@ -76,11 +76,11 @@ namespace WSViajes.Comunes
 
             Card request = new Card
             {
-                HolderName = pRequest.HolderName,
-                CardNumber = pRequest.CardNumber,
-                Cvv2 = pRequest.Cvv2,
-                ExpirationMonth = pRequest.ExpirationMonth,
-                ExpirationYear = pRequest.ExpirationYear
+                HolderName = pRequest.HolderName.Trim(),
+                CardNumber = pRequest.CardNumber.Trim(),
+                Cvv2 = pRequest.Cvv2.Trim(),
+                ExpirationMonth = pRequest.ExpirationMonth.Trim(),
+                ExpirationYear = pRequest.ExpirationYear.Trim()
             };
             
             request.DeviceSessionId = pRequest.DeviceSessionId;
