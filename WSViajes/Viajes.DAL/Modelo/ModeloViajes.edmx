@@ -76,6 +76,20 @@
           <Property Name="id_persona_mod" Type="int" />
           <Property Name="fecha_mod" Type="datetime" />
         </EntityType>
+        <EntityType Name="CTL_EXTRAS_PRODUCTO">
+          <Key>
+            <PropertyRef Name="id_extra" />
+          </Key>
+          <Property Name="id_extra" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="precio" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="estatus" Type="tinyint" Nullable="false" />
+          <Property Name="id_persona_alta" Type="int" Nullable="false" />
+          <Property Name="fecha_alta" Type="datetime" Nullable="false" />
+          <Property Name="id_persona_mod" Type="int" />
+          <Property Name="fecha_mod" Type="datetime" />
+        </EntityType>
         <EntityType Name="CTL_LOCAL">
           <Key>
             <PropertyRef Name="id_local" />
@@ -320,6 +334,42 @@
             </Principal>
             <Dependent Role="CTL_CONDUCTOR">
               <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="0..1" />
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_mod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_alta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -644,6 +694,7 @@
           <EntitySet Name="CTL_COSTO" EntityType="Self.CTL_COSTO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_DIRECCIONES" EntityType="Self.CTL_DIRECCIONES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_ESTATUS_PEDIDO" EntityType="Self.CTL_ESTATUS_PEDIDO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CTL_EXTRAS_PRODUCTO" EntityType="Self.CTL_EXTRAS_PRODUCTO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_LOCAL" EntityType="Self.CTL_LOCAL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_METODO_PAGO" EntityType="Self.CTL_METODO_PAGO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_PERSONA" EntityType="Self.CTL_PERSONA" Schema="dbo" store:Type="Tables" />
@@ -680,6 +731,18 @@
           <AssociationSet Name="FK_CTL_CONDUCTOR_CTL_PERSONA" Association="Self.FK_CTL_CONDUCTOR_CTL_PERSONA">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_CONDUCTOR" EntitySet="CTL_CONDUCTOR" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" Association="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" Association="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" Association="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
           </AssociationSet>
           <AssociationSet Name="FK_CTL_LOCAL_CTL_COSTO" Association="Self.FK_CTL_LOCAL_CTL_COSTO">
             <End Role="CTL_COSTO" EntitySet="CTL_COSTO" />
@@ -850,6 +913,9 @@
           <NavigationProperty Name="TBL_BANNERS" Relationship="ViajesModel.FK_BANNER_USUARIO_ALTA" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
           <NavigationProperty Name="TBL_BANNERS1" Relationship="ViajesModel.FK_BANNER_USUARIO_MOD" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
           <NavigationProperty Name="R_PERSONA_OPENPAY" Relationship="ViajesModel.FK_ID_PERSONA" FromRole="CTL_PERSONA" ToRole="R_PERSONA_OPENPAY" />
+          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
+          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO1" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
+          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO2" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
         </EntityType>
         <EntityType Name="CTL_PRODUCTO">
           <Key>
@@ -1217,6 +1283,19 @@
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="R_PERSONA_OPENPAY" EntitySet="R_PERSONA_OPENPAY" />
           </AssociationSet>
+          <EntitySet Name="CTL_EXTRAS_PRODUCTO" EntityType="ViajesModel.CTL_EXTRAS_PRODUCTO" />
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" Association="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" Association="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" Association="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1542,6 +1621,59 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CTL_EXTRAS_PRODUCTO">
+          <Key>
+            <PropertyRef Name="id_extra" />
+          </Key>
+          <Property Name="id_extra" Type="Guid" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="precio" Type="Decimal" Nullable="false" Precision="16" Scale="2" />
+          <Property Name="estatus" Type="Byte" Nullable="false" />
+          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_persona_mod" Type="Int32" />
+          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PERSONA1" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PERSONA2" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
+        </EntityType>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
+          <End Type="ViajesModel.CTL_EXTRAS_PRODUCTO" Role="CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="0..1" />
+          <End Type="ViajesModel.CTL_EXTRAS_PRODUCTO" Role="CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_mod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
+          <End Type="ViajesModel.CTL_EXTRAS_PRODUCTO" Role="CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1836,6 +1968,21 @@
               <MappingFragment StoreEntitySet="R_PERSONA_OPENPAY">
                 <ScalarProperty Name="id_customer" ColumnName="id_customer" />
                 <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CTL_EXTRAS_PRODUCTO">
+            <EntityTypeMapping TypeName="ViajesModel.CTL_EXTRAS_PRODUCTO">
+              <MappingFragment StoreEntitySet="CTL_EXTRAS_PRODUCTO">
+                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
+                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
+                <ScalarProperty Name="estatus" ColumnName="estatus" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="id_extra" ColumnName="id_extra" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

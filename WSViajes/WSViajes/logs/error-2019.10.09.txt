@@ -1,4 +1,0 @@
-2019-10-09 16:49:43,255 [78] ERROR WSViajes.Controllers.LocalController [(null)] ID=(null) - [WSViajes - CrearLocal ][SID:37e15d76-e410-4e06-9b98-4b4792312b97]Error Interno del Servicio [GUID: 077417fb-7b07-418d-9dcb-4714664e4e33].
-System.NotImplementedException: No se puede implementar el método o la operación.
-   en Viajes.BL.Local.LocalNegocio.Agregar(E_LOCAL Entidad) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\Viajes.BL\Local\LocalNegocio.cs:línea 16
-   en WSViajes.Controllers.LocalController.CrearLocal(InsertaActualizaLocalRequest pRequest) en C:\Users\black\Documents\Proyectos\RDViajes\WSViajes\WSViajes\Controllers\LocalController.cs:línea 74

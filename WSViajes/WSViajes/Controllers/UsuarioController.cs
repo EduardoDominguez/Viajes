@@ -4,15 +4,16 @@ using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Viajes.BL.Login;
 using Viajes.BL.Persona;
 using Viajes.EL.Extras;
+using WSViajes.Comunes;
 using WSViajes.Exceptions;
 using WSViajes.Models.Request;
 using WSViajes.Models.Response;
-using WSViajes.Comunes;
 
 namespace WSViajes.Controllers
 {
@@ -78,7 +79,7 @@ namespace WSViajes.Controllers
 
         [HttpPost]
         [Route("Registrar")]
-        public HttpResponseMessage Registrar([FromBody] InsertaPersonaRequest pInsertaPersonaRequest)
+        public async Task<HttpResponseMessage> Registrar([FromBody] InsertaPersonaRequest pInsertaPersonaRequest)
         {
             var respuesta = new InsertaPersonaResponse { };
             var strMetodo = "WSViajes - Registrar ";
@@ -111,16 +112,16 @@ namespace WSViajes.Controllers
 
                     if (respuestaCrearPersona.RET_NUMEROERROR >= 0)
                     {
-                        
-                        var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
-                        new PersonaNegocio().AgregarClienteOpenPay(new AccesoNegocio().ConsultaPorCorreo(pInsertaPersonaRequest.Email.Trim()).Id, creaClienteOpen.Id);
 
+                        var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
+                        var personaRecienCreada = await new AccesoNegocio().ConsultaPorCorreo(pInsertaPersonaRequest.Email.Trim());
+                        new PersonaNegocio().AgregarClienteOpenPay(personaRecienCreada.IdPersona, creaClienteOpen.Id);
+                        new Mailer().Send(pInsertaPersonaRequest.Email, "Bienvenido a nuestra plataforma FASTRUN", "Te damos la bienvenida a nuestra plataforma de pedidos y compras a través de tu aplicación. <br/> <b>¡¡Ha empezar a ordenar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", pInsertaPersonaRequest.Nombre);
                     }
 
                     respuesta.Exito = respuestaCrearPersona.RET_NUMEROERROR >= 0;
                     respuesta.Mensaje = respuestaCrearPersona.RET_VALORDEVUELTO;
 
-                    new Mailer().Send(pInsertaPersonaRequest.Email, "Bienvenido a nuestra plataforma FASTRUN", "Te damos la bienvenida a nuestra plataforma de pedidos y compras a través de tu aplicación. <br/> <b>¡¡Ha empezar a ordenar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", pInsertaPersonaRequest.Nombre);
                 }
             }
             catch (ServiceException Ex)

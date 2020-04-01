@@ -25,6 +25,9 @@ namespace Viajes.DAL.Modelo
             this.TBL_BANNERS = new HashSet<TBL_BANNERS>();
             this.TBL_BANNERS1 = new HashSet<TBL_BANNERS>();
             this.R_PERSONA_OPENPAY = new HashSet<R_PERSONA_OPENPAY>();
+            this.CTL_EXTRAS_PRODUCTO = new HashSet<CTL_EXTRAS_PRODUCTO>();
+            this.CTL_EXTRAS_PRODUCTO1 = new HashSet<CTL_EXTRAS_PRODUCTO>();
+            this.CTL_EXTRAS_PRODUCTO2 = new HashSet<CTL_EXTRAS_PRODUCTO>();
         }
     
         public int id_persona { get; set; }
@@ -56,5 +59,11 @@ namespace Viajes.DAL.Modelo
         public virtual ICollection<TBL_BANNERS> TBL_BANNERS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<R_PERSONA_OPENPAY> R_PERSONA_OPENPAY { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO2 { get; set; }
     }
 }

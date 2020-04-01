@@ -50,6 +50,7 @@
     <Compile Include="Extras\E_DETALLE_PEDIDO.cs" />
     <Compile Include="Extras\E_DIRECCION.cs" />
     <Compile Include="Extras\E_ESTATUS_PEDIDO.cs" />
+    <Compile Include="Extras\E_EXTRAS_PRODUCTO.cs" />
     <Compile Include="Extras\E_LOCAL.cs" />
     <Compile Include="Extras\E_LOGIN.cs" />
     <Compile Include="Extras\E_MENSAJE.cs" />

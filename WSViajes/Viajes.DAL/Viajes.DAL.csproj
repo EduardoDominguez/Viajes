@@ -74,6 +74,9 @@
     <Compile Include="Modelo\CTL_ESTATUS_PEDIDO.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\CTL_EXTRAS_PRODUCTO.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modelo\CTL_LOCAL.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
