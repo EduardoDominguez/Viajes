@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Viajes.BL.Producto
 {
-    public class ProductoNegocio : ICRUD<E_PRODUCTO>
+    public class ProductoNegocio
     {
         /// <summary>
         /// Método para crear productos
@@ -33,12 +33,12 @@ namespace Viajes.BL.Producto
         /// <param name="pIdProducto">Id del producto a consultar</param>
         /// <returns> Objeto tipo E_PRODUCTO con los datos solicitados </returns>  
         /// </summary>
-        public async Task<E_PRODUCTO> ConsultarPorId(int pIdProducto)
+        public async Task<E_PRODUCTO_DETALLE> ConsultarPorId(int pIdProducto)
         {
             try
             {
                 ProductoOperaciones pDatos = new ProductoOperaciones();
-                var pResultado = await pDatos.ConsultarProducto(pIdProducto);
+                var pResultado = await pDatos.ConsultarProductoId(pIdProducto);
                 return pResultado.FirstOrDefault();
             }
             catch (Exception ex)
@@ -162,6 +162,28 @@ namespace Viajes.BL.Producto
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Método para consultar  extras de productos        
+        /// <param name="pIdProducto">Id producto a consultar</param>        
+        /// <returns> Objeto tipo List<E_EXTRAS_PRODUCTO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_EXTRAS_PRODUCTO>> ConsultarExtrasByProducto(int pIdProducto)
+        {
+
+            try
+            {
+                ProductoOperaciones pDatos = new ProductoOperaciones();
+                var pResultado = await pDatos.ConsultaExtrasByProducto(pIdProducto);
+                return pResultado;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        
 
         /// <summary>
         /// Método para actualizar estatus de productos

@@ -39,7 +39,7 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
                 else if (String.IsNullOrEmpty(pRequest.Producto.Fotografia))
                     respuesta.Mensaje = "El elemento <<Fotografia>> no puede estar vacío.";
-                else if (String.IsNullOrEmpty(pRequest.Producto.Local.IdLocal.ToString()) || pRequest.Producto.Local.IdLocal == 0)
+                else if (String.IsNullOrEmpty(pRequest.Producto.IdLocal.ToString()) || pRequest.Producto.IdLocal == 0)
                     respuesta.Mensaje = "El elemento <<IdLocal>> no puede estar vacío ni igual a cero.";
                 else if (String.IsNullOrEmpty(pRequest.Producto.Precio.ToString()) || pRequest.Producto.Precio == 0)
                     respuesta.Mensaje = "El elemento <<Precio>> no puede estar vacío ni igual a cero.";
@@ -112,7 +112,7 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "No se recibió datos de petición.";
                 else if (String.IsNullOrEmpty(pRequest.Producto.Nombre))
                     respuesta.Mensaje = "El elemento <<Nombre>> no puede estar vacío.";
-                else if (String.IsNullOrEmpty(pRequest.Producto.Local.IdLocal.ToString()) || pRequest.Producto.Local.IdLocal == 0)
+                else if (String.IsNullOrEmpty(pRequest.Producto.IdLocal.ToString()) || pRequest.Producto.IdLocal == 0)
                     respuesta.Mensaje = "El elemento <<IdLocal>> no puede estar vacío ni igual a cero.";
                 else if (String.IsNullOrEmpty(pRequest.Producto.Precio.ToString()) || pRequest.Producto.Precio == 0)
                     respuesta.Mensaje = "El elemento <<Precio>> no puede estar vacío ni igual a cero.";
@@ -220,7 +220,7 @@ namespace WSViajes.Controllers
         [Route("{idProducto}")]
         public async Task<HttpResponseMessage> ConsultaProducto(int idProducto)
         {
-            var respuesta = new ConsultaPorIdResponse<E_PRODUCTO> { };
+            var respuesta = new ConsultaPorIdResponse<E_PRODUCTO_DETALLE> { };
             var strMetodo = "WSViajes - ConsultaProductoPorID ";
             string sid = Guid.NewGuid().ToString();
 
@@ -545,5 +545,47 @@ namespace WSViajes.Controllers
 
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
+
+        [HttpGet]
+        [Route("{idProducto}/extras")]
+        public async Task<HttpResponseMessage> GetExtrasByProducto(int idProducto)
+        {
+            var respuesta = new ConsultarTodoResponse<E_EXTRAS_PRODUCTO> { };
+            var strMetodo = "WSViajes - GetExtrasByProducto ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new ProductoNegocio().ConsultarExtrasByProducto(idProducto);
+
+                if (respuesta.Data != null)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen extras con los parámetros solicitados";
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
     }
 }

@@ -32,7 +32,7 @@ namespace Viajes.DAL.Producto
 
 
                     context.SP_PRODUCTO(pProducto.IdProducto, pProducto.Nombre, pProducto.Descripcion, pProducto.Precio,
-                                         pProducto.Fotografia, pProducto.Local.IdLocal, pProducto.IdPersonaAlta, pProducto.Estatus, "I",
+                                         pProducto.Fotografia, pProducto.IdLocal, pProducto.IdPersonaAlta, pProducto.Estatus, "I",
                                          RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -62,7 +62,7 @@ namespace Viajes.DAL.Producto
 
 
                     context.SP_PRODUCTO(pProducto.IdProducto, pProducto.Nombre, pProducto.Descripcion, pProducto.Precio,
-                                         pProducto.Fotografia, pProducto.Local.IdLocal, pProducto.IdPersonaModifica, pProducto.Estatus, "U",
+                                         pProducto.Fotografia, pProducto.IdLocal, pProducto.IdPersonaModifica, pProducto.Estatus, "U",
                                          RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -137,7 +137,7 @@ namespace Viajes.DAL.Producto
                                       //&& (pSoloActivos == null || (pSoloActivos != null && l.estatus == pSoloActivos))
                                      select s).ToListAsync<CTL_PRODUCTO>();
 
-                    return await procesaPorductos(productos);
+                    return procesaPorductos(productos);
                 }
             }
             catch (Exception ex)
@@ -146,6 +146,33 @@ namespace Viajes.DAL.Producto
             }
         }
 
+        /// <summary>
+        /// Método para consultar productos
+        /// <param name="pIdProducto">Id del producto a consultar</param>
+        /// <param name="pIdLocal">Id del local a consultar</param>
+        /// <param name="pSoloActivos">Id del local a consultar</param>
+        /// <returns> Objeto tipo List<E_PRODUCTO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PRODUCTO_DETALLE>> ConsultarProductoId(int pIdProducto)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    var productos = await (from s in context.CTL_PRODUCTO
+                                           join l in context.CTL_LOCAL on s.id_local equals l.id_local
+                                           where s.id_producto == pIdProducto
+                                           select s).ToListAsync<CTL_PRODUCTO>();
+
+                    return await procesaPorductosDetalle(productos);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
 
         /// <summary>
         /// Método para insertar productos favoritos
@@ -281,7 +308,7 @@ namespace Viajes.DAL.Producto
                                      && (pIdProducto == null || (pIdProducto != null && pf.id_producto == pIdProducto))
                                      select p).ToListAsync<CTL_PRODUCTO>();
 
-                    return await procesaPorductos(productos);
+                    return procesaPorductos(productos);
 
 
 
@@ -293,13 +320,57 @@ namespace Viajes.DAL.Producto
             }
         }
 
-        private async Task<List<E_PRODUCTO>> procesaPorductos(List<CTL_PRODUCTO> pProductos)
+        /// <summary>
+        /// Método para consultar  extras de productos 
+        /// <param name="pIdProducto">Id del producto</param>
+        /// <returns> Objeto tipo List<E_EXTRAS_PRODUCTO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_EXTRAS_PRODUCTO>> ConsultaExtrasByProducto(int pIdProducto)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    var extras = await (from s in context.CTL_EXTRAS_PRODUCTO
+                                           where
+                                           s.id_producto == pIdProducto
+                                           select s).ToListAsync<CTL_EXTRAS_PRODUCTO>();
+
+                    return procesaExtras(extras);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        
+        private List<E_EXTRAS_PRODUCTO> procesaExtras(List<CTL_EXTRAS_PRODUCTO> pExtras)
+        {
+            var listaExtras = new List<E_EXTRAS_PRODUCTO>();
+
+            foreach (var extra in pExtras)
+            {
+                listaExtras.Add(new E_EXTRAS_PRODUCTO
+                {
+                    IdProducto = extra.id_producto,
+                    Nombre = extra.nombre,
+                    IdExtra = extra.id_extra,
+                    Precio = extra.precio,
+                    Estatus = extra.estatus
+                });
+            }
+            return listaExtras;
+        }
+
+        private List<E_PRODUCTO> procesaPorductos(List<CTL_PRODUCTO> pProductos)
         {
             var listaProductos = new List<E_PRODUCTO>();
 
             foreach (var producto in pProductos)
             {
-                var local = await new LocalOperaciones().ConsultarLocales(pIdLocal: producto.id_local);
+                //var local = await new LocalOperaciones().ConsultarLocales(pIdLocal: producto.id_local);
                 listaProductos.Add(new E_PRODUCTO
                 {
                     IdProducto = producto.id_producto,
@@ -308,7 +379,33 @@ namespace Viajes.DAL.Producto
                     Precio = producto.precio,
                     Fotografia = producto.fotografia,
                     Estatus = producto.estatus,
+                    IdLocal = producto.id_local,
+                    //Local = local.FirstOrDefault(),
+                    IdPersonaAlta = producto.id_persona_alta,
+                    IdPersonaModifica = producto.id_persona_mod ?? 0
+                });
+            }
+            return listaProductos;
+        }
+
+        private async Task<List<E_PRODUCTO_DETALLE>> procesaPorductosDetalle(List<CTL_PRODUCTO> pProductos)
+        {
+            var listaProductos = new List<E_PRODUCTO_DETALLE>();
+
+            foreach (var producto in pProductos)
+            {
+                var local = await new LocalOperaciones().ConsultarLocales(pIdLocal: producto.id_local);
+                var extras = await ConsultaExtrasByProducto(producto.id_producto);
+                listaProductos.Add(new E_PRODUCTO_DETALLE
+                {
+                    IdProducto = producto.id_producto,
+                    Nombre = producto.nombre,
+                    Descripcion = producto.descripcion,
+                    Precio = producto.precio,
+                    Fotografia = producto.fotografia,
+                    Estatus = producto.estatus,
                     Local = local.FirstOrDefault(),
+                    Extras = extras,
                     IdPersonaAlta = producto.id_persona_alta,
                     IdPersonaModifica = producto.id_persona_mod ?? 0
                 });
