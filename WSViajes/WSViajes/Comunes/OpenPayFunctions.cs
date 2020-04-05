@@ -54,20 +54,22 @@ namespace WSViajes.Comunes
             }
         }
 
-        public void CreateCharge()
+        public Charge CreateCharge(string pIdCustomer, string pTokenId, string pDescripcion, decimal pMonto, string pSessionID )
         {
-            string customer_id = "awzhvjquygrvcinbzvyc";
+            string customer_id = pIdCustomer; //"awzhvjquygrvcinbzvyc";
 
-            ChargeRequest request = new ChargeRequest();
-            request.Method = "card";
-            request.SourceId = "ksqtpbpcgqxjm6ows4lp";
-            request.Description = "Testing from .Net";
-            request.Amount = new Decimal(9.99);
-            request.Currency = "MXN";
-            request.DeviceSessionId = "kR1MiQhz2otdIuUlQkbEyitIqVMiI16f";
+            ChargeRequest request = new ChargeRequest
+            {
+                Method = "card",
+                SourceId = pTokenId,//"ksqtpbpcgqxjm6ows4lp";
+                Description = pDescripcion, // "Testing from .Net";
+                Amount = pMonto,//new Decimal(9.99);
+                Currency = "MXN",
+                DeviceSessionId = pSessionID //"kR1MiQhz2otdIuUlQkbEyitIqVMiI16f";
+            };
 
 
-            Charge charge = openpayAPI.ChargeService.Create(customer_id, request);
+            return openpayAPI.ChargeService.Create(customer_id, request);
         }
 
         public Card CreateCard(CreaTarjetaOpenPayRequest pRequest, string pCustomerId)

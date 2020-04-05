@@ -187,6 +187,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -241,6 +244,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Comunes\OpenPayFunctions.cs" />
     <Compile Include="Models\Request\CreaClienteOpenPayRequest.cs" />
+    <Compile Include="AutoMapper\AutoMapperConfig.cs" />
+    <Compile Include="AutoMapper\EntityToExtrasMappingProfile.cs" />
+    <Compile Include="Models\Request\InsertaPedidoRequest.cs" />
+    <Compile Include="AutoMapper\RequestToExtrasMappingProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config" />
@@ -256,6 +263,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Assets\Img\" />
+    <Folder Include="AutoMapper\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Viajes.BL\Viajes.BL.csproj">
@@ -265,6 +273,10 @@
     <ProjectReference Include="..\Viajes.EL\Viajes.EL.csproj">
       <Project>{366ade9f-a929-4872-8516-7141e70c68ac}</Project>
       <Name>Viajes.EL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Viajes.DAL\Viajes.DAL.csproj">
+      <Project>{8E08882A-D3AD-4EEC-88F5-BDDDAD1F77FA}</Project>
+      <Name>Viajes.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

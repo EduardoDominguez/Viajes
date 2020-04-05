@@ -42,7 +42,7 @@ namespace WSViajes.Controllers
         public IHttpActionResult CreateChargeCustomer()
         {
             var open = new OpenPayFunctions();
-            open.CreateCharge();
+            //open.CreateCharge();
             return Ok(true);
 
         }

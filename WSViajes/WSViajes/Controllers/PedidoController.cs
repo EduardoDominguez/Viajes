@@ -12,7 +12,7 @@ using WSViajes.Models.Request;
 using WSViajes.Models.Response;
 using WSViajes.Comunes;
 using Viajes.BL.Persona;
-
+using System.Collections.Generic;
 
 namespace WSViajes.Controllers
 {
@@ -25,7 +25,7 @@ namespace WSViajes.Controllers
 
         [HttpPost]
         [Route("")]
-        public HttpResponseMessage Crea([FromBody] InsertaActualizaPedidoRequest pRequest)
+        public async Task<HttpResponseMessage> Crea([FromBody] InsertaActualizaPedidoRequest pRequest)
         {
             var respuesta = new Respuesta { };
             var strMetodo = "WSViajes - CreaPedido ";
@@ -45,10 +45,36 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<IdMetodoPago>> no puede estar vacío ni igual o menor a cero.";
                 else if (pRequest.Pedido.Detalle == null || pRequest.Pedido.Detalle.Count <= 0)
                     respuesta.Mensaje = "El elemento <<Detalle>> debe ser un arreglo y tener por lo menos un elemento.";
+                else if (String.IsNullOrEmpty(pRequest.SessionID) && pRequest.Pedido.IdMetodoPago == 2)
+                    respuesta.Mensaje = "El elemento <<SessionID>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.SessionID) && pRequest.Pedido.IdMetodoPago == 2)
+                    respuesta.Mensaje = "El elemento <<SessionID>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.TokenTarjeta) && pRequest.Pedido.IdMetodoPago == 2)
+                    respuesta.Mensaje = "El elemento <<TokenTarjeta>> no puede estar vacío.";
                 /*else if (String.IsNullOrEmpty(pRequest.Pedido.Observaciones.ToString()) || pRequest.IdPersonaCrea <= 0)
                     respuesta.Mensaje = "El elemento <<IdPersonaCrea>> no puede estar vacío ni igual o menor a cero.";*/
                 else
                 {
+                       /**
+                       * IdMetodoPago 1 = efectivo, 2 = tarjeta, 3 = paypal
+                       * */
+                    if (pRequest.Pedido.IdMetodoPago == 2)
+                    {
+                        string CustomerId = await new PersonaNegocio().ConsultarClienteIdOpenPay(pRequest.Pedido.PersonaPide.IdPersona);
+
+                        if (string.IsNullOrEmpty(CustomerId))
+                        {
+                            respuesta.CodigoError = 10001;
+                            respuesta.Mensaje = $"El usuario indicado no cuenta con una relación a openpay interna.";
+                        }
+                        else
+                        {
+                            var pago = new OpenPayFunctions().CreateCharge(CustomerId, pRequest.TokenTarjeta, "", getTotalPedido(pRequest.Pedido.Detalle), pRequest.SessionID);
+                        }
+
+                    }
+                    
+                      
 
                     var respuestaDireccion = new PedidoNegocio().Agregar(pRequest.Pedido);
 
@@ -555,6 +581,19 @@ namespace WSViajes.Controllers
             }
 
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+
+        private decimal getTotalPedido(List<E_DETALLE_PEDIDO> productos)
+        {
+            decimal total = 0;
+
+            foreach(var producto in productos)
+            {
+                total += (producto.Cantidad * producto.Precio);
+            }
+
+            return total;
         }
     }
 }

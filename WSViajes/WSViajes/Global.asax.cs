@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using WSViajes.AutoMapper;
 
 namespace WSViajes
 {
@@ -8,6 +9,7 @@ namespace WSViajes
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            AutoMapperConfig.RegisterMappings();
         }
 
         protected void Application_Error(object sender, EventArgs e)
