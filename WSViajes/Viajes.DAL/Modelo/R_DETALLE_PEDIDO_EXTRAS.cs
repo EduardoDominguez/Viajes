@@ -12,14 +12,13 @@ namespace Viajes.DAL.Modelo
     using System;
     using System.Collections.Generic;
     
-    public partial class TBL_QR_TIENDA
+    public partial class R_DETALLE_PEDIDO_EXTRAS
     {
-        public System.Guid id_qr { get; set; }
-        public string dispositivo { get; set; }
-        public string ip { get; set; }
-        public Nullable<decimal> latitud { get; set; }
-        public Nullable<decimal> longitud { get; set; }
-        public string aplicacion { get; set; }
-        public System.DateTime fecha_alta { get; set; }
+        public System.Guid id_detalle_pedido { get; set; }
+        public System.Guid id_extra { get; set; }
+        public decimal precio { get; set; }
+    
+        public virtual CTL_EXTRAS_PRODUCTO CTL_EXTRAS_PRODUCTO { get; set; }
+        public virtual M_DETALLE_PEDIDO M_DETALLE_PEDIDO { get; set; }
     }
 }

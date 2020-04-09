@@ -28,6 +28,8 @@ namespace Viajes.DAL.Pedido
                 using (context = new ViajesEntities())
                 {
 
+                    pPedido.IdPedido = Guid.NewGuid();
+
                     XElement xmlPedido = new XElement("PEDIDO");
 
                     foreach (var detalle in pPedido.Detalle)
@@ -35,9 +37,20 @@ namespace Viajes.DAL.Pedido
                         if(detalle.Local == null)
                             throw new System.ArgumentException("El elemento Detalle.Local.IdLocal no puede ser nullo.", "parametro");
 
+                        Guid IdDetalle = Guid.NewGuid();
+                        XElement xExtrasProducto = new XElement("EXTRAS");
+                        foreach(var extra in detalle.Extras)
+                        {
+                            xExtrasProducto.Add(
+                                new XAttribute("ID_DETALLE_PEDIDO", IdDetalle.ToString()),
+                                new XAttribute("ID_EXTRA", extra.IdExtra),
+                                new XAttribute("PRECIO", detalle.Precio)
+                        )   ;
+                        }
 
                         XElement xDetallePedido = new XElement("DETALLE");
                         xDetallePedido.Add(
+                            new XAttribute("ID_DETALLE_PEDIDO", IdDetalle.ToString()),
                             new XAttribute("ID_LOCAL", detalle.Local.IdLocal),
                             new XAttribute("ID_PRODUCTO", detalle.IdProducto),
                             new XAttribute("PRECIO", detalle.Precio),
@@ -45,6 +58,8 @@ namespace Viajes.DAL.Pedido
                             new XAttribute("OBSERVACIONES", detalle.Observaciones)
                         );
                         xmlPedido.Add(xDetallePedido);
+                        if(detalle.Extras.Count > 0)
+                            xmlPedido.Add(xExtrasProducto);
                     }
 
                     ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
@@ -54,7 +69,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I",
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I", pPedido.ReferenciaPago,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
                                         
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -108,7 +123,7 @@ namespace Viajes.DAL.Pedido
         /// <param name="pFolio">Folio del pedido</param>
         /// <returns> Objeto tipo List<E_PEDIDO> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_PEDIDO>> Consultar(long? pIdPedido = null, int? pIdPersonaPide = null, string pFolio = null)
+        public async Task<List<E_PEDIDO>> Consultar(Guid? pIdPedido = null, int? pIdPersonaPide = null, string pFolio = null)
         {
             try
             {
@@ -237,7 +252,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "C",
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "C", pPedido.ReferenciaPago,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -269,7 +284,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "A",
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "A", pPedido.ReferenciaPago,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -302,7 +317,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "AE",
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "AE", pPedido.ReferenciaPago,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -315,6 +330,118 @@ namespace Viajes.DAL.Pedido
             }
         }
 
+        /// <summary>
+        /// Método para consultar las preguntas pendientes por contestar de un pedido
+        /// <param name="pIdPedido">Identificador del pedido</param>
+        /// <param name="pTipoPregunta">Representa el tipo de preguntas a consultar 1=Cliente, 2=Conductor, 3=Local</param>
+        /// <returns> Objeto tipo List<E_PREGUNTA_SERVICIO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PREGUNTA_SERVICIO>> ConsultarPreguntasPendientesByIdPedido(Guid pIdPedido, byte pTipoPregunta)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+
+
+                    /*Consulta equivalente a subconsulta:
+                     * https://stackoverflow.com/questions/183791/how-would-you-do-a-not-in-query-with-linq
+                     * 
+                     * select *
+                        from  CTL_PREGUNTA_SERVICIO cp 
+                            where  cp.id_pregunta not in (
+				               select rpp.id_pregunta from  M_PEDIDO p 
+				                inner join R_PEDIDO_PREGRUNTA rpp on cp.id_pregunta = rpp.id_pregunta
+				            WHERE  p.id_pedido = '4791CF3F-BA77-47B0-A431-2402EB52CB57');
+                    ¨*/
+                    var preguntas = await (from p in context.CTL_PREGUNTA_SERVICIO
+                                           where !(
+                                                        from pe in context.M_PEDIDO
+                                                        join rps in context.R_PEDIDO_PREGRUNTA on pe.id_pedido equals rps.id_pedido
+                                                        where pe.id_pedido == pIdPedido
+                                                        select rps.id_pregunta
+                                                    ).Contains(p.id_pregunta)
+                                            && p.tipo_pregunta == pTipoPregunta
+                                           orderby p.tipo_pregunta, p.orden
+                                         select new E_PREGUNTA_SERVICIO
+                                         {
+                                            IdPregunta = p.id_pregunta,
+                                            Pregunta = p.pregunta,
+                                            TipoPregunta = p.tipo_pregunta
+                                         }).ToListAsync();
+
+                    return preguntas;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar todas las preguntas por tipo de pregunta
+        /// <param name="pTipoPregunta">Representa el tipo de preguntas a consultar 1=Cliente, 2=Conductor, 3=Local</param>
+        /// <returns> Objeto tipo List<E_PREGUNTA_SERVICIO> con los datos solicitados </returns>  
+        /// </summary>        
+        public async Task<List<E_PREGUNTA_SERVICIO>> ConsultarPreguntaByTipo(byte pTipoPregunta)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+
+                    var preguntas = await (from p in context.CTL_PREGUNTA_SERVICIO
+                                           where p.tipo_pregunta == pTipoPregunta
+                                           orderby p.tipo_pregunta, p.orden
+                                           select new E_PREGUNTA_SERVICIO
+                                           {
+                                               IdPregunta = p.id_pregunta,
+                                               Pregunta = p.pregunta,
+                                               TipoPregunta = p.tipo_pregunta
+                                           }).ToListAsync();
+
+                    return preguntas;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Inserta una respuesta a las preguntas del servicio
+        /// <param name="pIdPedido"></param>
+        /// <param name="pIdPregunta"></param>
+        /// <param name="pRespuesta"></param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos DE LA SOLICITUD </returns>  
+        /// </summary>        
+        public E_MENSAJE AgregarRespuestaPreguntaServicio(Guid pIdPedido, Guid pIdPregunta, byte pRespuesta)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    E_MENSAJE vMensaje = new E_MENSAJE();
+                    
+                    context.R_PEDIDO_PREGRUNTA.Add(new R_PEDIDO_PREGRUNTA() { id_pregunta = pIdPregunta, id_pedido = pIdPedido, respuesta = pRespuesta }); // fecha_alta = DateTime.Now 
+                    var resultado = context.SaveChanges();
+
+                    if (resultado <= 0)
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo insertar, intente más tarde", RET_VALORDEVUELTO = "No se pudo insertar, intente más tarde" };
+                    else
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Insertado", RET_VALORDEVUELTO = "Insertado" };
+                    
+
+                    return vMensaje;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         private async Task<List<E_PEDIDO>> ProcesaListaPedidos(List<M_PEDIDO> pPedidos)
         {
@@ -343,6 +470,7 @@ namespace Viajes.DAL.Pedido
                     FechaEntrega = pedido.fecha_entrega ?? DateTime.MinValue,
                     HoraEntrega = pedido.hora_entrega ?? TimeSpan.MinValue,
                     Folio = pedido.folio,
+                    ReferenciaPago = pedido.referencia_pago,
                     Detalle = await new DetallePedidoOperaciones().Consultar(pIdPedido: pedido.id_pedido),
                 }); ; ;
             }

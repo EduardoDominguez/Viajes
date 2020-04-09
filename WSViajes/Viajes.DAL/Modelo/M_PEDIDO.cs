@@ -18,10 +18,10 @@ namespace Viajes.DAL.Modelo
         public M_PEDIDO()
         {
             this.M_DETALLE_PEDIDO = new HashSet<M_DETALLE_PEDIDO>();
+            this.R_PEDIDO_PREGRUNTA = new HashSet<R_PEDIDO_PREGRUNTA>();
             this.TBL_COORDENADAS_CONDUCTOR = new HashSet<TBL_COORDENADAS_CONDUCTOR>();
         }
     
-        public long id_pedido { get; set; }
         public int id_persona_pide { get; set; }
         public int id_direccion_entrega { get; set; }
         public Nullable<int> id_persona_entrega { get; set; }
@@ -35,14 +35,18 @@ namespace Viajes.DAL.Modelo
         public Nullable<System.TimeSpan> hora_entrega { get; set; }
         public string folio { get; set; }
         public int id_metodo_pago { get; set; }
+        public string referencia_pago { get; set; }
+        public System.Guid id_pedido { get; set; }
     
         public virtual CTL_DIRECCIONES CTL_DIRECCIONES { get; set; }
+        public virtual CTL_ESTATUS_PEDIDO CTL_ESTATUS_PEDIDO { get; set; }
+        public virtual CTL_METODO_PAGO CTL_METODO_PAGO { get; set; }
         public virtual CTL_PERSONA CTL_PERSONA { get; set; }
         public virtual CTL_PERSONA CTL_PERSONA1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_DETALLE_PEDIDO> M_DETALLE_PEDIDO { get; set; }
-        public virtual CTL_ESTATUS_PEDIDO CTL_ESTATUS_PEDIDO { get; set; }
-        public virtual CTL_METODO_PAGO CTL_METODO_PAGO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<R_PEDIDO_PREGRUNTA> R_PEDIDO_PREGRUNTA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
     }

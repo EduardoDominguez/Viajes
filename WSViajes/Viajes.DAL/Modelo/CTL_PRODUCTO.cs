@@ -17,9 +17,9 @@ namespace Viajes.DAL.Modelo
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CTL_PRODUCTO()
         {
-            this.R_PERSONA_PRODUCTO_FAVORITO = new HashSet<R_PERSONA_PRODUCTO_FAVORITO>();
-            this.M_DETALLE_PEDIDO = new HashSet<M_DETALLE_PEDIDO>();
             this.TBL_BANNERS = new HashSet<TBL_BANNERS>();
+            this.M_DETALLE_PEDIDO = new HashSet<M_DETALLE_PEDIDO>();
+            this.R_PERSONA_PRODUCTO_FAVORITO = new HashSet<R_PERSONA_PRODUCTO_FAVORITO>();
         }
     
         public int id_local { get; set; }
@@ -36,10 +36,10 @@ namespace Viajes.DAL.Modelo
     
         public virtual CTL_LOCAL CTL_LOCAL { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<R_PERSONA_PRODUCTO_FAVORITO> R_PERSONA_PRODUCTO_FAVORITO { get; set; }
+        public virtual ICollection<TBL_BANNERS> TBL_BANNERS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_DETALLE_PEDIDO> M_DETALLE_PEDIDO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TBL_BANNERS> TBL_BANNERS { get; set; }
+        public virtual ICollection<R_PERSONA_PRODUCTO_FAVORITO> R_PERSONA_PRODUCTO_FAVORITO { get; set; }
     }
 }

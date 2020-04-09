@@ -23,8 +23,8 @@ namespace Viajes.DAL.Modelo
         public Nullable<int> id_persona_mod { get; set; }
         public string fech_mod { get; set; }
     
-        public virtual CTL_PRODUCTO CTL_PRODUCTO { get; set; }
         public virtual CTL_PERSONA CTL_PERSONA { get; set; }
         public virtual CTL_PERSONA CTL_PERSONA1 { get; set; }
+        public virtual CTL_PRODUCTO CTL_PRODUCTO { get; set; }
     }
 }

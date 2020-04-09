@@ -28,24 +28,27 @@ namespace Viajes.DAL.Modelo
         }
     
         public virtual DbSet<CTL_ACCESO_PERSONA> CTL_ACCESO_PERSONA { get; set; }
+        public virtual DbSet<CTL_CONDUCTOR> CTL_CONDUCTOR { get; set; }
         public virtual DbSet<CTL_COSTO> CTL_COSTO { get; set; }
         public virtual DbSet<CTL_DIRECCIONES> CTL_DIRECCIONES { get; set; }
+        public virtual DbSet<CTL_ESTATUS_PEDIDO> CTL_ESTATUS_PEDIDO { get; set; }
+        public virtual DbSet<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO { get; set; }
         public virtual DbSet<CTL_LOCAL> CTL_LOCAL { get; set; }
+        public virtual DbSet<CTL_METODO_PAGO> CTL_METODO_PAGO { get; set; }
         public virtual DbSet<CTL_PERSONA> CTL_PERSONA { get; set; }
+        public virtual DbSet<CTL_PREGUNTA_SERVICIO> CTL_PREGUNTA_SERVICIO { get; set; }
         public virtual DbSet<CTL_PRODUCTO> CTL_PRODUCTO { get; set; }
         public virtual DbSet<CTL_TIPO_LOCAL> CTL_TIPO_LOCAL { get; set; }
-        public virtual DbSet<R_PERSONA_PRODUCTO_FAVORITO> R_PERSONA_PRODUCTO_FAVORITO { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<M_DETALLE_PEDIDO> M_DETALLE_PEDIDO { get; set; }
         public virtual DbSet<M_PEDIDO> M_PEDIDO { get; set; }
-        public virtual DbSet<CTL_ESTATUS_PEDIDO> CTL_ESTATUS_PEDIDO { get; set; }
-        public virtual DbSet<CTL_METODO_PAGO> CTL_METODO_PAGO { get; set; }
-        public virtual DbSet<CTL_CONDUCTOR> CTL_CONDUCTOR { get; set; }
+        public virtual DbSet<R_DETALLE_PEDIDO_EXTRAS> R_DETALLE_PEDIDO_EXTRAS { get; set; }
+        public virtual DbSet<R_PEDIDO_PREGRUNTA> R_PEDIDO_PREGRUNTA { get; set; }
+        public virtual DbSet<R_PERSONA_OPENPAY> R_PERSONA_OPENPAY { get; set; }
+        public virtual DbSet<R_PERSONA_PRODUCTO_FAVORITO> R_PERSONA_PRODUCTO_FAVORITO { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<TBL_BANNERS> TBL_BANNERS { get; set; }
         public virtual DbSet<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
         public virtual DbSet<TBL_QR_TIENDA> TBL_QR_TIENDA { get; set; }
-        public virtual DbSet<TBL_BANNERS> TBL_BANNERS { get; set; }
-        public virtual DbSet<R_PERSONA_OPENPAY> R_PERSONA_OPENPAY { get; set; }
-        public virtual DbSet<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
@@ -189,6 +192,71 @@ namespace Viajes.DAL.Modelo
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
         }
     
+        public virtual int SP_LOCAL(Nullable<int> pIN_ID_LOCAL, string pIN_NOMBRE, string pIN_REFERENCIAS, Nullable<decimal> pIN_LATITUD, Nullable<decimal> pIN_LONGITUD, string pIN_FOTOGRAFIA, string pIN_CALLE, string pIN_COLONIA, string pIN_NO_EXT, string pIN_NO_INT, Nullable<int> pIN_ID_COSTO, Nullable<int> pIN_ID_TIPO_LOCAL, Nullable<int> pIN_ID_PERSONA_MOVIMIENTO, Nullable<byte> pIN_ESTATUS, string pIN_TIPO_MOVIMIENTO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
+        {
+            var pIN_ID_LOCALParameter = pIN_ID_LOCAL.HasValue ?
+                new ObjectParameter("PIN_ID_LOCAL", pIN_ID_LOCAL) :
+                new ObjectParameter("PIN_ID_LOCAL", typeof(int));
+    
+            var pIN_NOMBREParameter = pIN_NOMBRE != null ?
+                new ObjectParameter("PIN_NOMBRE", pIN_NOMBRE) :
+                new ObjectParameter("PIN_NOMBRE", typeof(string));
+    
+            var pIN_REFERENCIASParameter = pIN_REFERENCIAS != null ?
+                new ObjectParameter("PIN_REFERENCIAS", pIN_REFERENCIAS) :
+                new ObjectParameter("PIN_REFERENCIAS", typeof(string));
+    
+            var pIN_LATITUDParameter = pIN_LATITUD.HasValue ?
+                new ObjectParameter("PIN_LATITUD", pIN_LATITUD) :
+                new ObjectParameter("PIN_LATITUD", typeof(decimal));
+    
+            var pIN_LONGITUDParameter = pIN_LONGITUD.HasValue ?
+                new ObjectParameter("PIN_LONGITUD", pIN_LONGITUD) :
+                new ObjectParameter("PIN_LONGITUD", typeof(decimal));
+    
+            var pIN_FOTOGRAFIAParameter = pIN_FOTOGRAFIA != null ?
+                new ObjectParameter("PIN_FOTOGRAFIA", pIN_FOTOGRAFIA) :
+                new ObjectParameter("PIN_FOTOGRAFIA", typeof(string));
+    
+            var pIN_CALLEParameter = pIN_CALLE != null ?
+                new ObjectParameter("PIN_CALLE", pIN_CALLE) :
+                new ObjectParameter("PIN_CALLE", typeof(string));
+    
+            var pIN_COLONIAParameter = pIN_COLONIA != null ?
+                new ObjectParameter("PIN_COLONIA", pIN_COLONIA) :
+                new ObjectParameter("PIN_COLONIA", typeof(string));
+    
+            var pIN_NO_EXTParameter = pIN_NO_EXT != null ?
+                new ObjectParameter("PIN_NO_EXT", pIN_NO_EXT) :
+                new ObjectParameter("PIN_NO_EXT", typeof(string));
+    
+            var pIN_NO_INTParameter = pIN_NO_INT != null ?
+                new ObjectParameter("PIN_NO_INT", pIN_NO_INT) :
+                new ObjectParameter("PIN_NO_INT", typeof(string));
+    
+            var pIN_ID_COSTOParameter = pIN_ID_COSTO.HasValue ?
+                new ObjectParameter("PIN_ID_COSTO", pIN_ID_COSTO) :
+                new ObjectParameter("PIN_ID_COSTO", typeof(int));
+    
+            var pIN_ID_TIPO_LOCALParameter = pIN_ID_TIPO_LOCAL.HasValue ?
+                new ObjectParameter("PIN_ID_TIPO_LOCAL", pIN_ID_TIPO_LOCAL) :
+                new ObjectParameter("PIN_ID_TIPO_LOCAL", typeof(int));
+    
+            var pIN_ID_PERSONA_MOVIMIENTOParameter = pIN_ID_PERSONA_MOVIMIENTO.HasValue ?
+                new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", pIN_ID_PERSONA_MOVIMIENTO) :
+                new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", typeof(int));
+    
+            var pIN_ESTATUSParameter = pIN_ESTATUS.HasValue ?
+                new ObjectParameter("PIN_ESTATUS", pIN_ESTATUS) :
+                new ObjectParameter("PIN_ESTATUS", typeof(byte));
+    
+            var pIN_TIPO_MOVIMIENTOParameter = pIN_TIPO_MOVIMIENTO != null ?
+                new ObjectParameter("PIN_TIPO_MOVIMIENTO", pIN_TIPO_MOVIMIENTO) :
+                new ObjectParameter("PIN_TIPO_MOVIMIENTO", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_LOCAL", pIN_ID_LOCALParameter, pIN_NOMBREParameter, pIN_REFERENCIASParameter, pIN_LATITUDParameter, pIN_LONGITUDParameter, pIN_FOTOGRAFIAParameter, pIN_CALLEParameter, pIN_COLONIAParameter, pIN_NO_EXTParameter, pIN_NO_INTParameter, pIN_ID_COSTOParameter, pIN_ID_TIPO_LOCALParameter, pIN_ID_PERSONA_MOVIMIENTOParameter, pIN_ESTATUSParameter, pIN_TIPO_MOVIMIENTOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
+        }
+    
         public virtual int SP_LOGIN(string pIN_EMAIL, string pIN_PASSWORD, Nullable<byte> pIN_TIPO_USUARIO, ObjectParameter rET_ID_PERSONA, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
         {
             var pIN_EMAILParameter = pIN_EMAIL != null ?
@@ -204,6 +272,55 @@ namespace Viajes.DAL.Modelo
                 new ObjectParameter("PIN_TIPO_USUARIO", typeof(byte));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_LOGIN", pIN_EMAILParameter, pIN_PASSWORDParameter, pIN_TIPO_USUARIOParameter, rET_ID_PERSONA, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
+        }
+    
+        public virtual int SP_PEDIDO(Nullable<System.Guid> pIN_ID_PEDIDO, Nullable<int> pIN_ID_PERSONA_PIDE, Nullable<int> pIN_ID_DIRECCION_ENTREGA, Nullable<int> pIN_ID_PERSONA_ENTREGA, string pIN_OBSERVACIONES, string pIN_FOLIO, Nullable<int> pIN_ID_METODO_PAGO, Nullable<int> pIN_ID_ESTATUS, string pIN_DETALLE, string pIN_TIPO_MOVIMIENTO, string pIN_REFERENCIA_PAGO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
+        {
+            var pIN_ID_PEDIDOParameter = pIN_ID_PEDIDO.HasValue ?
+                new ObjectParameter("PIN_ID_PEDIDO", pIN_ID_PEDIDO) :
+                new ObjectParameter("PIN_ID_PEDIDO", typeof(System.Guid));
+    
+            var pIN_ID_PERSONA_PIDEParameter = pIN_ID_PERSONA_PIDE.HasValue ?
+                new ObjectParameter("PIN_ID_PERSONA_PIDE", pIN_ID_PERSONA_PIDE) :
+                new ObjectParameter("PIN_ID_PERSONA_PIDE", typeof(int));
+    
+            var pIN_ID_DIRECCION_ENTREGAParameter = pIN_ID_DIRECCION_ENTREGA.HasValue ?
+                new ObjectParameter("PIN_ID_DIRECCION_ENTREGA", pIN_ID_DIRECCION_ENTREGA) :
+                new ObjectParameter("PIN_ID_DIRECCION_ENTREGA", typeof(int));
+    
+            var pIN_ID_PERSONA_ENTREGAParameter = pIN_ID_PERSONA_ENTREGA.HasValue ?
+                new ObjectParameter("PIN_ID_PERSONA_ENTREGA", pIN_ID_PERSONA_ENTREGA) :
+                new ObjectParameter("PIN_ID_PERSONA_ENTREGA", typeof(int));
+    
+            var pIN_OBSERVACIONESParameter = pIN_OBSERVACIONES != null ?
+                new ObjectParameter("PIN_OBSERVACIONES", pIN_OBSERVACIONES) :
+                new ObjectParameter("PIN_OBSERVACIONES", typeof(string));
+    
+            var pIN_FOLIOParameter = pIN_FOLIO != null ?
+                new ObjectParameter("PIN_FOLIO", pIN_FOLIO) :
+                new ObjectParameter("PIN_FOLIO", typeof(string));
+    
+            var pIN_ID_METODO_PAGOParameter = pIN_ID_METODO_PAGO.HasValue ?
+                new ObjectParameter("PIN_ID_METODO_PAGO", pIN_ID_METODO_PAGO) :
+                new ObjectParameter("PIN_ID_METODO_PAGO", typeof(int));
+    
+            var pIN_ID_ESTATUSParameter = pIN_ID_ESTATUS.HasValue ?
+                new ObjectParameter("PIN_ID_ESTATUS", pIN_ID_ESTATUS) :
+                new ObjectParameter("PIN_ID_ESTATUS", typeof(int));
+    
+            var pIN_DETALLEParameter = pIN_DETALLE != null ?
+                new ObjectParameter("PIN_DETALLE", pIN_DETALLE) :
+                new ObjectParameter("PIN_DETALLE", typeof(string));
+    
+            var pIN_TIPO_MOVIMIENTOParameter = pIN_TIPO_MOVIMIENTO != null ?
+                new ObjectParameter("PIN_TIPO_MOVIMIENTO", pIN_TIPO_MOVIMIENTO) :
+                new ObjectParameter("PIN_TIPO_MOVIMIENTO", typeof(string));
+    
+            var pIN_REFERENCIA_PAGOParameter = pIN_REFERENCIA_PAGO != null ?
+                new ObjectParameter("PIN_REFERENCIA_PAGO", pIN_REFERENCIA_PAGO) :
+                new ObjectParameter("PIN_REFERENCIA_PAGO", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_PEDIDO", pIN_ID_PEDIDOParameter, pIN_ID_PERSONA_PIDEParameter, pIN_ID_DIRECCION_ENTREGAParameter, pIN_ID_PERSONA_ENTREGAParameter, pIN_OBSERVACIONESParameter, pIN_FOLIOParameter, pIN_ID_METODO_PAGOParameter, pIN_ID_ESTATUSParameter, pIN_DETALLEParameter, pIN_TIPO_MOVIMIENTOParameter, pIN_REFERENCIA_PAGOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     
         public virtual int SP_PERSONA(string pIN_NOMBRE, string pIN_TELEFONO, string pIN_FOTOGRAFIA, string pIN_EMAIL, string pIN_PASSWORD, Nullable<byte> pIN_TIPO_USUARIO, string pIN_TOKEN_FIREBASE, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
@@ -300,116 +417,6 @@ namespace Viajes.DAL.Modelo
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
-        }
-    
-        public virtual int SP_PEDIDO(Nullable<long> pIN_ID_PEDIDO, Nullable<int> pIN_ID_PERSONA_PIDE, Nullable<int> pIN_ID_DIRECCION_ENTREGA, Nullable<int> pIN_ID_PERSONA_ENTREGA, string pIN_OBSERVACIONES, string pIN_FOLIO, Nullable<int> pIN_ID_METODO_PAGO, Nullable<int> pIN_ID_ESTATUS, string pIN_DETALLE, string pIN_TIPO_MOVIMIENTO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
-        {
-            var pIN_ID_PEDIDOParameter = pIN_ID_PEDIDO.HasValue ?
-                new ObjectParameter("PIN_ID_PEDIDO", pIN_ID_PEDIDO) :
-                new ObjectParameter("PIN_ID_PEDIDO", typeof(long));
-    
-            var pIN_ID_PERSONA_PIDEParameter = pIN_ID_PERSONA_PIDE.HasValue ?
-                new ObjectParameter("PIN_ID_PERSONA_PIDE", pIN_ID_PERSONA_PIDE) :
-                new ObjectParameter("PIN_ID_PERSONA_PIDE", typeof(int));
-    
-            var pIN_ID_DIRECCION_ENTREGAParameter = pIN_ID_DIRECCION_ENTREGA.HasValue ?
-                new ObjectParameter("PIN_ID_DIRECCION_ENTREGA", pIN_ID_DIRECCION_ENTREGA) :
-                new ObjectParameter("PIN_ID_DIRECCION_ENTREGA", typeof(int));
-    
-            var pIN_ID_PERSONA_ENTREGAParameter = pIN_ID_PERSONA_ENTREGA.HasValue ?
-                new ObjectParameter("PIN_ID_PERSONA_ENTREGA", pIN_ID_PERSONA_ENTREGA) :
-                new ObjectParameter("PIN_ID_PERSONA_ENTREGA", typeof(int));
-    
-            var pIN_OBSERVACIONESParameter = pIN_OBSERVACIONES != null ?
-                new ObjectParameter("PIN_OBSERVACIONES", pIN_OBSERVACIONES) :
-                new ObjectParameter("PIN_OBSERVACIONES", typeof(string));
-    
-            var pIN_FOLIOParameter = pIN_FOLIO != null ?
-                new ObjectParameter("PIN_FOLIO", pIN_FOLIO) :
-                new ObjectParameter("PIN_FOLIO", typeof(string));
-    
-            var pIN_ID_METODO_PAGOParameter = pIN_ID_METODO_PAGO.HasValue ?
-                new ObjectParameter("PIN_ID_METODO_PAGO", pIN_ID_METODO_PAGO) :
-                new ObjectParameter("PIN_ID_METODO_PAGO", typeof(int));
-    
-            var pIN_ID_ESTATUSParameter = pIN_ID_ESTATUS.HasValue ?
-                new ObjectParameter("PIN_ID_ESTATUS", pIN_ID_ESTATUS) :
-                new ObjectParameter("PIN_ID_ESTATUS", typeof(int));
-    
-            var pIN_DETALLEParameter = pIN_DETALLE != null ?
-                new ObjectParameter("PIN_DETALLE", pIN_DETALLE) :
-                new ObjectParameter("PIN_DETALLE", typeof(string));
-    
-            var pIN_TIPO_MOVIMIENTOParameter = pIN_TIPO_MOVIMIENTO != null ?
-                new ObjectParameter("PIN_TIPO_MOVIMIENTO", pIN_TIPO_MOVIMIENTO) :
-                new ObjectParameter("PIN_TIPO_MOVIMIENTO", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_PEDIDO", pIN_ID_PEDIDOParameter, pIN_ID_PERSONA_PIDEParameter, pIN_ID_DIRECCION_ENTREGAParameter, pIN_ID_PERSONA_ENTREGAParameter, pIN_OBSERVACIONESParameter, pIN_FOLIOParameter, pIN_ID_METODO_PAGOParameter, pIN_ID_ESTATUSParameter, pIN_DETALLEParameter, pIN_TIPO_MOVIMIENTOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
-        }
-    
-        public virtual int SP_LOCAL(Nullable<int> pIN_ID_LOCAL, string pIN_NOMBRE, string pIN_REFERENCIAS, Nullable<decimal> pIN_LATITUD, Nullable<decimal> pIN_LONGITUD, string pIN_FOTOGRAFIA, string pIN_CALLE, string pIN_COLONIA, string pIN_NO_EXT, string pIN_NO_INT, Nullable<int> pIN_ID_COSTO, Nullable<int> pIN_ID_TIPO_LOCAL, Nullable<int> pIN_ID_PERSONA_MOVIMIENTO, Nullable<byte> pIN_ESTATUS, string pIN_TIPO_MOVIMIENTO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
-        {
-            var pIN_ID_LOCALParameter = pIN_ID_LOCAL.HasValue ?
-                new ObjectParameter("PIN_ID_LOCAL", pIN_ID_LOCAL) :
-                new ObjectParameter("PIN_ID_LOCAL", typeof(int));
-    
-            var pIN_NOMBREParameter = pIN_NOMBRE != null ?
-                new ObjectParameter("PIN_NOMBRE", pIN_NOMBRE) :
-                new ObjectParameter("PIN_NOMBRE", typeof(string));
-    
-            var pIN_REFERENCIASParameter = pIN_REFERENCIAS != null ?
-                new ObjectParameter("PIN_REFERENCIAS", pIN_REFERENCIAS) :
-                new ObjectParameter("PIN_REFERENCIAS", typeof(string));
-    
-            var pIN_LATITUDParameter = pIN_LATITUD.HasValue ?
-                new ObjectParameter("PIN_LATITUD", pIN_LATITUD) :
-                new ObjectParameter("PIN_LATITUD", typeof(decimal));
-    
-            var pIN_LONGITUDParameter = pIN_LONGITUD.HasValue ?
-                new ObjectParameter("PIN_LONGITUD", pIN_LONGITUD) :
-                new ObjectParameter("PIN_LONGITUD", typeof(decimal));
-    
-            var pIN_FOTOGRAFIAParameter = pIN_FOTOGRAFIA != null ?
-                new ObjectParameter("PIN_FOTOGRAFIA", pIN_FOTOGRAFIA) :
-                new ObjectParameter("PIN_FOTOGRAFIA", typeof(string));
-    
-            var pIN_CALLEParameter = pIN_CALLE != null ?
-                new ObjectParameter("PIN_CALLE", pIN_CALLE) :
-                new ObjectParameter("PIN_CALLE", typeof(string));
-    
-            var pIN_COLONIAParameter = pIN_COLONIA != null ?
-                new ObjectParameter("PIN_COLONIA", pIN_COLONIA) :
-                new ObjectParameter("PIN_COLONIA", typeof(string));
-    
-            var pIN_NO_EXTParameter = pIN_NO_EXT != null ?
-                new ObjectParameter("PIN_NO_EXT", pIN_NO_EXT) :
-                new ObjectParameter("PIN_NO_EXT", typeof(string));
-    
-            var pIN_NO_INTParameter = pIN_NO_INT != null ?
-                new ObjectParameter("PIN_NO_INT", pIN_NO_INT) :
-                new ObjectParameter("PIN_NO_INT", typeof(string));
-    
-            var pIN_ID_COSTOParameter = pIN_ID_COSTO.HasValue ?
-                new ObjectParameter("PIN_ID_COSTO", pIN_ID_COSTO) :
-                new ObjectParameter("PIN_ID_COSTO", typeof(int));
-    
-            var pIN_ID_TIPO_LOCALParameter = pIN_ID_TIPO_LOCAL.HasValue ?
-                new ObjectParameter("PIN_ID_TIPO_LOCAL", pIN_ID_TIPO_LOCAL) :
-                new ObjectParameter("PIN_ID_TIPO_LOCAL", typeof(int));
-    
-            var pIN_ID_PERSONA_MOVIMIENTOParameter = pIN_ID_PERSONA_MOVIMIENTO.HasValue ?
-                new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", pIN_ID_PERSONA_MOVIMIENTO) :
-                new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", typeof(int));
-    
-            var pIN_ESTATUSParameter = pIN_ESTATUS.HasValue ?
-                new ObjectParameter("PIN_ESTATUS", pIN_ESTATUS) :
-                new ObjectParameter("PIN_ESTATUS", typeof(byte));
-    
-            var pIN_TIPO_MOVIMIENTOParameter = pIN_TIPO_MOVIMIENTO != null ?
-                new ObjectParameter("PIN_TIPO_MOVIMIENTO", pIN_TIPO_MOVIMIENTO) :
-                new ObjectParameter("PIN_TIPO_MOVIMIENTO", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_LOCAL", pIN_ID_LOCALParameter, pIN_NOMBREParameter, pIN_REFERENCIASParameter, pIN_LATITUDParameter, pIN_LONGITUDParameter, pIN_FOTOGRAFIAParameter, pIN_CALLEParameter, pIN_COLONIAParameter, pIN_NO_EXTParameter, pIN_NO_INTParameter, pIN_ID_COSTOParameter, pIN_ID_TIPO_LOCALParameter, pIN_ID_PERSONA_MOVIMIENTOParameter, pIN_ESTATUSParameter, pIN_TIPO_MOVIMIENTOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     }
 }

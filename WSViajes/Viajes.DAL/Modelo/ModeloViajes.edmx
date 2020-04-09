@@ -141,6 +141,19 @@
           <Property Name="id_persona_mod" Type="tinyint" />
           <Property Name="fecha_mod" Type="datetime" />
         </EntityType>
+        <EntityType Name="CTL_PREGUNTA_SERVICIO">
+          <Key>
+            <PropertyRef Name="id_pregunta" />
+          </Key>
+          <Property Name="id_pregunta" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="pregunta" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="tipo_pregunta" Type="tinyint" Nullable="false" />
+          <Property Name="id_persona_alta" Type="int" Nullable="false" />
+          <Property Name="fecha_alta" Type="datetime" Nullable="false" />
+          <Property Name="id_persona_mod" Type="int" />
+          <Property Name="fecha_mod" Type="datetime" />
+          <Property Name="orden" Type="tinyint" Nullable="false" />
+        </EntityType>
         <EntityType Name="CTL_PRODUCTO">
           <Key>
             <PropertyRef Name="id_producto" />
@@ -175,19 +188,18 @@
           <Key>
             <PropertyRef Name="id_detalle_pedido" />
           </Key>
-          <Property Name="id_pedido" Type="bigint" Nullable="false" />
           <Property Name="id_local" Type="int" Nullable="false" />
           <Property Name="id_producto" Type="int" Nullable="false" />
           <Property Name="precio" Type="decimal" Precision="16" Scale="2" Nullable="false" />
           <Property Name="cantidad" Type="int" Nullable="false" />
           <Property Name="observaciones" Type="nvarchar" MaxLength="2000" />
-          <Property Name="id_detalle_pedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_detalle_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="M_PEDIDO">
           <Key>
             <PropertyRef Name="id_pedido" />
           </Key>
-          <Property Name="id_pedido" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_persona_pide" Type="int" Nullable="false" />
           <Property Name="id_direccion_entrega" Type="int" Nullable="false" />
           <Property Name="id_persona_entrega" Type="int" />
@@ -201,6 +213,26 @@
           <Property Name="hora_entrega" Type="time" Precision="7" />
           <Property Name="folio" Type="nvarchar" MaxLength="20" />
           <Property Name="id_metodo_pago" Type="int" Nullable="false" />
+          <Property Name="referencia_pago" Type="nvarchar" MaxLength="400" />
+          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="R_DETALLE_PEDIDO_EXTRAS">
+          <Key>
+            <PropertyRef Name="id_detalle_pedido" />
+            <PropertyRef Name="id_extra" />
+          </Key>
+          <Property Name="id_detalle_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id_extra" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="precio" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="R_PEDIDO_PREGRUNTA">
+          <Key>
+            <PropertyRef Name="id_pregunta" />
+            <PropertyRef Name="id_pedido" />
+          </Key>
+          <Property Name="id_pregunta" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="respuesta" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="R_PERSONA_OPENPAY">
           <Key>
@@ -251,7 +283,7 @@
           <Property Name="longitud" Type="decimal" Precision="9" Scale="6" Nullable="false" />
           <Property Name="fecha" Type="datetime" Nullable="false" />
           <Property Name="id_coordenada" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="id_pedido" Type="bigint" />
+          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="TBL_QR_TIENDA">
           <Key>
@@ -409,6 +441,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DETALLE">
+          <End Role="M_DETALLE_PEDIDO" Type="Self.M_DETALLE_PEDIDO" Multiplicity="1" />
+          <End Role="R_DETALLE_PEDIDO_EXTRAS" Type="Self.R_DETALLE_PEDIDO_EXTRAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_DETALLE_PEDIDO">
+              <PropertyRef Name="id_detalle_pedido" />
+            </Principal>
+            <Dependent Role="R_DETALLE_PEDIDO_EXTRAS">
+              <PropertyRef Name="id_detalle_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EXTRA">
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="1" />
+          <End Role="R_DETALLE_PEDIDO_EXTRAS" Type="Self.R_DETALLE_PEDIDO_EXTRAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_extra" />
+            </Principal>
+            <Dependent Role="R_DETALLE_PEDIDO_EXTRAS">
+              <PropertyRef Name="id_extra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ID_PERSONA">
           <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
           <End Role="R_PERSONA_OPENPAY" Type="Self.R_PERSONA_OPENPAY" Multiplicity="*" />
@@ -541,6 +597,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_R_PREGUNTA_CTL_PREGUNTA">
+          <End Role="CTL_PREGUNTA_SERVICIO" Type="Self.CTL_PREGUNTA_SERVICIO" Multiplicity="1" />
+          <End Role="R_PEDIDO_PREGRUNTA" Type="Self.R_PEDIDO_PREGRUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PREGUNTA_SERVICIO">
+              <PropertyRef Name="id_pregunta" />
+            </Principal>
+            <Dependent Role="R_PEDIDO_PREGRUNTA">
+              <PropertyRef Name="id_pregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_R_PREGUNTA_M_PEDIDO">
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="R_PEDIDO_PREGRUNTA" Type="Self.R_PEDIDO_PREGRUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="R_PEDIDO_PREGRUNTA">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR">
           <End Role="CTL_CONDUCTOR" Type="Self.CTL_CONDUCTOR" Multiplicity="1" />
           <End Role="TBL_COORDENADAS_CONDUCTOR" Type="Self.TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
@@ -554,7 +634,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO">
-          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="0..1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
           <End Role="TBL_COORDENADAS_CONDUCTOR" Type="Self.TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="M_PEDIDO">
@@ -642,7 +722,7 @@
           <Parameter Name="RET_VALORDEVUELTO" Type="varchar" Mode="InOut" />
         </Function>
         <Function Name="SP_PEDIDO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PIN_ID_PEDIDO" Type="bigint" Mode="In" />
+          <Parameter Name="PIN_ID_PEDIDO" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="PIN_ID_PERSONA_PIDE" Type="int" Mode="In" />
           <Parameter Name="PIN_ID_DIRECCION_ENTREGA" Type="int" Mode="In" />
           <Parameter Name="PIN_ID_PERSONA_ENTREGA" Type="int" Mode="In" />
@@ -652,6 +732,7 @@
           <Parameter Name="PIN_ID_ESTATUS" Type="int" Mode="In" />
           <Parameter Name="PIN_DETALLE" Type="xml" Mode="In" />
           <Parameter Name="PIN_TIPO_MOVIMIENTO" Type="char" Mode="In" />
+          <Parameter Name="PIN_REFERENCIA_PAGO" Type="nvarchar" Mode="In" />
           <Parameter Name="RET_NUMEROERROR" Type="int" Mode="InOut" />
           <Parameter Name="RET_MENSAJEERROR" Type="varchar" Mode="InOut" />
           <Parameter Name="RET_VALORDEVUELTO" Type="varchar" Mode="InOut" />
@@ -698,10 +779,13 @@
           <EntitySet Name="CTL_LOCAL" EntityType="Self.CTL_LOCAL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_METODO_PAGO" EntityType="Self.CTL_METODO_PAGO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_PERSONA" EntityType="Self.CTL_PERSONA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CTL_PREGUNTA_SERVICIO" EntityType="Self.CTL_PREGUNTA_SERVICIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_PRODUCTO" EntityType="Self.CTL_PRODUCTO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_TIPO_LOCAL" EntityType="Self.CTL_TIPO_LOCAL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_DETALLE_PEDIDO" EntityType="Self.M_DETALLE_PEDIDO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_PEDIDO" EntityType="Self.M_PEDIDO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="R_DETALLE_PEDIDO_EXTRAS" EntityType="Self.R_DETALLE_PEDIDO_EXTRAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="R_PEDIDO_PREGRUNTA" EntityType="Self.R_PEDIDO_PREGRUNTA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_PERSONA_OPENPAY" EntityType="Self.R_PERSONA_OPENPAY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_PERSONA_PRODUCTO_FAVORITO" EntityType="Self.R_PERSONA_PRODUCTO_FAVORITO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -756,6 +840,14 @@
             <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
             <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
           </AssociationSet>
+          <AssociationSet Name="FK_DETALLE" Association="Self.FK_DETALLE">
+            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
+            <End Role="R_DETALLE_PEDIDO_EXTRAS" EntitySet="R_DETALLE_PEDIDO_EXTRAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EXTRA" Association="Self.FK_EXTRA">
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+            <End Role="R_DETALLE_PEDIDO_EXTRAS" EntitySet="R_DETALLE_PEDIDO_EXTRAS" />
+          </AssociationSet>
           <AssociationSet Name="FK_ID_PERSONA" Association="Self.FK_ID_PERSONA">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="R_PERSONA_OPENPAY" EntitySet="R_PERSONA_OPENPAY" />
@@ -800,6 +892,14 @@
             <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
             <End Role="R_PERSONA_PRODUCTO_FAVORITO" EntitySet="R_PERSONA_PRODUCTO_FAVORITO" />
           </AssociationSet>
+          <AssociationSet Name="FK_R_PREGUNTA_CTL_PREGUNTA" Association="Self.FK_R_PREGUNTA_CTL_PREGUNTA">
+            <End Role="CTL_PREGUNTA_SERVICIO" EntitySet="CTL_PREGUNTA_SERVICIO" />
+            <End Role="R_PEDIDO_PREGRUNTA" EntitySet="R_PEDIDO_PREGRUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_R_PREGUNTA_M_PEDIDO" Association="Self.FK_R_PREGUNTA_M_PEDIDO">
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+            <End Role="R_PEDIDO_PREGRUNTA" EntitySet="R_PEDIDO_PREGRUNTA" />
+          </AssociationSet>
           <AssociationSet Name="FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" Association="Self.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR">
             <End Role="CTL_CONDUCTOR" EntitySet="CTL_CONDUCTOR" />
             <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
@@ -823,9 +923,23 @@
           <Property Name="password" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="tipo_usuario" Type="Byte" Nullable="false" />
           <Property Name="acepta_terminos" Type="Byte" Nullable="false" />
+          <Property Name="token_firebase" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK__CTL_ACCES__id_pe__34C8D9D1" FromRole="CTL_ACCESO_PERSONA" ToRole="CTL_PERSONA" />
           <NavigationProperty Name="CTL_PERSONA1" Relationship="Self.FK__CTL_ACCES__id_pe__36B12243" FromRole="CTL_ACCESO_PERSONA" ToRole="CTL_PERSONA" />
-          <Property Name="token_firebase" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CTL_CONDUCTOR">
+          <Key>
+            <PropertyRef Name="id_persona" />
+          </Key>
+          <Property Name="id_persona" Type="Int32" Nullable="false" />
+          <Property Name="calle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="colonia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="no_int" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="no_ext" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="no_placas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="no_licencia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_CTL_CONDUCTOR_CTL_PERSONA" FromRole="CTL_CONDUCTOR" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" FromRole="CTL_CONDUCTOR" ToRole="TBL_COORDENADAS_CONDUCTOR" />
         </EntityType>
         <EntityType Name="CTL_COSTO">
           <Key>
@@ -860,8 +974,40 @@
           <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_persona_mod" Type="Int32" />
           <Property Name="fecha_mod" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_DIRECCIONES" FromRole="CTL_DIRECCIONES" ToRole="M_PEDIDO" />
           <Property Name="predeterminada" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_M_PEDIDO_CTL_DIRECCIONES" FromRole="CTL_DIRECCIONES" ToRole="M_PEDIDO" />
+        </EntityType>
+        <EntityType Name="CTL_ESTATUS_PEDIDO">
+          <Key>
+            <PropertyRef Name="id_estatus" />
+          </Key>
+          <Property Name="id_estatus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="estatus" Type="Byte" Nullable="false" />
+          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_persona_mod" Type="Int32" />
+          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" FromRole="CTL_ESTATUS_PEDIDO" ToRole="M_PEDIDO" />
+        </EntityType>
+        <EntityType Name="CTL_EXTRAS_PRODUCTO">
+          <Key>
+            <PropertyRef Name="id_extra" />
+          </Key>
+          <Property Name="id_extra" Type="Guid" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="precio" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="estatus" Type="Byte" Nullable="false" />
+          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_persona_mod" Type="Int32" />
+          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PERSONA1" Relationship="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PERSONA2" Relationship="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="R_DETALLE_PEDIDO_EXTRAS" Relationship="Self.FK_EXTRA" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="R_DETALLE_PEDIDO_EXTRAS" />
         </EntityType>
         <EntityType Name="CTL_LOCAL">
           <Key>
@@ -887,7 +1033,21 @@
           <NavigationProperty Name="CTL_COSTO" Relationship="Self.FK_CTL_LOCAL_CTL_COSTO" FromRole="CTL_LOCAL" ToRole="CTL_COSTO" />
           <NavigationProperty Name="CTL_TIPO_LOCAL" Relationship="Self.FK_CTL_LOCAL_CTL_TIPO_LOCAL" FromRole="CTL_LOCAL" ToRole="CTL_TIPO_LOCAL" />
           <NavigationProperty Name="CTL_PRODUCTO" Relationship="Self.FK_CTL_PRODUCTO_CTL_LOCAL" FromRole="CTL_LOCAL" ToRole="CTL_PRODUCTO" />
-          <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_LOCAL" FromRole="CTL_LOCAL" ToRole="M_DETALLE_PEDIDO" />
+          <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_CTL_LOCAL" FromRole="CTL_LOCAL" ToRole="M_DETALLE_PEDIDO" />
+        </EntityType>
+        <EntityType Name="CTL_METODO_PAGO">
+          <Key>
+            <PropertyRef Name="id_metodo_pago" />
+          </Key>
+          <Property Name="id_metodo_pago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="estatus" Type="Byte" Nullable="false" />
+          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_persona_mod" Type="Int32" />
+          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_M_PEDIDO_CTL_METODO_PAGO" FromRole="CTL_METODO_PAGO" ToRole="M_PEDIDO" />
         </EntityType>
         <EntityType Name="CTL_PERSONA">
           <Key>
@@ -906,16 +1066,30 @@
           <Property Name="fecha_mod" Type="DateTime" Precision="3" />
           <NavigationProperty Name="CTL_ACCESO_PERSONA" Relationship="Self.FK__CTL_ACCES__id_pe__34C8D9D1" FromRole="CTL_PERSONA" ToRole="CTL_ACCESO_PERSONA" />
           <NavigationProperty Name="CTL_ACCESO_PERSONA1" Relationship="Self.FK__CTL_ACCES__id_pe__36B12243" FromRole="CTL_PERSONA" ToRole="CTL_ACCESO_PERSONA" />
+          <NavigationProperty Name="CTL_CONDUCTOR" Relationship="Self.FK_CTL_CONDUCTOR_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="CTL_CONDUCTOR" />
+          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO" Relationship="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
+          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO1" Relationship="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
+          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO2" Relationship="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
+          <NavigationProperty Name="TBL_BANNERS" Relationship="Self.FK_BANNER_USUARIO_ALTA" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
+          <NavigationProperty Name="TBL_BANNERS1" Relationship="Self.FK_BANNER_USUARIO_MOD" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
+          <NavigationProperty Name="R_PERSONA_OPENPAY" Relationship="Self.FK_ID_PERSONA" FromRole="CTL_PERSONA" ToRole="R_PERSONA_OPENPAY" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
+          <NavigationProperty Name="M_PEDIDO1" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
           <NavigationProperty Name="R_PERSONA_PRODUCTO_FAVORITO" Relationship="Self.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="R_PERSONA_PRODUCTO_FAVORITO" />
-          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
-          <NavigationProperty Name="M_PEDIDO1" Relationship="ViajesModel.FK_M_PEDIDO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
-          <NavigationProperty Name="CTL_CONDUCTOR" Relationship="ViajesModel.FK_CTL_CONDUCTOR_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="CTL_CONDUCTOR" />
-          <NavigationProperty Name="TBL_BANNERS" Relationship="ViajesModel.FK_BANNER_USUARIO_ALTA" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
-          <NavigationProperty Name="TBL_BANNERS1" Relationship="ViajesModel.FK_BANNER_USUARIO_MOD" FromRole="CTL_PERSONA" ToRole="TBL_BANNERS" />
-          <NavigationProperty Name="R_PERSONA_OPENPAY" Relationship="ViajesModel.FK_ID_PERSONA" FromRole="CTL_PERSONA" ToRole="R_PERSONA_OPENPAY" />
-          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
-          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO1" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
-          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO2" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" FromRole="CTL_PERSONA" ToRole="CTL_EXTRAS_PRODUCTO" />
+        </EntityType>
+        <EntityType Name="CTL_PREGUNTA_SERVICIO">
+          <Key>
+            <PropertyRef Name="id_pregunta" />
+          </Key>
+          <Property Name="id_pregunta" Type="Guid" Nullable="false" />
+          <Property Name="pregunta" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="tipo_pregunta" Type="Byte" Nullable="false" />
+          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_persona_mod" Type="Int32" />
+          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="R_PEDIDO_PREGRUNTA" Relationship="Self.FK_R_PREGUNTA_CTL_PREGUNTA" FromRole="CTL_PREGUNTA_SERVICIO" ToRole="R_PEDIDO_PREGRUNTA" />
+          <Property Name="orden" Type="Byte" Nullable="false" />
         </EntityType>
         <EntityType Name="CTL_PRODUCTO">
           <Key>
@@ -933,9 +1107,9 @@
           <Property Name="id_producto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="estatus" Type="Byte" Nullable="false" />
           <NavigationProperty Name="CTL_LOCAL" Relationship="Self.FK_CTL_PRODUCTO_CTL_LOCAL" FromRole="CTL_PRODUCTO" ToRole="CTL_LOCAL" />
+          <NavigationProperty Name="TBL_BANNERS" Relationship="Self.FK_BANNER_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="TBL_BANNERS" />
+          <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="M_DETALLE_PEDIDO" />
           <NavigationProperty Name="R_PERSONA_PRODUCTO_FAVORITO" Relationship="Self.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="R_PERSONA_PRODUCTO_FAVORITO" />
-          <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="M_DETALLE_PEDIDO" />
-          <NavigationProperty Name="TBL_BANNERS" Relationship="ViajesModel.FK_BANNER_PRODUCTO" FromRole="CTL_PRODUCTO" ToRole="TBL_BANNERS" />
         </EntityType>
         <EntityType Name="CTL_TIPO_LOCAL">
           <Key>
@@ -949,8 +1123,83 @@
           <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_persona_mod" Type="Int32" />
           <Property Name="fecha_mod" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="CTL_LOCAL" Relationship="Self.FK_CTL_LOCAL_CTL_TIPO_LOCAL" FromRole="CTL_TIPO_LOCAL" ToRole="CTL_LOCAL" />
           <Property Name="fotografia" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CTL_LOCAL" Relationship="Self.FK_CTL_LOCAL_CTL_TIPO_LOCAL" FromRole="CTL_TIPO_LOCAL" ToRole="CTL_LOCAL" />
+        </EntityType>
+        <EntityType Name="M_DETALLE_PEDIDO">
+          <Key>
+            <PropertyRef Name="id_detalle_pedido" />
+          </Key>
+          <Property Name="id_local" Type="Int32" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="precio" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="observaciones" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="id_detalle_pedido" Type="Guid" Nullable="false" />
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="CTL_LOCAL" Relationship="Self.FK_M_DETALLE_PEDIDO_CTL_LOCAL" FromRole="M_DETALLE_PEDIDO" ToRole="CTL_LOCAL" />
+          <NavigationProperty Name="CTL_PRODUCTO" Relationship="Self.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" FromRole="M_DETALLE_PEDIDO" ToRole="CTL_PRODUCTO" />
+          <NavigationProperty Name="R_DETALLE_PEDIDO_EXTRAS" Relationship="Self.FK_DETALLE" FromRole="M_DETALLE_PEDIDO" ToRole="R_DETALLE_PEDIDO_EXTRAS" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_M_PEDIDO" FromRole="M_DETALLE_PEDIDO" ToRole="M_PEDIDO" />
+        </EntityType>
+        <EntityType Name="M_PEDIDO">
+          <Key>
+            <PropertyRef Name="id_pedido" />
+          </Key>
+          <Property Name="id_persona_pide" Type="Int32" Nullable="false" />
+          <Property Name="id_direccion_entrega" Type="Int32" Nullable="false" />
+          <Property Name="id_persona_entrega" Type="Int32" />
+          <Property Name="id_encuesta" Type="Int32" />
+          <Property Name="id_estatus" Type="Int32" Nullable="false" />
+          <Property Name="calificacion" Type="Int32" />
+          <Property Name="observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_pedido" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="hora_pedido" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="fecha_entrega" Type="DateTime" Precision="0" />
+          <Property Name="hora_entrega" Type="Time" Precision="7" />
+          <Property Name="folio" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="id_metodo_pago" Type="Int32" Nullable="false" />
+          <Property Name="referencia_pago" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="CTL_DIRECCIONES" Relationship="Self.FK_M_PEDIDO_CTL_DIRECCIONES" FromRole="M_PEDIDO" ToRole="CTL_DIRECCIONES" />
+          <NavigationProperty Name="CTL_ESTATUS_PEDIDO" Relationship="Self.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" FromRole="M_PEDIDO" ToRole="CTL_ESTATUS_PEDIDO" />
+          <NavigationProperty Name="CTL_METODO_PAGO" Relationship="Self.FK_M_PEDIDO_CTL_METODO_PAGO" FromRole="M_PEDIDO" ToRole="CTL_METODO_PAGO" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA" FromRole="M_PEDIDO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PERSONA1" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA1" FromRole="M_PEDIDO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="M_DETALLE_PEDIDO" />
+          <NavigationProperty Name="R_PEDIDO_PREGRUNTA" Relationship="Self.FK_R_PREGUNTA_M_PEDIDO" FromRole="M_PEDIDO" ToRole="R_PEDIDO_PREGRUNTA" />
+          <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="M_PEDIDO" ToRole="TBL_COORDENADAS_CONDUCTOR" />
+        </EntityType>
+        <EntityType Name="R_DETALLE_PEDIDO_EXTRAS">
+          <Key>
+            <PropertyRef Name="id_detalle_pedido" />
+            <PropertyRef Name="id_extra" />
+          </Key>
+          <Property Name="id_detalle_pedido" Type="Guid" Nullable="false" />
+          <Property Name="id_extra" Type="Guid" Nullable="false" />
+          <Property Name="precio" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="CTL_EXTRAS_PRODUCTO" Relationship="Self.FK_EXTRA" FromRole="R_DETALLE_PEDIDO_EXTRAS" ToRole="CTL_EXTRAS_PRODUCTO" />
+          <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="Self.FK_DETALLE" FromRole="R_DETALLE_PEDIDO_EXTRAS" ToRole="M_DETALLE_PEDIDO" />
+        </EntityType>
+        <EntityType Name="R_PEDIDO_PREGRUNTA">
+          <Key>
+            <PropertyRef Name="id_pregunta" />
+            <PropertyRef Name="id_pedido" />
+          </Key>
+          <Property Name="id_pregunta" Type="Guid" Nullable="false" />
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <Property Name="respuesta" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="CTL_PREGUNTA_SERVICIO" Relationship="Self.FK_R_PREGUNTA_CTL_PREGUNTA" FromRole="R_PEDIDO_PREGRUNTA" ToRole="CTL_PREGUNTA_SERVICIO" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_R_PREGUNTA_M_PEDIDO" FromRole="R_PEDIDO_PREGRUNTA" ToRole="M_PEDIDO" />
+        </EntityType>
+        <EntityType Name="R_PERSONA_OPENPAY">
+          <Key>
+            <PropertyRef Name="id_persona" />
+            <PropertyRef Name="id_customer" />
+          </Key>
+          <Property Name="id_persona" Type="Int32" Nullable="false" />
+          <Property Name="id_customer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_ID_PERSONA" FromRole="R_PERSONA_OPENPAY" ToRole="CTL_PERSONA" />
         </EntityType>
         <EntityType Name="R_PERSONA_PRODUCTO_FAVORITO">
           <Key>
@@ -972,6 +1221,47 @@
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TBL_BANNERS">
+          <Key>
+            <PropertyRef Name="id_banner" />
+          </Key>
+          <Property Name="id_banner" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fotografia" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_persona_mod" Type="Int32" />
+          <Property Name="fech_mod" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_BANNER_USUARIO_ALTA" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PERSONA1" Relationship="Self.FK_BANNER_USUARIO_MOD" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="CTL_PRODUCTO" Relationship="Self.FK_BANNER_PRODUCTO" FromRole="TBL_BANNERS" ToRole="CTL_PRODUCTO" />
+        </EntityType>
+        <EntityType Name="TBL_COORDENADAS_CONDUCTOR">
+          <Key>
+            <PropertyRef Name="id_coordenada" />
+          </Key>
+          <Property Name="id_persona" Type="Int32" Nullable="false" />
+          <Property Name="latitud" Type="Decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="longitud" Type="Decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_coordenada" Type="Guid" Nullable="false" />
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="CTL_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" FromRole="TBL_COORDENADAS_CONDUCTOR" ToRole="CTL_CONDUCTOR" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="TBL_COORDENADAS_CONDUCTOR" ToRole="M_PEDIDO" />
+        </EntityType>
+        <EntityType Name="TBL_QR_TIENDA">
+          <Key>
+            <PropertyRef Name="id_qr" />
+          </Key>
+          <Property Name="id_qr" Type="Guid" Nullable="false" />
+          <Property Name="dispositivo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ip" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="latitud" Type="Decimal" Precision="9" Scale="6" />
+          <Property Name="longitud" Type="Decimal" Precision="9" Scale="6" />
+          <Property Name="aplicacion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="FK__CTL_ACCES__id_pe__34C8D9D1">
           <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
@@ -997,6 +1287,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CTL_CONDUCTOR_CTL_PERSONA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="CTL_CONDUCTOR" Type="Self.CTL_CONDUCTOR" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_CONDUCTOR">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR">
+          <End Role="CTL_CONDUCTOR" Type="Self.CTL_CONDUCTOR" Multiplicity="1" />
+          <End Role="TBL_COORDENADAS_CONDUCTOR" Type="Self.TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_CONDUCTOR">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_COORDENADAS_CONDUCTOR">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CTL_LOCAL_CTL_COSTO">
           <End Role="CTL_COSTO" Type="Self.CTL_COSTO" Multiplicity="1" />
           <End Role="CTL_LOCAL" Type="Self.CTL_LOCAL" Multiplicity="*" />
@@ -1006,6 +1320,78 @@
             </Principal>
             <Dependent Role="CTL_LOCAL">
               <PropertyRef Name="id_costo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_PEDIDO_CTL_DIRECCIONES">
+          <End Role="CTL_DIRECCIONES" Type="Self.CTL_DIRECCIONES" Multiplicity="1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_DIRECCIONES">
+              <PropertyRef Name="id_direccion" />
+            </Principal>
+            <Dependent Role="M_PEDIDO">
+              <PropertyRef Name="id_direccion_entrega" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_PEDIDO_CTL_ESTATUS_PEDIDO">
+          <End Role="CTL_ESTATUS_PEDIDO" Type="Self.CTL_ESTATUS_PEDIDO" Multiplicity="1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_ESTATUS_PEDIDO">
+              <PropertyRef Name="id_estatus" />
+            </Principal>
+            <Dependent Role="M_PEDIDO">
+              <PropertyRef Name="id_estatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="0..1" />
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_mod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EXTRA">
+          <End Role="CTL_EXTRAS_PRODUCTO" Type="Self.CTL_EXTRAS_PRODUCTO" Multiplicity="1" />
+          <End Role="R_DETALLE_PEDIDO_EXTRAS" Type="Self.R_DETALLE_PEDIDO_EXTRAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_EXTRAS_PRODUCTO">
+              <PropertyRef Name="id_extra" />
+            </Principal>
+            <Dependent Role="R_DETALLE_PEDIDO_EXTRAS">
+              <PropertyRef Name="id_extra" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1033,6 +1419,90 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_M_DETALLE_PEDIDO_CTL_LOCAL">
+          <End Role="CTL_LOCAL" Type="Self.CTL_LOCAL" Multiplicity="1" />
+          <End Role="M_DETALLE_PEDIDO" Type="Self.M_DETALLE_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_LOCAL">
+              <PropertyRef Name="id_local" />
+            </Principal>
+            <Dependent Role="M_DETALLE_PEDIDO">
+              <PropertyRef Name="id_local" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_PEDIDO_CTL_METODO_PAGO">
+          <End Role="CTL_METODO_PAGO" Type="Self.CTL_METODO_PAGO" Multiplicity="1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_METODO_PAGO">
+              <PropertyRef Name="id_metodo_pago" />
+            </Principal>
+            <Dependent Role="M_PEDIDO">
+              <PropertyRef Name="id_metodo_pago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_USUARIO_ALTA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="TBL_BANNERS" Type="Self.TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_persona_alta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_USUARIO_MOD">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="0..1" />
+          <End Role="TBL_BANNERS" Type="Self.TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_persona_mod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ID_PERSONA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="R_PERSONA_OPENPAY" Type="Self.R_PERSONA_OPENPAY" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="R_PERSONA_OPENPAY">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_PEDIDO_CTL_PERSONA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="M_PEDIDO">
+              <PropertyRef Name="id_persona_pide" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_PEDIDO_CTL_PERSONA1">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="0..1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="M_PEDIDO">
+              <PropertyRef Name="id_persona_entrega" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PERSONA">
           <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
           <End Role="R_PERSONA_PRODUCTO_FAVORITO" Type="Self.R_PERSONA_PRODUCTO_FAVORITO" Multiplicity="*" />
@@ -1042,6 +1512,42 @@
             </Principal>
             <Dependent Role="R_PERSONA_PRODUCTO_FAVORITO">
               <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_R_PREGUNTA_CTL_PREGUNTA">
+          <End Role="CTL_PREGUNTA_SERVICIO" Type="Self.CTL_PREGUNTA_SERVICIO" Multiplicity="1" />
+          <End Role="R_PEDIDO_PREGRUNTA" Type="Self.R_PEDIDO_PREGRUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PREGUNTA_SERVICIO">
+              <PropertyRef Name="id_pregunta" />
+            </Principal>
+            <Dependent Role="R_PEDIDO_PREGRUNTA">
+              <PropertyRef Name="id_pregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BANNER_PRODUCTO">
+          <End Role="CTL_PRODUCTO" Type="Self.CTL_PRODUCTO" Multiplicity="1" />
+          <End Role="TBL_BANNERS" Type="Self.TBL_BANNERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PRODUCTO">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TBL_BANNERS">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_DETALLE_PEDIDO_CTL_PRODUCTO">
+          <End Role="CTL_PRODUCTO" Type="Self.CTL_PRODUCTO" Multiplicity="1" />
+          <End Role="M_DETALLE_PEDIDO" Type="Self.M_DETALLE_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PRODUCTO">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="M_DETALLE_PEDIDO">
+              <PropertyRef Name="id_producto" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1057,16 +1563,77 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DETALLE">
+          <End Role="M_DETALLE_PEDIDO" Type="Self.M_DETALLE_PEDIDO" Multiplicity="1" />
+          <End Role="R_DETALLE_PEDIDO_EXTRAS" Type="Self.R_DETALLE_PEDIDO_EXTRAS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_DETALLE_PEDIDO">
+              <PropertyRef Name="id_detalle_pedido" />
+            </Principal>
+            <Dependent Role="R_DETALLE_PEDIDO_EXTRAS">
+              <PropertyRef Name="id_detalle_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_DETALLE_PEDIDO_M_PEDIDO">
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="M_DETALLE_PEDIDO" Type="Self.M_DETALLE_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="M_DETALLE_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_R_PREGUNTA_M_PEDIDO">
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="R_PEDIDO_PREGRUNTA" Type="Self.R_PEDIDO_PREGRUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="R_PEDIDO_PREGRUNTA">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO">
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="TBL_COORDENADAS_CONDUCTOR" Type="Self.TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TBL_COORDENADAS_CONDUCTOR">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ViajesEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CTL_ACCESO_PERSONA" EntityType="Self.CTL_ACCESO_PERSONA" />
+          <EntitySet Name="CTL_CONDUCTOR" EntityType="Self.CTL_CONDUCTOR" />
           <EntitySet Name="CTL_COSTO" EntityType="Self.CTL_COSTO" />
           <EntitySet Name="CTL_DIRECCIONES" EntityType="Self.CTL_DIRECCIONES" />
+          <EntitySet Name="CTL_ESTATUS_PEDIDO" EntityType="Self.CTL_ESTATUS_PEDIDO" />
+          <EntitySet Name="CTL_EXTRAS_PRODUCTO" EntityType="Self.CTL_EXTRAS_PRODUCTO" />
           <EntitySet Name="CTL_LOCAL" EntityType="Self.CTL_LOCAL" />
+          <EntitySet Name="CTL_METODO_PAGO" EntityType="Self.CTL_METODO_PAGO" />
           <EntitySet Name="CTL_PERSONA" EntityType="Self.CTL_PERSONA" />
+          <EntitySet Name="CTL_PREGUNTA_SERVICIO" EntityType="Self.CTL_PREGUNTA_SERVICIO" />
           <EntitySet Name="CTL_PRODUCTO" EntityType="Self.CTL_PRODUCTO" />
           <EntitySet Name="CTL_TIPO_LOCAL" EntityType="Self.CTL_TIPO_LOCAL" />
+          <EntitySet Name="M_DETALLE_PEDIDO" EntityType="Self.M_DETALLE_PEDIDO" />
+          <EntitySet Name="M_PEDIDO" EntityType="Self.M_PEDIDO" />
+          <EntitySet Name="R_DETALLE_PEDIDO_EXTRAS" EntityType="Self.R_DETALLE_PEDIDO_EXTRAS" />
+          <EntitySet Name="R_PEDIDO_PREGRUNTA" EntityType="Self.R_PEDIDO_PREGRUNTA" />
+          <EntitySet Name="R_PERSONA_OPENPAY" EntityType="Self.R_PERSONA_OPENPAY" />
           <EntitySet Name="R_PERSONA_PRODUCTO_FAVORITO" EntityType="Self.R_PERSONA_PRODUCTO_FAVORITO" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TBL_BANNERS" EntityType="Self.TBL_BANNERS" />
+          <EntitySet Name="TBL_COORDENADAS_CONDUCTOR" EntityType="Self.TBL_COORDENADAS_CONDUCTOR" />
+          <EntitySet Name="TBL_QR_TIENDA" EntityType="Self.TBL_QR_TIENDA" />
           <AssociationSet Name="FK__CTL_ACCES__id_pe__34C8D9D1" Association="Self.FK__CTL_ACCES__id_pe__34C8D9D1">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_ACCESO_PERSONA" EntitySet="CTL_ACCESO_PERSONA" />
@@ -1075,9 +1642,41 @@
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_ACCESO_PERSONA" EntitySet="CTL_ACCESO_PERSONA" />
           </AssociationSet>
+          <AssociationSet Name="FK_CTL_CONDUCTOR_CTL_PERSONA" Association="Self.FK_CTL_CONDUCTOR_CTL_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_CONDUCTOR" EntitySet="CTL_CONDUCTOR" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" Association="Self.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR">
+            <End Role="CTL_CONDUCTOR" EntitySet="CTL_CONDUCTOR" />
+            <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
+          </AssociationSet>
           <AssociationSet Name="FK_CTL_LOCAL_CTL_COSTO" Association="Self.FK_CTL_LOCAL_CTL_COSTO">
             <End Role="CTL_COSTO" EntitySet="CTL_COSTO" />
             <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_PEDIDO_CTL_DIRECCIONES" Association="Self.FK_M_PEDIDO_CTL_DIRECCIONES">
+            <End Role="CTL_DIRECCIONES" EntitySet="CTL_DIRECCIONES" />
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" Association="Self.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO">
+            <End Role="CTL_ESTATUS_PEDIDO" EntitySet="CTL_ESTATUS_PEDIDO" />
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" Association="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" Association="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" Association="Self.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EXTRA" Association="Self.FK_EXTRA">
+            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
+            <End Role="R_DETALLE_PEDIDO_EXTRAS" EntitySet="R_DETALLE_PEDIDO_EXTRAS" />
           </AssociationSet>
           <AssociationSet Name="FK_CTL_LOCAL_CTL_TIPO_LOCAL" Association="Self.FK_CTL_LOCAL_CTL_TIPO_LOCAL">
             <End Role="CTL_TIPO_LOCAL" EntitySet="CTL_TIPO_LOCAL" />
@@ -1087,13 +1686,69 @@
             <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
             <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
           </AssociationSet>
+          <AssociationSet Name="FK_M_DETALLE_PEDIDO_CTL_LOCAL" Association="Self.FK_M_DETALLE_PEDIDO_CTL_LOCAL">
+            <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
+            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_PEDIDO_CTL_METODO_PAGO" Association="Self.FK_M_PEDIDO_CTL_METODO_PAGO">
+            <End Role="CTL_METODO_PAGO" EntitySet="CTL_METODO_PAGO" />
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_USUARIO_ALTA" Association="Self.FK_BANNER_USUARIO_ALTA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_USUARIO_MOD" Association="Self.FK_BANNER_USUARIO_MOD">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ID_PERSONA" Association="Self.FK_ID_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="R_PERSONA_OPENPAY" EntitySet="R_PERSONA_OPENPAY" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_PEDIDO_CTL_PERSONA" Association="Self.FK_M_PEDIDO_CTL_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_PEDIDO_CTL_PERSONA1" Association="Self.FK_M_PEDIDO_CTL_PERSONA1">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+          </AssociationSet>
           <AssociationSet Name="FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PERSONA" Association="Self.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PERSONA">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="R_PERSONA_PRODUCTO_FAVORITO" EntitySet="R_PERSONA_PRODUCTO_FAVORITO" />
           </AssociationSet>
+          <AssociationSet Name="FK_R_PREGUNTA_CTL_PREGUNTA" Association="Self.FK_R_PREGUNTA_CTL_PREGUNTA">
+            <End Role="CTL_PREGUNTA_SERVICIO" EntitySet="CTL_PREGUNTA_SERVICIO" />
+            <End Role="R_PEDIDO_PREGRUNTA" EntitySet="R_PEDIDO_PREGRUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BANNER_PRODUCTO" Association="Self.FK_BANNER_PRODUCTO">
+            <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
+            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" Association="Self.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO">
+            <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
+            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
+          </AssociationSet>
           <AssociationSet Name="FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PRODUCTO" Association="Self.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PRODUCTO">
             <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
             <End Role="R_PERSONA_PRODUCTO_FAVORITO" EntitySet="R_PERSONA_PRODUCTO_FAVORITO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLE" Association="Self.FK_DETALLE">
+            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
+            <End Role="R_DETALLE_PEDIDO_EXTRAS" EntitySet="R_DETALLE_PEDIDO_EXTRAS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_DETALLE_PEDIDO_M_PEDIDO" Association="Self.FK_M_DETALLE_PEDIDO_M_PEDIDO">
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_R_PREGUNTA_M_PEDIDO" Association="Self.FK_R_PREGUNTA_M_PEDIDO">
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+            <End Role="R_PEDIDO_PREGRUNTA" EntitySet="R_PEDIDO_PREGRUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" Association="Self.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO">
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+            <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
           </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
@@ -1138,11 +1793,47 @@
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="SP_LOCAL">
+            <Parameter Name="PIN_ID_LOCAL" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_NOMBRE" Mode="In" Type="String" />
+            <Parameter Name="PIN_REFERENCIAS" Mode="In" Type="String" />
+            <Parameter Name="PIN_LATITUD" Mode="In" Type="Decimal" />
+            <Parameter Name="PIN_LONGITUD" Mode="In" Type="Decimal" />
+            <Parameter Name="PIN_FOTOGRAFIA" Mode="In" Type="String" />
+            <Parameter Name="PIN_CALLE" Mode="In" Type="String" />
+            <Parameter Name="PIN_COLONIA" Mode="In" Type="String" />
+            <Parameter Name="PIN_NO_EXT" Mode="In" Type="String" />
+            <Parameter Name="PIN_NO_INT" Mode="In" Type="String" />
+            <Parameter Name="PIN_ID_COSTO" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ID_TIPO_LOCAL" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ID_PERSONA_MOVIMIENTO" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ESTATUS" Mode="In" Type="Byte" />
+            <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
+            <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
+            <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
+            <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="SP_LOGIN">
             <Parameter Name="PIN_EMAIL" Mode="In" Type="String" />
             <Parameter Name="PIN_PASSWORD" Mode="In" Type="String" />
             <Parameter Name="PIN_TIPO_USUARIO" Mode="In" Type="Byte" />
             <Parameter Name="RET_ID_PERSONA" Mode="InOut" Type="Int32" />
+            <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
+            <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
+            <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_PEDIDO">
+            <Parameter Name="PIN_ID_PEDIDO" Mode="In" Type="Guid" />
+            <Parameter Name="PIN_ID_PERSONA_PIDE" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ID_DIRECCION_ENTREGA" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ID_PERSONA_ENTREGA" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_OBSERVACIONES" Mode="In" Type="String" />
+            <Parameter Name="PIN_FOLIO" Mode="In" Type="String" />
+            <Parameter Name="PIN_ID_METODO_PAGO" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ID_ESTATUS" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_DETALLE" Mode="In" Type="String" />
+            <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
+            <Parameter Name="PIN_REFERENCIA_PAGO" Mode="In" Type="String" />
             <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
             <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
@@ -1179,123 +1870,6 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <EntitySet Name="M_DETALLE_PEDIDO" EntityType="ViajesModel.M_DETALLE_PEDIDO" />
-          <EntitySet Name="M_PEDIDO" EntityType="ViajesModel.M_PEDIDO" />
-          <AssociationSet Name="FK_M_PEDIDO_CTL_DIRECCIONES" Association="ViajesModel.FK_M_PEDIDO_CTL_DIRECCIONES">
-            <End Role="CTL_DIRECCIONES" EntitySet="CTL_DIRECCIONES" />
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_M_DETALLE_PEDIDO_CTL_LOCAL" Association="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_LOCAL">
-            <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
-            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_M_PEDIDO_CTL_PERSONA" Association="ViajesModel.FK_M_PEDIDO_CTL_PERSONA">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_M_PEDIDO_CTL_PERSONA1" Association="ViajesModel.FK_M_PEDIDO_CTL_PERSONA1">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" Association="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO">
-            <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
-            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_M_DETALLE_PEDIDO_M_PEDIDO" Association="ViajesModel.FK_M_DETALLE_PEDIDO_M_PEDIDO">
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-            <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
-          </AssociationSet>
-          <FunctionImport Name="SP_PEDIDO">
-            <Parameter Name="PIN_ID_PEDIDO" Mode="In" Type="Int64" />
-            <Parameter Name="PIN_ID_PERSONA_PIDE" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_ID_DIRECCION_ENTREGA" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_ID_PERSONA_ENTREGA" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_OBSERVACIONES" Mode="In" Type="String" />
-            <Parameter Name="PIN_FOLIO" Mode="In" Type="String" />
-            <Parameter Name="PIN_ID_METODO_PAGO" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_ID_ESTATUS" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_DETALLE" Mode="In" Type="String" />
-            <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
-            <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
-            <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
-            <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="CTL_ESTATUS_PEDIDO" EntityType="ViajesModel.CTL_ESTATUS_PEDIDO" />
-          <EntitySet Name="CTL_METODO_PAGO" EntityType="ViajesModel.CTL_METODO_PAGO" />
-          <AssociationSet Name="FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" Association="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO">
-            <End Role="CTL_ESTATUS_PEDIDO" EntitySet="CTL_ESTATUS_PEDIDO" />
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_M_PEDIDO_CTL_METODO_PAGO" Association="ViajesModel.FK_M_PEDIDO_CTL_METODO_PAGO">
-            <End Role="CTL_METODO_PAGO" EntitySet="CTL_METODO_PAGO" />
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-          </AssociationSet>
-          <EntitySet Name="CTL_CONDUCTOR" EntityType="ViajesModel.CTL_CONDUCTOR" />
-          <EntitySet Name="TBL_COORDENADAS_CONDUCTOR" EntityType="ViajesModel.TBL_COORDENADAS_CONDUCTOR" />
-          <AssociationSet Name="FK_CTL_CONDUCTOR_CTL_PERSONA" Association="ViajesModel.FK_CTL_CONDUCTOR_CTL_PERSONA">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="CTL_CONDUCTOR" EntitySet="CTL_CONDUCTOR" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR">
-            <End Role="CTL_CONDUCTOR" EntitySet="CTL_CONDUCTOR" />
-            <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO">
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-            <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
-          </AssociationSet>
-          <FunctionImport Name="SP_LOCAL">
-            <Parameter Name="PIN_ID_LOCAL" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_NOMBRE" Mode="In" Type="String" />
-            <Parameter Name="PIN_REFERENCIAS" Mode="In" Type="String" />
-            <Parameter Name="PIN_LATITUD" Mode="In" Type="Decimal" />
-            <Parameter Name="PIN_LONGITUD" Mode="In" Type="Decimal" />
-            <Parameter Name="PIN_FOTOGRAFIA" Mode="In" Type="String" />
-            <Parameter Name="PIN_CALLE" Mode="In" Type="String" />
-            <Parameter Name="PIN_COLONIA" Mode="In" Type="String" />
-            <Parameter Name="PIN_NO_EXT" Mode="In" Type="String" />
-            <Parameter Name="PIN_NO_INT" Mode="In" Type="String" />
-            <Parameter Name="PIN_ID_COSTO" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_ID_TIPO_LOCAL" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_ID_PERSONA_MOVIMIENTO" Mode="In" Type="Int32" />
-            <Parameter Name="PIN_ESTATUS" Mode="In" Type="Byte" />
-            <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
-            <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
-            <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
-            <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="TBL_QR_TIENDA" EntityType="ViajesModel.TBL_QR_TIENDA" />
-          <EntitySet Name="TBL_BANNERS" EntityType="ViajesModel.TBL_BANNERS" />
-          <AssociationSet Name="FK_BANNER_PRODUCTO" Association="ViajesModel.FK_BANNER_PRODUCTO">
-            <End Role="CTL_PRODUCTO" EntitySet="CTL_PRODUCTO" />
-            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BANNER_USUARIO_ALTA" Association="ViajesModel.FK_BANNER_USUARIO_ALTA">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BANNER_USUARIO_MOD" Association="ViajesModel.FK_BANNER_USUARIO_MOD">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="TBL_BANNERS" EntitySet="TBL_BANNERS" />
-          </AssociationSet>
-          <EntitySet Name="R_PERSONA_OPENPAY" EntityType="ViajesModel.R_PERSONA_OPENPAY" />
-          <AssociationSet Name="FK_ID_PERSONA" Association="ViajesModel.FK_ID_PERSONA">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="R_PERSONA_OPENPAY" EntitySet="R_PERSONA_OPENPAY" />
-          </AssociationSet>
-          <EntitySet Name="CTL_EXTRAS_PRODUCTO" EntityType="ViajesModel.CTL_EXTRAS_PRODUCTO" />
-          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" Association="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" Association="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" Association="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
-            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
-            <End Role="CTL_EXTRAS_PRODUCTO" EntitySet="CTL_EXTRAS_PRODUCTO" />
-          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1308,372 +1882,6 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="M_DETALLE_PEDIDO">
-          <Key>
-            <PropertyRef Name="id_detalle_pedido" />
-          </Key>
-          <Property Name="id_pedido" Type="Int64" Nullable="false" />
-          <Property Name="id_local" Type="Int32" Nullable="false" />
-          <Property Name="id_producto" Type="Int32" Nullable="false" />
-          <Property Name="precio" Type="Decimal" Nullable="false" Precision="16" Scale="2" />
-          <Property Name="cantidad" Type="Int32" Nullable="false" />
-          <Property Name="observaciones" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="id_detalle_pedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="CTL_LOCAL" Relationship="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_LOCAL" FromRole="M_DETALLE_PEDIDO" ToRole="CTL_LOCAL" />
-          <NavigationProperty Name="CTL_PRODUCTO" Relationship="ViajesModel.FK_M_DETALLE_PEDIDO_CTL_PRODUCTO" FromRole="M_DETALLE_PEDIDO" ToRole="CTL_PRODUCTO" />
-          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_M_DETALLE_PEDIDO_M_PEDIDO" FromRole="M_DETALLE_PEDIDO" ToRole="M_PEDIDO" />
-        </EntityType>
-        <EntityType Name="M_PEDIDO">
-          <Key>
-            <PropertyRef Name="id_pedido" />
-          </Key>
-          <Property Name="id_pedido" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_persona_pide" Type="Int32" Nullable="false" />
-          <Property Name="id_direccion_entrega" Type="Int32" Nullable="false" />
-          <Property Name="id_persona_entrega" Type="Int32" />
-          <Property Name="id_encuesta" Type="Int32" />
-          <Property Name="id_estatus" Type="Int32" Nullable="false" />
-          <Property Name="calificacion" Type="Int32" />
-          <Property Name="observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="fecha_pedido" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="hora_pedido" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="fecha_entrega" Type="DateTime" Precision="0" />
-          <Property Name="hora_entrega" Type="Time" Precision="7" />
-          <Property Name="folio" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CTL_DIRECCIONES" Relationship="ViajesModel.FK_M_PEDIDO_CTL_DIRECCIONES" FromRole="M_PEDIDO" ToRole="CTL_DIRECCIONES" />
-          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_M_PEDIDO_CTL_PERSONA" FromRole="M_PEDIDO" ToRole="CTL_PERSONA" />
-          <NavigationProperty Name="CTL_PERSONA1" Relationship="ViajesModel.FK_M_PEDIDO_CTL_PERSONA1" FromRole="M_PEDIDO" ToRole="CTL_PERSONA" />
-          <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="ViajesModel.FK_M_DETALLE_PEDIDO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="M_DETALLE_PEDIDO" />
-          <Property Name="id_metodo_pago" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CTL_ESTATUS_PEDIDO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" FromRole="M_PEDIDO" ToRole="CTL_ESTATUS_PEDIDO" />
-          <NavigationProperty Name="CTL_METODO_PAGO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_METODO_PAGO" FromRole="M_PEDIDO" ToRole="CTL_METODO_PAGO" />
-          <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="M_PEDIDO" ToRole="TBL_COORDENADAS_CONDUCTOR" />
-        </EntityType>
-        <Association Name="FK_M_PEDIDO_CTL_DIRECCIONES">
-          <End Type="ViajesModel.CTL_DIRECCIONES" Role="CTL_DIRECCIONES" Multiplicity="1" />
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_DIRECCIONES">
-              <PropertyRef Name="id_direccion" />
-            </Principal>
-            <Dependent Role="M_PEDIDO">
-              <PropertyRef Name="id_direccion_entrega" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_DETALLE_PEDIDO_CTL_LOCAL">
-          <End Type="ViajesModel.CTL_LOCAL" Role="CTL_LOCAL" Multiplicity="1" />
-          <End Type="ViajesModel.M_DETALLE_PEDIDO" Role="M_DETALLE_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_LOCAL">
-              <PropertyRef Name="id_local" />
-            </Principal>
-            <Dependent Role="M_DETALLE_PEDIDO">
-              <PropertyRef Name="id_local" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_PEDIDO_CTL_PERSONA">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="M_PEDIDO">
-              <PropertyRef Name="id_persona_pide" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_PEDIDO_CTL_PERSONA1">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="0..1" />
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="M_PEDIDO">
-              <PropertyRef Name="id_persona_entrega" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_DETALLE_PEDIDO_CTL_PRODUCTO">
-          <End Type="ViajesModel.CTL_PRODUCTO" Role="CTL_PRODUCTO" Multiplicity="1" />
-          <End Type="ViajesModel.M_DETALLE_PEDIDO" Role="M_DETALLE_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PRODUCTO">
-              <PropertyRef Name="id_producto" />
-            </Principal>
-            <Dependent Role="M_DETALLE_PEDIDO">
-              <PropertyRef Name="id_producto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_DETALLE_PEDIDO_M_PEDIDO">
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="1" />
-          <End Type="ViajesModel.M_DETALLE_PEDIDO" Role="M_DETALLE_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_PEDIDO">
-              <PropertyRef Name="id_pedido" />
-            </Principal>
-            <Dependent Role="M_DETALLE_PEDIDO">
-              <PropertyRef Name="id_pedido" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="CTL_ESTATUS_PEDIDO">
-          <Key>
-            <PropertyRef Name="id_estatus" />
-          </Key>
-          <Property Name="id_estatus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="estatus" Type="Byte" Nullable="false" />
-          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
-          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_persona_mod" Type="Int32" />
-          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" FromRole="CTL_ESTATUS_PEDIDO" ToRole="M_PEDIDO" />
-        </EntityType>
-        <EntityType Name="CTL_METODO_PAGO">
-          <Key>
-            <PropertyRef Name="id_metodo_pago" />
-          </Key>
-          <Property Name="id_metodo_pago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="descripcion" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="estatus" Type="Byte" Nullable="false" />
-          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
-          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_persona_mod" Type="Int32" />
-          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_METODO_PAGO" FromRole="CTL_METODO_PAGO" ToRole="M_PEDIDO" />
-        </EntityType>
-        <Association Name="FK_M_PEDIDO_CTL_ESTATUS_PEDIDO">
-          <End Type="ViajesModel.CTL_ESTATUS_PEDIDO" Role="CTL_ESTATUS_PEDIDO" Multiplicity="1" />
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_ESTATUS_PEDIDO">
-              <PropertyRef Name="id_estatus" />
-            </Principal>
-            <Dependent Role="M_PEDIDO">
-              <PropertyRef Name="id_estatus" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_PEDIDO_CTL_METODO_PAGO">
-          <End Type="ViajesModel.CTL_METODO_PAGO" Role="CTL_METODO_PAGO" Multiplicity="1" />
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_METODO_PAGO">
-              <PropertyRef Name="id_metodo_pago" />
-            </Principal>
-            <Dependent Role="M_PEDIDO">
-              <PropertyRef Name="id_metodo_pago" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="CTL_CONDUCTOR">
-          <Key>
-            <PropertyRef Name="id_persona" />
-          </Key>
-          <Property Name="id_persona" Type="Int32" Nullable="false" />
-          <Property Name="calle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="colonia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="no_int" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="no_ext" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="no_placas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="no_licencia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_CTL_CONDUCTOR_CTL_PERSONA" FromRole="CTL_CONDUCTOR" ToRole="CTL_PERSONA" />
-          <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" FromRole="CTL_CONDUCTOR" ToRole="TBL_COORDENADAS_CONDUCTOR" />
-        </EntityType>
-        <EntityType Name="TBL_COORDENADAS_CONDUCTOR">
-          <Key>
-            <PropertyRef Name="id_coordenada" />
-          </Key>
-          <Property Name="id_persona" Type="Int32" Nullable="false" />
-          <Property Name="latitud" Type="Decimal" Nullable="false" Precision="9" Scale="6" />
-          <Property Name="longitud" Type="Decimal" Nullable="false" Precision="9" Scale="6" />
-          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="CTL_CONDUCTOR" Relationship="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" FromRole="TBL_COORDENADAS_CONDUCTOR" ToRole="CTL_CONDUCTOR" />
-          <Property Name="id_coordenada" Type="Guid" Nullable="false" />
-          <Property Name="id_pedido" Type="Int64" />
-          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="TBL_COORDENADAS_CONDUCTOR" ToRole="M_PEDIDO" />
-        </EntityType>
-        <Association Name="FK_CTL_CONDUCTOR_CTL_PERSONA">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
-          <End Type="ViajesModel.CTL_CONDUCTOR" Role="CTL_CONDUCTOR" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="CTL_CONDUCTOR">
-              <PropertyRef Name="id_persona" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR">
-          <End Type="ViajesModel.CTL_CONDUCTOR" Role="CTL_CONDUCTOR" Multiplicity="1" />
-          <End Type="ViajesModel.TBL_COORDENADAS_CONDUCTOR" Role="TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_CONDUCTOR">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="TBL_COORDENADAS_CONDUCTOR">
-              <PropertyRef Name="id_persona" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO">
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="0..1" />
-          <End Type="ViajesModel.TBL_COORDENADAS_CONDUCTOR" Role="TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_PEDIDO">
-              <PropertyRef Name="id_pedido" />
-            </Principal>
-            <Dependent Role="TBL_COORDENADAS_CONDUCTOR">
-              <PropertyRef Name="id_pedido" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="TBL_QR_TIENDA">
-          <Key>
-            <PropertyRef Name="id_qr" />
-          </Key>
-          <Property Name="dispositivo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ip" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="latitud" Type="Decimal" Precision="9" Scale="6" />
-          <Property Name="longitud" Type="Decimal" Precision="9" Scale="6" />
-          <Property Name="aplicacion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_qr" Type="Guid" Nullable="false" />
-        </EntityType>
-        <EntityType Name="TBL_BANNERS">
-          <Key>
-            <PropertyRef Name="id_banner" />
-          </Key>
-          <Property Name="id_banner" Type="Guid" Nullable="false" />
-          <Property Name="nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="fotografia" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="id_producto" Type="Int32" Nullable="false" />
-          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
-          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_persona_mod" Type="Int32" />
-          <Property Name="fech_mod" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CTL_PRODUCTO" Relationship="ViajesModel.FK_BANNER_PRODUCTO" FromRole="TBL_BANNERS" ToRole="CTL_PRODUCTO" />
-          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_BANNER_USUARIO_ALTA" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
-          <NavigationProperty Name="CTL_PERSONA1" Relationship="ViajesModel.FK_BANNER_USUARIO_MOD" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
-        </EntityType>
-        <Association Name="FK_BANNER_PRODUCTO">
-          <End Type="ViajesModel.CTL_PRODUCTO" Role="CTL_PRODUCTO" Multiplicity="1" />
-          <End Type="ViajesModel.TBL_BANNERS" Role="TBL_BANNERS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PRODUCTO">
-              <PropertyRef Name="id_producto" />
-            </Principal>
-            <Dependent Role="TBL_BANNERS">
-              <PropertyRef Name="id_producto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BANNER_USUARIO_ALTA">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
-          <End Type="ViajesModel.TBL_BANNERS" Role="TBL_BANNERS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="TBL_BANNERS">
-              <PropertyRef Name="id_persona_alta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BANNER_USUARIO_MOD">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="0..1" />
-          <End Type="ViajesModel.TBL_BANNERS" Role="TBL_BANNERS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="TBL_BANNERS">
-              <PropertyRef Name="id_persona_mod" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="R_PERSONA_OPENPAY">
-          <Key>
-            <PropertyRef Name="id_persona" />
-            <PropertyRef Name="id_customer" />
-          </Key>
-          <Property Name="id_persona" Type="Int32" Nullable="false" />
-          <Property Name="id_customer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_ID_PERSONA" FromRole="R_PERSONA_OPENPAY" ToRole="CTL_PERSONA" />
-        </EntityType>
-        <Association Name="FK_ID_PERSONA">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
-          <End Type="ViajesModel.R_PERSONA_OPENPAY" Role="R_PERSONA_OPENPAY" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="R_PERSONA_OPENPAY">
-              <PropertyRef Name="id_persona" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="CTL_EXTRAS_PRODUCTO">
-          <Key>
-            <PropertyRef Name="id_extra" />
-          </Key>
-          <Property Name="id_extra" Type="Guid" Nullable="false" />
-          <Property Name="id_producto" Type="Int32" Nullable="false" />
-          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="precio" Type="Decimal" Nullable="false" Precision="16" Scale="2" />
-          <Property Name="estatus" Type="Byte" Nullable="false" />
-          <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
-          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_persona_mod" Type="Int32" />
-          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
-          <NavigationProperty Name="CTL_PERSONA1" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
-          <NavigationProperty Name="CTL_PERSONA2" Relationship="ViajesModel.FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO" FromRole="CTL_EXTRAS_PRODUCTO" ToRole="CTL_PERSONA" />
-        </EntityType>
-        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
-          <End Type="ViajesModel.CTL_EXTRAS_PRODUCTO" Role="CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="CTL_EXTRAS_PRODUCTO">
-              <PropertyRef Name="id_persona_alta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PERSONA1">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="0..1" />
-          <End Type="ViajesModel.CTL_EXTRAS_PRODUCTO" Role="CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="CTL_EXTRAS_PRODUCTO">
-              <PropertyRef Name="id_persona_mod" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CTL_EXTRAS_PRODUCTO_CTL_PRODUCTO">
-          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
-          <End Type="ViajesModel.CTL_EXTRAS_PRODUCTO" Role="CTL_EXTRAS_PRODUCTO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CTL_PERSONA">
-              <PropertyRef Name="id_persona" />
-            </Principal>
-            <Dependent Role="CTL_EXTRAS_PRODUCTO">
-              <PropertyRef Name="id_persona_alta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1683,12 +1891,25 @@
           <EntitySetMapping Name="CTL_ACCESO_PERSONA">
             <EntityTypeMapping TypeName="ViajesModel.CTL_ACCESO_PERSONA">
               <MappingFragment StoreEntitySet="CTL_ACCESO_PERSONA">
-                <ScalarProperty Name="token_firebase" ColumnName="token_firebase" />
                 <ScalarProperty Name="id_persona" ColumnName="id_persona" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="tipo_usuario" ColumnName="tipo_usuario" />
                 <ScalarProperty Name="acepta_terminos" ColumnName="acepta_terminos" />
+                <ScalarProperty Name="token_firebase" ColumnName="token_firebase" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CTL_CONDUCTOR">
+            <EntityTypeMapping TypeName="ViajesModel.CTL_CONDUCTOR">
+              <MappingFragment StoreEntitySet="CTL_CONDUCTOR">
+                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+                <ScalarProperty Name="calle" ColumnName="calle" />
+                <ScalarProperty Name="colonia" ColumnName="colonia" />
+                <ScalarProperty Name="no_int" ColumnName="no_int" />
+                <ScalarProperty Name="no_ext" ColumnName="no_ext" />
+                <ScalarProperty Name="no_placas" ColumnName="no_placas" />
+                <ScalarProperty Name="no_licencia" ColumnName="no_licencia" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1709,7 +1930,6 @@
           <EntitySetMapping Name="CTL_DIRECCIONES">
             <EntityTypeMapping TypeName="ViajesModel.CTL_DIRECCIONES">
               <MappingFragment StoreEntitySet="CTL_DIRECCIONES">
-                <ScalarProperty Name="predeterminada" ColumnName="predeterminada" />
                 <ScalarProperty Name="id_direccion" ColumnName="id_direccion" />
                 <ScalarProperty Name="id_persona" ColumnName="id_persona" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
@@ -1720,6 +1940,36 @@
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
                 <ScalarProperty Name="latitud" ColumnName="latitud" />
                 <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="estatus" ColumnName="estatus" />
+                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
+                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
+                <ScalarProperty Name="predeterminada" ColumnName="predeterminada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CTL_ESTATUS_PEDIDO">
+            <EntityTypeMapping TypeName="ViajesModel.CTL_ESTATUS_PEDIDO">
+              <MappingFragment StoreEntitySet="CTL_ESTATUS_PEDIDO">
+                <ScalarProperty Name="id_estatus" ColumnName="id_estatus" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="estatus" ColumnName="estatus" />
+                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
+                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CTL_EXTRAS_PRODUCTO">
+            <EntityTypeMapping TypeName="ViajesModel.CTL_EXTRAS_PRODUCTO">
+              <MappingFragment StoreEntitySet="CTL_EXTRAS_PRODUCTO">
+                <ScalarProperty Name="id_extra" ColumnName="id_extra" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
                 <ScalarProperty Name="estatus" ColumnName="estatus" />
                 <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
                 <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
@@ -1751,6 +2001,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CTL_METODO_PAGO">
+            <EntityTypeMapping TypeName="ViajesModel.CTL_METODO_PAGO">
+              <MappingFragment StoreEntitySet="CTL_METODO_PAGO">
+                <ScalarProperty Name="id_metodo_pago" ColumnName="id_metodo_pago" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="estatus" ColumnName="estatus" />
+                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
+                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CTL_PERSONA">
             <EntityTypeMapping TypeName="ViajesModel.CTL_PERSONA">
               <MappingFragment StoreEntitySet="CTL_PERSONA">
@@ -1761,6 +2025,20 @@
                 <ScalarProperty Name="telefono" ColumnName="telefono" />
                 <ScalarProperty Name="fotografia" ColumnName="fotografia" />
                 <ScalarProperty Name="estatus" ColumnName="estatus" />
+                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
+                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CTL_PREGUNTA_SERVICIO">
+            <EntityTypeMapping TypeName="ViajesModel.CTL_PREGUNTA_SERVICIO">
+              <MappingFragment StoreEntitySet="CTL_PREGUNTA_SERVICIO">
+                <ScalarProperty Name="orden" ColumnName="orden" />
+                <ScalarProperty Name="id_pregunta" ColumnName="id_pregunta" />
+                <ScalarProperty Name="pregunta" ColumnName="pregunta" />
+                <ScalarProperty Name="tipo_pregunta" ColumnName="tipo_pregunta" />
                 <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
                 <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
                 <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
@@ -1788,7 +2066,6 @@
           <EntitySetMapping Name="CTL_TIPO_LOCAL">
             <EntityTypeMapping TypeName="ViajesModel.CTL_TIPO_LOCAL">
               <MappingFragment StoreEntitySet="CTL_TIPO_LOCAL">
-                <ScalarProperty Name="fotografia" ColumnName="fotografia" />
                 <ScalarProperty Name="id_tipo_local" ColumnName="id_tipo_local" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
@@ -1797,6 +2074,67 @@
                 <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
                 <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
                 <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
+                <ScalarProperty Name="fotografia" ColumnName="fotografia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_DETALLE_PEDIDO">
+            <EntityTypeMapping TypeName="ViajesModel.M_DETALLE_PEDIDO">
+              <MappingFragment StoreEntitySet="M_DETALLE_PEDIDO">
+                <ScalarProperty Name="id_local" ColumnName="id_local" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="observaciones" ColumnName="observaciones" />
+                <ScalarProperty Name="id_detalle_pedido" ColumnName="id_detalle_pedido" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_PEDIDO">
+            <EntityTypeMapping TypeName="ViajesModel.M_PEDIDO">
+              <MappingFragment StoreEntitySet="M_PEDIDO">
+                <ScalarProperty Name="id_persona_pide" ColumnName="id_persona_pide" />
+                <ScalarProperty Name="id_direccion_entrega" ColumnName="id_direccion_entrega" />
+                <ScalarProperty Name="id_persona_entrega" ColumnName="id_persona_entrega" />
+                <ScalarProperty Name="id_encuesta" ColumnName="id_encuesta" />
+                <ScalarProperty Name="id_estatus" ColumnName="id_estatus" />
+                <ScalarProperty Name="calificacion" ColumnName="calificacion" />
+                <ScalarProperty Name="observaciones" ColumnName="observaciones" />
+                <ScalarProperty Name="fecha_pedido" ColumnName="fecha_pedido" />
+                <ScalarProperty Name="hora_pedido" ColumnName="hora_pedido" />
+                <ScalarProperty Name="fecha_entrega" ColumnName="fecha_entrega" />
+                <ScalarProperty Name="hora_entrega" ColumnName="hora_entrega" />
+                <ScalarProperty Name="folio" ColumnName="folio" />
+                <ScalarProperty Name="id_metodo_pago" ColumnName="id_metodo_pago" />
+                <ScalarProperty Name="referencia_pago" ColumnName="referencia_pago" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="R_DETALLE_PEDIDO_EXTRAS">
+            <EntityTypeMapping TypeName="ViajesModel.R_DETALLE_PEDIDO_EXTRAS">
+              <MappingFragment StoreEntitySet="R_DETALLE_PEDIDO_EXTRAS">
+                <ScalarProperty Name="id_detalle_pedido" ColumnName="id_detalle_pedido" />
+                <ScalarProperty Name="id_extra" ColumnName="id_extra" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="R_PEDIDO_PREGRUNTA">
+            <EntityTypeMapping TypeName="ViajesModel.R_PEDIDO_PREGRUNTA">
+              <MappingFragment StoreEntitySet="R_PEDIDO_PREGRUNTA">
+                <ScalarProperty Name="id_pregunta" ColumnName="id_pregunta" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="R_PERSONA_OPENPAY">
+            <EntityTypeMapping TypeName="ViajesModel.R_PERSONA_OPENPAY">
+              <MappingFragment StoreEntitySet="R_PERSONA_OPENPAY">
+                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+                <ScalarProperty Name="id_customer" ColumnName="id_customer" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1817,6 +2155,45 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_BANNERS">
+            <EntityTypeMapping TypeName="ViajesModel.TBL_BANNERS">
+              <MappingFragment StoreEntitySet="TBL_BANNERS">
+                <ScalarProperty Name="id_banner" ColumnName="id_banner" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="fotografia" ColumnName="fotografia" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
+                <ScalarProperty Name="fech_mod" ColumnName="fech_mod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_COORDENADAS_CONDUCTOR">
+            <EntityTypeMapping TypeName="ViajesModel.TBL_COORDENADAS_CONDUCTOR">
+              <MappingFragment StoreEntitySet="TBL_COORDENADAS_CONDUCTOR">
+                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+                <ScalarProperty Name="latitud" ColumnName="latitud" />
+                <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="id_coordenada" ColumnName="id_coordenada" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_QR_TIENDA">
+            <EntityTypeMapping TypeName="ViajesModel.TBL_QR_TIENDA">
+              <MappingFragment StoreEntitySet="TBL_QR_TIENDA">
+                <ScalarProperty Name="id_qr" ColumnName="id_qr" />
+                <ScalarProperty Name="dispositivo" ColumnName="dispositivo" />
+                <ScalarProperty Name="ip" ColumnName="ip" />
+                <ScalarProperty Name="latitud" ColumnName="latitud" />
+                <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="aplicacion" ColumnName="aplicacion" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1843,149 +2220,13 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_LOCAL" FunctionName="ViajesModel.Store.SP_LOCAL" />
           <FunctionImportMapping FunctionImportName="SP_LOGIN" FunctionName="ViajesModel.Store.SP_LOGIN" />
+          <FunctionImportMapping FunctionImportName="SP_PEDIDO" FunctionName="ViajesModel.Store.SP_PEDIDO" />
           <FunctionImportMapping FunctionImportName="SP_PERSONA" FunctionName="ViajesModel.Store.SP_PERSONA" />
           <FunctionImportMapping FunctionImportName="SP_PRODUCTO" FunctionName="ViajesModel.Store.SP_PRODUCTO" />
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ViajesModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ViajesModel.Store.sp_upgraddiagrams" />
-          <EntitySetMapping Name="M_DETALLE_PEDIDO">
-            <EntityTypeMapping TypeName="ViajesModel.M_DETALLE_PEDIDO">
-              <MappingFragment StoreEntitySet="M_DETALLE_PEDIDO">
-                <ScalarProperty Name="id_detalle_pedido" ColumnName="id_detalle_pedido" />
-                <ScalarProperty Name="observaciones" ColumnName="observaciones" />
-                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
-                <ScalarProperty Name="precio" ColumnName="precio" />
-                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
-                <ScalarProperty Name="id_local" ColumnName="id_local" />
-                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="M_PEDIDO">
-            <EntityTypeMapping TypeName="ViajesModel.M_PEDIDO">
-              <MappingFragment StoreEntitySet="M_PEDIDO">
-                <ScalarProperty Name="id_metodo_pago" ColumnName="id_metodo_pago" />
-                <ScalarProperty Name="folio" ColumnName="folio" />
-                <ScalarProperty Name="hora_entrega" ColumnName="hora_entrega" />
-                <ScalarProperty Name="fecha_entrega" ColumnName="fecha_entrega" />
-                <ScalarProperty Name="hora_pedido" ColumnName="hora_pedido" />
-                <ScalarProperty Name="fecha_pedido" ColumnName="fecha_pedido" />
-                <ScalarProperty Name="observaciones" ColumnName="observaciones" />
-                <ScalarProperty Name="calificacion" ColumnName="calificacion" />
-                <ScalarProperty Name="id_estatus" ColumnName="id_estatus" />
-                <ScalarProperty Name="id_encuesta" ColumnName="id_encuesta" />
-                <ScalarProperty Name="id_persona_entrega" ColumnName="id_persona_entrega" />
-                <ScalarProperty Name="id_direccion_entrega" ColumnName="id_direccion_entrega" />
-                <ScalarProperty Name="id_persona_pide" ColumnName="id_persona_pide" />
-                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SP_PEDIDO" FunctionName="ViajesModel.Store.SP_PEDIDO" />
-          <EntitySetMapping Name="CTL_ESTATUS_PEDIDO">
-            <EntityTypeMapping TypeName="ViajesModel.CTL_ESTATUS_PEDIDO">
-              <MappingFragment StoreEntitySet="CTL_ESTATUS_PEDIDO">
-                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
-                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
-                <ScalarProperty Name="estatus" ColumnName="estatus" />
-                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="id_estatus" ColumnName="id_estatus" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CTL_METODO_PAGO">
-            <EntityTypeMapping TypeName="ViajesModel.CTL_METODO_PAGO">
-              <MappingFragment StoreEntitySet="CTL_METODO_PAGO">
-                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
-                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
-                <ScalarProperty Name="estatus" ColumnName="estatus" />
-                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="id_metodo_pago" ColumnName="id_metodo_pago" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CTL_CONDUCTOR">
-            <EntityTypeMapping TypeName="ViajesModel.CTL_CONDUCTOR">
-              <MappingFragment StoreEntitySet="CTL_CONDUCTOR">
-                <ScalarProperty Name="no_licencia" ColumnName="no_licencia" />
-                <ScalarProperty Name="no_placas" ColumnName="no_placas" />
-                <ScalarProperty Name="no_ext" ColumnName="no_ext" />
-                <ScalarProperty Name="no_int" ColumnName="no_int" />
-                <ScalarProperty Name="colonia" ColumnName="colonia" />
-                <ScalarProperty Name="calle" ColumnName="calle" />
-                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TBL_COORDENADAS_CONDUCTOR">
-            <EntityTypeMapping TypeName="ViajesModel.TBL_COORDENADAS_CONDUCTOR">
-              <MappingFragment StoreEntitySet="TBL_COORDENADAS_CONDUCTOR">
-                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
-                <ScalarProperty Name="id_coordenada" ColumnName="id_coordenada" />
-                <ScalarProperty Name="fecha" ColumnName="fecha" />
-                <ScalarProperty Name="longitud" ColumnName="longitud" />
-                <ScalarProperty Name="latitud" ColumnName="latitud" />
-                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SP_LOCAL" FunctionName="ViajesModel.Store.SP_LOCAL" />
-          <EntitySetMapping Name="TBL_QR_TIENDA">
-            <EntityTypeMapping TypeName="ViajesModel.TBL_QR_TIENDA">
-              <MappingFragment StoreEntitySet="TBL_QR_TIENDA">
-                <ScalarProperty Name="id_qr" ColumnName="id_qr" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-                <ScalarProperty Name="aplicacion" ColumnName="aplicacion" />
-                <ScalarProperty Name="longitud" ColumnName="longitud" />
-                <ScalarProperty Name="latitud" ColumnName="latitud" />
-                <ScalarProperty Name="ip" ColumnName="ip" />
-                <ScalarProperty Name="dispositivo" ColumnName="dispositivo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TBL_BANNERS">
-            <EntityTypeMapping TypeName="ViajesModel.TBL_BANNERS">
-              <MappingFragment StoreEntitySet="TBL_BANNERS">
-                <ScalarProperty Name="fech_mod" ColumnName="fech_mod" />
-                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
-                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
-                <ScalarProperty Name="fotografia" ColumnName="fotografia" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="id_banner" ColumnName="id_banner" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="R_PERSONA_OPENPAY">
-            <EntityTypeMapping TypeName="ViajesModel.R_PERSONA_OPENPAY">
-              <MappingFragment StoreEntitySet="R_PERSONA_OPENPAY">
-                <ScalarProperty Name="id_customer" ColumnName="id_customer" />
-                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CTL_EXTRAS_PRODUCTO">
-            <EntityTypeMapping TypeName="ViajesModel.CTL_EXTRAS_PRODUCTO">
-              <MappingFragment StoreEntitySet="CTL_EXTRAS_PRODUCTO">
-                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
-                <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-                <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
-                <ScalarProperty Name="estatus" ColumnName="estatus" />
-                <ScalarProperty Name="precio" ColumnName="precio" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
-                <ScalarProperty Name="id_extra" ColumnName="id_extra" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

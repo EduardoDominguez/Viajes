@@ -19,15 +19,15 @@ namespace Viajes.DAL.Modelo
         {
             this.CTL_ACCESO_PERSONA = new HashSet<CTL_ACCESO_PERSONA>();
             this.CTL_ACCESO_PERSONA1 = new HashSet<CTL_ACCESO_PERSONA>();
-            this.R_PERSONA_PRODUCTO_FAVORITO = new HashSet<R_PERSONA_PRODUCTO_FAVORITO>();
-            this.M_PEDIDO = new HashSet<M_PEDIDO>();
-            this.M_PEDIDO1 = new HashSet<M_PEDIDO>();
-            this.TBL_BANNERS = new HashSet<TBL_BANNERS>();
-            this.TBL_BANNERS1 = new HashSet<TBL_BANNERS>();
-            this.R_PERSONA_OPENPAY = new HashSet<R_PERSONA_OPENPAY>();
             this.CTL_EXTRAS_PRODUCTO = new HashSet<CTL_EXTRAS_PRODUCTO>();
             this.CTL_EXTRAS_PRODUCTO1 = new HashSet<CTL_EXTRAS_PRODUCTO>();
             this.CTL_EXTRAS_PRODUCTO2 = new HashSet<CTL_EXTRAS_PRODUCTO>();
+            this.TBL_BANNERS = new HashSet<TBL_BANNERS>();
+            this.TBL_BANNERS1 = new HashSet<TBL_BANNERS>();
+            this.R_PERSONA_OPENPAY = new HashSet<R_PERSONA_OPENPAY>();
+            this.M_PEDIDO = new HashSet<M_PEDIDO>();
+            this.M_PEDIDO1 = new HashSet<M_PEDIDO>();
+            this.R_PERSONA_PRODUCTO_FAVORITO = new HashSet<R_PERSONA_PRODUCTO_FAVORITO>();
         }
     
         public int id_persona { get; set; }
@@ -46,13 +46,13 @@ namespace Viajes.DAL.Modelo
         public virtual ICollection<CTL_ACCESO_PERSONA> CTL_ACCESO_PERSONA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CTL_ACCESO_PERSONA> CTL_ACCESO_PERSONA1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<R_PERSONA_PRODUCTO_FAVORITO> R_PERSONA_PRODUCTO_FAVORITO { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_PEDIDO> M_PEDIDO { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_PEDIDO> M_PEDIDO1 { get; set; }
         public virtual CTL_CONDUCTOR CTL_CONDUCTOR { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TBL_BANNERS> TBL_BANNERS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -60,10 +60,10 @@ namespace Viajes.DAL.Modelo
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<R_PERSONA_OPENPAY> R_PERSONA_OPENPAY { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO { get; set; }
+        public virtual ICollection<M_PEDIDO> M_PEDIDO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO1 { get; set; }
+        public virtual ICollection<M_PEDIDO> M_PEDIDO1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CTL_EXTRAS_PRODUCTO> CTL_EXTRAS_PRODUCTO2 { get; set; }
+        public virtual ICollection<R_PERSONA_PRODUCTO_FAVORITO> R_PERSONA_PRODUCTO_FAVORITO { get; set; }
     }
 }

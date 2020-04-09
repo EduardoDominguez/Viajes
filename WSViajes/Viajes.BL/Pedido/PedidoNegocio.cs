@@ -34,7 +34,7 @@ namespace Viajes.BL.Pedido
         /// <param name="pIdPedido">Id del pedido a consultar</param>
         /// <returns> Objeto tipo E_PEDIDO con los datos solicitados </returns>  
         /// </summary>       
-        public async Task<E_PEDIDO> ConsultarPorId(long pIdPedido)
+        public async Task<E_PEDIDO> ConsultarPorId(Guid pIdPedido)
         {
             try
             {
@@ -175,6 +175,66 @@ namespace Viajes.BL.Pedido
             {
                 PedidoOperaciones pDatos = new PedidoOperaciones();
                 return pDatos.Asignar(pEntidad);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// Método para consultar las preguntas pendientes por contestar de un pedido
+        /// <param name="pIdPedido">Identificador del pedido</param>
+        /// <param name="pTipoPregunta">Representa el tipo de preguntas a consultar 1=Cliente, 2=Conductor, 3=Local</param>
+        /// <returns> Objeto tipo List<E_PREGUNTA_SERVICIO> con los datos solicitados </returns>  
+        /// </summary>        
+        public async Task<List<E_PREGUNTA_SERVICIO>> ConsultarPreguntasPendientesByIdPedido(Guid pIdPedido, byte pTipoPregunta)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                var pResultado = await pDatos.ConsultarPreguntasPendientesByIdPedido(pIdPedido, pTipoPregunta);
+                return pResultado;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar todas las preguntas por tipo de pregunta
+        /// <param name="pTipoPregunta">Representa el tipo de preguntas a consultar 1=Cliente, 2=Conductor, 3=Local</param>
+        /// <returns> Objeto tipo List<E_PREGUNTA_SERVICIO> con los datos solicitados </returns>  
+        /// </summary>        
+        public async Task<List<E_PREGUNTA_SERVICIO>> ConsultarPreguntaByTipo(byte pTipoPregunta)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                var pResultado = await pDatos.ConsultarPreguntaByTipo(pTipoPregunta);
+                return pResultado;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Inserta una respuesta a las preguntas del servicio
+        /// <param name="pIdPedido"></param>
+        /// <param name="pIdPregunta"></param>
+        /// <param name="pRespuesta"></param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos DE LA SOLICITUD </returns>  
+        /// </summary>        
+        public E_MENSAJE AgregarRespuestaPreguntaServicio(Guid pIdPedido, Guid pIdPregunta, byte pRespuesta)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                return pDatos.AgregarRespuestaPreguntaServicio(pIdPedido, pIdPregunta, pRespuesta);
             }
             catch (Exception ex)
             {

@@ -45,19 +45,17 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<IdMetodoPago>> no puede estar vacío ni igual o menor a cero.";
                 else if (pRequest.Pedido.Detalle == null || pRequest.Pedido.Detalle.Count <= 0)
                     respuesta.Mensaje = "El elemento <<Detalle>> debe ser un arreglo y tener por lo menos un elemento.";
-                else if (String.IsNullOrEmpty(pRequest.SessionID) && pRequest.Pedido.IdMetodoPago == 2)
-                    respuesta.Mensaje = "El elemento <<SessionID>> no puede estar vacío.";
-                else if (String.IsNullOrEmpty(pRequest.SessionID) && pRequest.Pedido.IdMetodoPago == 2)
-                    respuesta.Mensaje = "El elemento <<SessionID>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.SessionId) && pRequest.Pedido.IdMetodoPago == 2)
+                    respuesta.Mensaje = "El elemento <<SessionId>> no puede estar vacío.";
                 else if (String.IsNullOrEmpty(pRequest.TokenTarjeta) && pRequest.Pedido.IdMetodoPago == 2)
                     respuesta.Mensaje = "El elemento <<TokenTarjeta>> no puede estar vacío.";
                 /*else if (String.IsNullOrEmpty(pRequest.Pedido.Observaciones.ToString()) || pRequest.IdPersonaCrea <= 0)
                     respuesta.Mensaje = "El elemento <<IdPersonaCrea>> no puede estar vacío ni igual o menor a cero.";*/
                 else
                 {
-                       /**
-                       * IdMetodoPago 1 = efectivo, 2 = tarjeta, 3 = paypal
-                       * */
+                    /**
+                    * IdMetodoPago 1 = efectivo, 2 = tarjeta, 3 = paypal
+                    * */
                     if (pRequest.Pedido.IdMetodoPago == 2)
                     {
                         string CustomerId = await new PersonaNegocio().ConsultarClienteIdOpenPay(pRequest.Pedido.PersonaPide.IdPersona);
@@ -69,25 +67,48 @@ namespace WSViajes.Controllers
                         }
                         else
                         {
-                            var pago = new OpenPayFunctions().CreateCharge(CustomerId, pRequest.TokenTarjeta, "", getTotalPedido(pRequest.Pedido.Detalle), pRequest.SessionID);
+                            var pago = new OpenPayFunctions().CreateCharge(CustomerId, pRequest.TokenTarjeta, "", getTotalPedido(pRequest.Pedido.Detalle), pRequest.SessionId);
+
+                            if(pago.ErrorMessage == null)
+                            {
+                                pRequest.Pedido.ReferenciaPago = pago.Id;
+                                var respuestaDireccion = new PedidoNegocio().Agregar(pRequest.Pedido);
+
+                                if (respuestaDireccion.RET_NUMEROERROR == 0)
+                                {
+                                    respuesta.Exito = true;
+                                    respuesta.Mensaje = "Pedido registrado con éxito";//respuestaDireccion.RET_VALORDEVUELTO;
+                                }
+                                else
+                                {
+                                    respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                                    respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                                }
+                            }
+                            else
+                            {
+                                respuesta.CodigoError = -2000;
+                                respuesta.Mensaje = pago.ErrorMessage;
+                            }
+                            
                         }
-
-                    }
-                    
-                      
-
-                    var respuestaDireccion = new PedidoNegocio().Agregar(pRequest.Pedido);
-
-                    if (respuestaDireccion.RET_NUMEROERROR == 0)
-                    {
-                        respuesta.Exito = true;
-                        respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
                     }
                     else
                     {
-                        respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
-                        respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
-                    }
+                        var respuestaDireccion = new PedidoNegocio().Agregar(pRequest.Pedido);
+
+                        if (respuestaDireccion.RET_NUMEROERROR == 0)
+                        {
+                            respuesta.Exito = true;
+                            respuesta.Mensaje = "Pedido registrado con éxito";//respuestaDireccion.RET_VALORDEVUELTO;
+                        }
+                        else
+                        {
+                            respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                            respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                        }
+                    }                    
+
                 }
             }
             catch (ServiceException Ex)
@@ -108,7 +129,6 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
-
         [HttpPut]
         [Route("Cancelar")]
         public HttpResponseMessage Cancelar([FromBody] InsertaActualizaPedidoRequest pRequest)
@@ -123,8 +143,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "No se recibió datos de petición.";
                 else if (pRequest.Pedido == null)
                     respuesta.Mensaje = "No se recibió datos de petición.";
-                else if (String.IsNullOrEmpty(pRequest.Pedido.IdPedido.ToString()) || pRequest.Pedido.IdPedido == 0)
-                    respuesta.Mensaje = "El elemento <<IdPedido>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Pedido.IdPedido.ToString()))
+                    respuesta.Mensaje = "El elemento <<IdPedido>> no puede estar vacío.";
                 else
                 {
 
@@ -160,7 +180,6 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
-
         [HttpPut]
         [Route("Estatus")]
         public async Task<HttpResponseMessage> ActualizaEstatus([FromBody] InsertaActualizaPedidoRequest pRequest)
@@ -175,8 +194,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "No se recibió datos de petición.";
                 else if (pRequest.Pedido == null)
                     respuesta.Mensaje = "No se recibió datos de petición.";
-                else if (String.IsNullOrEmpty(pRequest.Pedido.IdPedido.ToString()) || pRequest.Pedido.IdPedido == 0)
-                    respuesta.Mensaje = "El elemento <<IdPedido>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Pedido.IdPedido.ToString()) || pRequest.Pedido.IdPedido.ToString().Length !=36)
+                    respuesta.Mensaje = "El elemento <<IdPedido>> no puede estar vacío ni igual a cero y debe tener 36 caracteres.";
                 else if (String.IsNullOrEmpty(pRequest.Pedido.Estatus.IdEstatus.ToString()) || pRequest.Pedido.Estatus.IdEstatus == 0)
                     respuesta.Mensaje = "El elemento <<IdEstatus>> no puede estar vacío ni igual a cero.";
                 else
@@ -273,7 +292,7 @@ namespace WSViajes.Controllers
 
         [HttpGet]
         [Route("{idPedido}")]
-        public async Task<HttpResponseMessage> ConsultaPedidoPorId(int idPedido)
+        public async Task<HttpResponseMessage> ConsultaPedidoPorId(Guid idPedido)
         {
             var respuesta = new ConsultaPorIdResponse<E_PEDIDO> { };
             var strMetodo = "WSViajes - ConsultapedidoPorID ";
@@ -356,7 +375,6 @@ namespace WSViajes.Controllers
 
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
-
 
         [HttpGet]
         [Route("Actual/{idPersona}")]
@@ -501,8 +519,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "No se recibió datos de petición.";
                 else if (pRequest.Pedido == null)
                     respuesta.Mensaje = "No se recibió datos de petición.";
-                else if (String.IsNullOrEmpty(pRequest.Pedido.IdPedido.ToString()) || pRequest.Pedido.IdPedido == 0)
-                    respuesta.Mensaje = "El elemento <<IdPedido>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Pedido.IdPedido.ToString()) || pRequest.Pedido.IdPedido.ToString().Length != 36)
+                    respuesta.Mensaje = "El elemento <<IdPedido>> no puede estar vacío y debe tener 36 caracteres.";
                 else if (String.IsNullOrEmpty(pRequest.Pedido.PersonaEntrega.IdPersona.ToString()) || pRequest.Pedido.PersonaEntrega.IdPersona == 0)
                     respuesta.Mensaje = "El elemento <<PersonaEntrega.IdPersona>> no puede estar vacío ni igual a cero.";
                 else
@@ -583,14 +601,196 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
+        [HttpGet]
+        [Route("{idPedido}/Preguntas/{tipoPreguntas}")]
+        public async Task<HttpResponseMessage> ConsultaPreguntasPendientesPedido(Guid pIdPedido, byte tipoPreguntas)
+        {
+            var respuesta = new ConsultarTodoResponse<E_PREGUNTA_SERVICIO> { };
+            var strMetodo = "WSViajes - ConsultaPreguntasPendientesPedido ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new PedidoNegocio().ConsultarPreguntasPendientesByIdPedido(pIdPedido, tipoPreguntas);
+
+                if (respuesta.Data != null)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen preguntas con los parámetros solicitados";
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpGet]
+        [Route("Preguntas/{tipoPreguntas}")]
+        public async Task<HttpResponseMessage> ConsultaPreguntas(byte tipoPreguntas)
+        {
+            var respuesta = new ConsultarTodoResponse<E_PREGUNTA_SERVICIO> { };
+            var strMetodo = "WSViajes - ConsultaPreguntas ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new PedidoNegocio().ConsultarPreguntaByTipo(tipoPreguntas);
+
+                if (respuesta.Data != null)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen preguntas con los parámetros solicitados";
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpPost]
+        [Route("RespuestaServicio")]
+        public HttpResponseMessage CreaRespuestaPreguntaServicio([FromBody] InsertaRespuestaServicio pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - CreaRespuestaPreguntaServicio ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (string.IsNullOrEmpty(pRequest.IdPregunta.ToString()) || pRequest.IdPregunta.ToString().Length != 36)
+                    respuesta.Mensaje = "El elemento <<IdPregunta>> no puede estar vacío y debe tener 36 caracteres.";
+                else if (string.IsNullOrEmpty(pRequest.IdPedido.ToString()) || pRequest.IdPedido.ToString().Length != 36)
+                    respuesta.Mensaje = "El elemento <<IdPedido>> no puede estar vacío y debe tener 36 caracteres.";
+                else if (string.IsNullOrEmpty(pRequest.Respuesta.ToString()))
+                    respuesta.Mensaje = "El elemento <<Respuesta>> no puede estar vacío.";
+                else
+                {
+                    
+                    var respuestaDireccion = new PedidoNegocio().AgregarRespuestaPreguntaServicio(pRequest.IdPedido, pRequest.IdPregunta, pRequest.Respuesta);
+
+                    if (respuestaDireccion.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                        respuesta.Mensaje = "Respuesta registrada con éxito";
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                        respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                    }
+
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpPost]
+        [Route("CostoEntrega")]
+        public HttpResponseMessage CalculaCostoEntrega([FromBody] CalculaCostoEntrega pRequest)
+        {
+            var respuesta = new ConsultaPorIdResponse<double> { };
+            var strMetodo = "WSViajes - CalculaCostoEntrega ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (string.IsNullOrEmpty(pRequest.IdDireccionEntrega.ToString()) || pRequest.IdDireccionEntrega == 0)
+                    respuesta.Mensaje = "El elemento <<IdDireccionEntrega>> no puede estar vacío y debe ser mayor a cero";
+                else if (pRequest.DireccionesRecoge == null || pRequest.DireccionesRecoge.Count <= 0)
+                    respuesta.Mensaje = "El elemento <<DireccionesRecoge>> debe ser una lista y tener por lo menos un elemento.";
+                else
+                {
+
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = "Datos cargados con éxito.";
+                    respuesta.Data = 34.13;
+
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
 
         private decimal getTotalPedido(List<E_DETALLE_PEDIDO> productos)
         {
             decimal total = 0;
-
+              
             foreach(var producto in productos)
             {
                 total += (producto.Cantidad * producto.Precio);
+                foreach(var extra in producto.Extras)
+                {
+                    total += extra.Precio;
+                }
             }
 
             return total;

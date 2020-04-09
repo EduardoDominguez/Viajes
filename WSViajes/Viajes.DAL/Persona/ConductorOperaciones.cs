@@ -51,7 +51,7 @@ namespace Viajes.DAL.Persona
         /// <param name="pIdPedido">Id del pedido en caso de existir</param>
         /// <returns> Objeto tipo List<E_COORDENADAS_CONDUCTOR> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_COORDENADAS_CONDUCTOR>> ConsultarCoordenadas(int? pIdPersona = null, long? pIdPedido = null)
+        public async Task<List<E_COORDENADAS_CONDUCTOR>> ConsultarCoordenadas(int? pIdPersona = null, Guid? pIdPedido = null)
         {
             try
             {

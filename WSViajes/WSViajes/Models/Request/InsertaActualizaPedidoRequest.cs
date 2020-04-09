@@ -7,7 +7,7 @@ namespace WSViajes.Models.Request
         public E_PEDIDO Pedido { get; set; }
 
         public string TokenTarjeta { get; set; }
-        public string SessionID { get; set; }
+        public string SessionId { get; set; }
 
     }
 }

@@ -223,6 +223,7 @@
     <Compile Include="Handlers\TokenValidationHandler.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Request\ActualizaTokenRequest.cs" />
+    <Compile Include="Models\Request\CalculaCostoEntrega.cs" />
     <Compile Include="Models\Request\CreaTarjetaOpenPayRequest.cs" />
     <Compile Include="Models\Request\EnviaNotificacionRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaDireccionRequest.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Models\Request\InsertaActualizaProductoFavorito.cs" />
     <Compile Include="Models\Request\InsertaCoordenadasConductor.cs" />
     <Compile Include="Models\Request\InsertaPersonaRequest.cs" />
+    <Compile Include="Models\Request\InsertaRespuestaServicio.cs" />
     <Compile Include="Models\Request\LoginRequest.cs" />
     <Compile Include="Models\Request\UploadFileRequest.cs" />
     <Compile Include="Models\Response\ConsultaPorIdResponse.cs" />
@@ -263,7 +265,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Assets\Img\" />
-    <Folder Include="AutoMapper\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Viajes.BL\Viajes.BL.csproj">

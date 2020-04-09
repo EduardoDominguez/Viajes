@@ -14,16 +14,24 @@ namespace Viajes.DAL.Modelo
     
     public partial class M_DETALLE_PEDIDO
     {
-        public long id_pedido { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public M_DETALLE_PEDIDO()
+        {
+            this.R_DETALLE_PEDIDO_EXTRAS = new HashSet<R_DETALLE_PEDIDO_EXTRAS>();
+        }
+    
         public int id_local { get; set; }
         public int id_producto { get; set; }
         public decimal precio { get; set; }
         public int cantidad { get; set; }
         public string observaciones { get; set; }
-        public int id_detalle_pedido { get; set; }
+        public System.Guid id_detalle_pedido { get; set; }
+        public System.Guid id_pedido { get; set; }
     
         public virtual CTL_LOCAL CTL_LOCAL { get; set; }
         public virtual CTL_PRODUCTO CTL_PRODUCTO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<R_DETALLE_PEDIDO_EXTRAS> R_DETALLE_PEDIDO_EXTRAS { get; set; }
         public virtual M_PEDIDO M_PEDIDO { get; set; }
     }
 }

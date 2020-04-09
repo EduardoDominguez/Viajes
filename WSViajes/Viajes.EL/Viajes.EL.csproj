@@ -57,6 +57,7 @@
     <Compile Include="Extras\E_METODO_PAGO.cs" />
     <Compile Include="Extras\E_PEDIDO.cs" />
     <Compile Include="Extras\E_PERSONA.cs" />
+    <Compile Include="Extras\E_PREGUNTA_SERVICIO.cs" />
     <Compile Include="Extras\E_PRODUCTO.cs" />
     <Compile Include="Extras\E_QR_TIENDA.cs" />
     <Compile Include="Extras\E_TIPO_LOCAL.cs" />

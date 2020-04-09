@@ -27,7 +27,7 @@ namespace WSViajes.Controllers
 
         [HttpGet]
         [Route("Conductor/Coordenadas/Pedido/{IdPedido}")]
-        public async Task<HttpResponseMessage> ConsultaCoordenadasByIdPedido(long IdPedido)
+        public async Task<HttpResponseMessage> ConsultaCoordenadasByIdPedido(Guid IdPedido)
         {
             var respuesta = new ConsultarTodoResponse<E_COORDENADAS_CONDUCTOR> { };
             var strMetodo = "WSViajes - ConsultaCoordenadasByIdPedido ";

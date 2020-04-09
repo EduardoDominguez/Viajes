@@ -8,7 +8,7 @@ namespace Viajes.EL.Extras
 {
     public class E_PEDIDO
     {
-        public long IdPedido { get; set; }
+        public Guid IdPedido { get; set; }
         //public int IdPersonaPide { get; set; }
         public E_PERSONA PersonaPide { get; set; }
         //public int IdDireccionEntrega { get; set; }
@@ -27,6 +27,7 @@ namespace Viajes.EL.Extras
         public DateTime FechaEntrega { get; set; }
         public TimeSpan HoraEntrega { get; set; }
         public string Folio { get; set; }
+        public string ReferenciaPago { get; set; }
         public List<E_DETALLE_PEDIDO> Detalle { get; set; }
 
         public E_PEDIDO()

@@ -86,6 +86,9 @@
     <Compile Include="Modelo\CTL_PERSONA.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\CTL_PREGUNTA_SERVICIO.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modelo\CTL_PRODUCTO.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
@@ -111,6 +114,12 @@
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
     <Compile Include="Modelo\M_PEDIDO.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\R_DETALLE_PEDIDO_EXTRAS.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\R_PEDIDO_PREGRUNTA.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
     <Compile Include="Modelo\R_PERSONA_OPENPAY.cs">
@@ -167,6 +176,7 @@
       <Name>Viajes.EL</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Modelo\ModeloViajes.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -179,7 +189,6 @@
       <LastGenOutput>ModeloViajes.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
 </Project>

@@ -345,8 +345,60 @@ namespace Viajes.DAL.Producto
             }
         }
 
-        
+        /// <summary>
+        /// Método para consultar  extras de productos 
+        /// <param name="pIdProducto">Id del producto</param>
+        /// <returns> Objeto tipo List<E_EXTRAS_PRODUCTO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_EXTRAS_PRODUCTO>> ConsultaExtrasPedidoByIdDetalle(Guid pIdDetalle)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    var extras = await (from s in context.CTL_EXTRAS_PRODUCTO
+                                           join l in context.R_DETALLE_PEDIDO_EXTRAS on s.id_extra equals l.id_extra
+                                           where
+                                           l.id_detalle_pedido == pIdDetalle
+                                           select new E_EXTRAS_PRODUCTO
+                                           {
+                                              IdExtra = s.id_extra,
+                                              Precio = l.precio,
+                                              Nombre = s.nombre, 
+                                              Estatus = s.estatus,
+                                              IdProducto = s.id_producto
+                                           }).ToListAsync();
+
+                    //return procesaExtras(extras);
+                    return extras;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         private List<E_EXTRAS_PRODUCTO> procesaExtras(List<CTL_EXTRAS_PRODUCTO> pExtras)
+        {
+            var listaExtras = new List<E_EXTRAS_PRODUCTO>();
+
+            foreach (var extra in pExtras)
+            {
+                listaExtras.Add(new E_EXTRAS_PRODUCTO
+                {
+                    IdProducto = extra.id_producto,
+                    Nombre = extra.nombre,
+                    IdExtra = extra.id_extra,
+                    Precio = extra.precio,
+                    Estatus = extra.estatus
+                });
+            }
+            return listaExtras;
+        }
+
+        private List<E_EXTRAS_PRODUCTO> procesaExtrasPedido(List<CTL_EXTRAS_PRODUCTO> pExtras)
         {
             var listaExtras = new List<E_EXTRAS_PRODUCTO>();
 
