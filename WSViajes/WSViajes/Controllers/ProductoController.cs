@@ -587,5 +587,47 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
+
+        [HttpGet]
+        [Route("Busqueda")]
+        public async Task<HttpResponseMessage> BusquedaProductoByTermino(string termino = "")
+        {
+            var respuesta = new ConsultarTodoResponse<E_PRODUCTO_BUSQUEDA> { };
+            var strMetodo = "WSViajes - BusquedaProductoByTermino ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new ProductoNegocio().BusquedaProductoByTermino(termino.Trim());
+
+                if (respuesta.Data != null)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen productos con los parámetros solicitados";
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
     }
 }

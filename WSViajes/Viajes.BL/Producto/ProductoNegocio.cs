@@ -203,6 +203,25 @@ namespace Viajes.BL.Producto
             }
         }
 
+
+        /// <summary>
+        /// Método para busqueda de productos
+        /// <param name="pTermino">Palabra clave al buscar</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
+        /// </summary>
+        public async Task<List<E_PRODUCTO_BUSQUEDA>> BusquedaProductoByTermino(string pTermino)
+        {
+            try
+            {
+                ProductoOperaciones pDatos = new ProductoOperaciones();
+                return await pDatos.BusquedaProductoByTermino(pTermino);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
 

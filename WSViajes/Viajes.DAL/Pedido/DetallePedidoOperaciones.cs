@@ -24,7 +24,7 @@ namespace Viajes.DAL.Pedido
         {
             try
             {
-                var listaDetallePedidos = new List<E_DETALLE_PEDIDO>();
+                //var listaDetallePedidos = new List<E_DETALLE_PEDIDO>();
                 using (context = new ViajesEntities())
                 {
                     var detalles = await (from s in context.M_DETALLE_PEDIDO
@@ -53,7 +53,7 @@ namespace Viajes.DAL.Pedido
                         detalle.Extras = await new ProductoOperaciones().ConsultaExtrasPedidoByIdDetalle(detalle.IdDetallePedido);
                     }
 
-                    return listaDetallePedidos;
+                    return detalles;
 
                 }
             }

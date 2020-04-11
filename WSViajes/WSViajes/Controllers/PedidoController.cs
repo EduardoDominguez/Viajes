@@ -49,6 +49,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<SessionId>> no puede estar vacío.";
                 else if (String.IsNullOrEmpty(pRequest.TokenTarjeta) && pRequest.Pedido.IdMetodoPago == 2)
                     respuesta.Mensaje = "El elemento <<TokenTarjeta>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Pedido.CostoEnvio.ToString()))
+                    respuesta.Mensaje = "El elemento <<CostoEnvio>> no puede estar vacío.";
                 /*else if (String.IsNullOrEmpty(pRequest.Pedido.Observaciones.ToString()) || pRequest.IdPersonaCrea <= 0)
                     respuesta.Mensaje = "El elemento <<IdPersonaCrea>> no puede estar vacío ni igual o menor a cero.";*/
                 else
@@ -603,7 +605,7 @@ namespace WSViajes.Controllers
 
         [HttpGet]
         [Route("{idPedido}/Preguntas/{tipoPreguntas}")]
-        public async Task<HttpResponseMessage> ConsultaPreguntasPendientesPedido(Guid pIdPedido, byte tipoPreguntas)
+        public async Task<HttpResponseMessage> ConsultaPreguntasPendientesPedido(Guid idPedido, byte tipoPreguntas)
         {
             var respuesta = new ConsultarTodoResponse<E_PREGUNTA_SERVICIO> { };
             var strMetodo = "WSViajes - ConsultaPreguntasPendientesPedido ";
@@ -611,7 +613,7 @@ namespace WSViajes.Controllers
 
             try
             {
-                respuesta.Data = await new PedidoNegocio().ConsultarPreguntasPendientesByIdPedido(pIdPedido, tipoPreguntas);
+                respuesta.Data = await new PedidoNegocio().ConsultarPreguntasPendientesByIdPedido(idPedido, tipoPreguntas);
 
                 if (respuesta.Data != null)
                 {

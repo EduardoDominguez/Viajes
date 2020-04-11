@@ -38,14 +38,15 @@ namespace Viajes.DAL.Pedido
                             throw new System.ArgumentException("El elemento Detalle.Local.IdLocal no puede ser nullo.", "parametro");
 
                         Guid IdDetalle = Guid.NewGuid();
-                        XElement xExtrasProducto = new XElement("EXTRAS");
                         foreach(var extra in detalle.Extras)
                         {
+                            XElement xExtrasProducto = new XElement("EXTRAS");
                             xExtrasProducto.Add(
                                 new XAttribute("ID_DETALLE_PEDIDO", IdDetalle.ToString()),
                                 new XAttribute("ID_EXTRA", extra.IdExtra),
-                                new XAttribute("PRECIO", detalle.Precio)
-                        )   ;
+                                new XAttribute("PRECIO", extra.Precio)
+                            );
+                            xmlPedido.Add(xExtrasProducto);
                         }
 
                         XElement xDetallePedido = new XElement("DETALLE");
@@ -58,8 +59,6 @@ namespace Viajes.DAL.Pedido
                             new XAttribute("OBSERVACIONES", detalle.Observaciones)
                         );
                         xmlPedido.Add(xDetallePedido);
-                        if(detalle.Extras.Count > 0)
-                            xmlPedido.Add(xExtrasProducto);
                     }
 
                     ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
@@ -70,6 +69,7 @@ namespace Viajes.DAL.Pedido
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
                                          pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I", pPedido.ReferenciaPago,
+                                         pPedido.CostoEnvio,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
                                         
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -133,6 +133,7 @@ namespace Viajes.DAL.Pedido
                                    where
                                    (pIdPedido == null || (pIdPedido != null && s.id_pedido == pIdPedido))
                                     && (pIdPersonaPide == null || (pIdPersonaPide != null && s.id_persona_pide == pIdPersonaPide))
+                                    orderby s.fecha_pedido descending, s.hora_pedido descending
                                    select s).ToListAsync<M_PEDIDO>();
 
                     return await ProcesaListaPedidos(pedidos);
@@ -252,7 +253,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "C", pPedido.ReferenciaPago,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "C", pPedido.ReferenciaPago, pPedido.CostoEnvio,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -284,7 +285,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "A", pPedido.ReferenciaPago,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "A", pPedido.ReferenciaPago, pPedido.CostoEnvio,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -317,7 +318,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "AE", pPedido.ReferenciaPago,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "AE", pPedido.ReferenciaPago, pPedido.CostoEnvio,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -451,8 +452,8 @@ namespace Viajes.DAL.Pedido
             {
                 var direccion = await new DireccionOperaciones().ConsultarDirecciones(pIdDireccion: pedido.id_direccion_entrega);
                 var estatus = await  new EstatusOperaciones().Consultar(pIdEstatus: pedido.id_estatus);
-                var conductor = await new ConductorOperaciones().Consultar(pIdPersona: pedido.id_persona_entrega);
                 var cliente = await new PersonaOperaciones().Consultar(pIdPersona: pedido.id_persona_pide);
+                var conductor = await new ConductorOperaciones().Consultar(pIdPersona: (pedido.id_persona_entrega == null)? 0: pedido.id_persona_entrega);
                 listaPedidos.Add(new E_PEDIDO
                 {
                     IdPedido = pedido.id_pedido,
@@ -471,6 +472,7 @@ namespace Viajes.DAL.Pedido
                     HoraEntrega = pedido.hora_entrega ?? TimeSpan.MinValue,
                     Folio = pedido.folio,
                     ReferenciaPago = pedido.referencia_pago,
+                    CostoEnvio = pedido.costo_envio,
                     Detalle = await new DetallePedidoOperaciones().Consultar(pIdPedido: pedido.id_pedido),
                 }); ; ;
             }

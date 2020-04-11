@@ -215,6 +215,7 @@
           <Property Name="id_metodo_pago" Type="int" Nullable="false" />
           <Property Name="referencia_pago" Type="nvarchar" MaxLength="400" />
           <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="costo_envio" Type="money" Nullable="false" />
         </EntityType>
         <EntityType Name="R_DETALLE_PEDIDO_EXTRAS">
           <Key>
@@ -733,6 +734,7 @@
           <Parameter Name="PIN_DETALLE" Type="xml" Mode="In" />
           <Parameter Name="PIN_TIPO_MOVIMIENTO" Type="char" Mode="In" />
           <Parameter Name="PIN_REFERENCIA_PAGO" Type="nvarchar" Mode="In" />
+          <Parameter Name="PIN_COSTO_ENVIO" Type="money" Mode="In" />
           <Parameter Name="RET_NUMEROERROR" Type="int" Mode="InOut" />
           <Parameter Name="RET_MENSAJEERROR" Type="varchar" Mode="InOut" />
           <Parameter Name="RET_VALORDEVUELTO" Type="varchar" Mode="InOut" />
@@ -1169,6 +1171,7 @@
           <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="M_DETALLE_PEDIDO" />
           <NavigationProperty Name="R_PEDIDO_PREGRUNTA" Relationship="Self.FK_R_PREGUNTA_M_PEDIDO" FromRole="M_PEDIDO" ToRole="R_PEDIDO_PREGRUNTA" />
           <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="M_PEDIDO" ToRole="TBL_COORDENADAS_CONDUCTOR" />
+          <Property Name="costo_envio" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="R_DETALLE_PEDIDO_EXTRAS">
           <Key>
@@ -1834,6 +1837,7 @@
             <Parameter Name="PIN_DETALLE" Mode="In" Type="String" />
             <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
             <Parameter Name="PIN_REFERENCIA_PAGO" Mode="In" Type="String" />
+            <Parameter Name="PIN_COSTO_ENVIO" Mode="In" Type="Decimal" />
             <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
             <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
@@ -2094,6 +2098,7 @@
           <EntitySetMapping Name="M_PEDIDO">
             <EntityTypeMapping TypeName="ViajesModel.M_PEDIDO">
               <MappingFragment StoreEntitySet="M_PEDIDO">
+                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
                 <ScalarProperty Name="id_persona_pide" ColumnName="id_persona_pide" />
                 <ScalarProperty Name="id_direccion_entrega" ColumnName="id_direccion_entrega" />
                 <ScalarProperty Name="id_persona_entrega" ColumnName="id_persona_entrega" />

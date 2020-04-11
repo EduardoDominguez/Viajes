@@ -147,6 +147,48 @@ namespace Viajes.DAL.Producto
         }
 
         /// <summary>
+        /// Método para consultar productos en busqueda por termino
+        /// <param name="pTermino">Id del producto a consultar</param>
+        /// <returns> Objeto tipo List<E_PRODUCTO_BUSQUEDA> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PRODUCTO_BUSQUEDA>> BusquedaProductoByTermino(string pTermino)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    var productos = await (from s in context.CTL_PRODUCTO
+                                           join l in context.CTL_LOCAL on s.id_local equals l.id_local
+                                           join tl in context.CTL_TIPO_LOCAL on l.id_tipo_local equals tl.id_tipo_local
+                                           where s.nombre.Contains(pTermino) || s.descripcion.Contains(pTermino)
+                                                   || l.nombre.Contains(pTermino) || tl.nombre.Contains(pTermino)
+                                           orderby s.nombre, l.nombre
+                                           select new E_PRODUCTO_BUSQUEDA {
+                                               IdProducto = s.id_producto,
+                                               NombreProducto = s.nombre,
+                                               DescripcionProducto = s.descripcion,
+                                               FotografiaProducto = s.fotografia,
+                                               Precio = s.precio,
+                                               IdLocal = l.id_local,
+                                               NombreLocal = l.nombre,
+                                               FotografiaLocal = l.fotografia,
+                                               IdTipoLocal = tl.id_tipo_local,
+                                               NombreTipoLocal = tl.nombre,
+                                               FotografiaTipoLocal = tl.fotografia
+                                           }
+                                           
+                        ).ToListAsync();
+
+                    return productos;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Método para consultar productos
         /// <param name="pIdProducto">Id del producto a consultar</param>
         /// <param name="pIdLocal">Id del local a consultar</param>

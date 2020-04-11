@@ -28,6 +28,7 @@ namespace Viajes.EL.Extras
         public TimeSpan HoraEntrega { get; set; }
         public string Folio { get; set; }
         public string ReferenciaPago { get; set; }
+        public decimal CostoEnvio { get; set; }
         public List<E_DETALLE_PEDIDO> Detalle { get; set; }
 
         public E_PEDIDO()

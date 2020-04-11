@@ -37,6 +37,7 @@ namespace Viajes.DAL.Modelo
         public int id_metodo_pago { get; set; }
         public string referencia_pago { get; set; }
         public System.Guid id_pedido { get; set; }
+        public decimal costo_envio { get; set; }
     
         public virtual CTL_DIRECCIONES CTL_DIRECCIONES { get; set; }
         public virtual CTL_ESTATUS_PEDIDO CTL_ESTATUS_PEDIDO { get; set; }
