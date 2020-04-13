@@ -49,6 +49,7 @@ namespace Viajes.DAL.Modelo
         public virtual DbSet<TBL_BANNERS> TBL_BANNERS { get; set; }
         public virtual DbSet<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
         public virtual DbSet<TBL_QR_TIENDA> TBL_QR_TIENDA { get; set; }
+        public virtual DbSet<M_DETALLE_PEDIDO_PERSONALIZADO> M_DETALLE_PEDIDO_PERSONALIZADO { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
@@ -274,7 +275,7 @@ namespace Viajes.DAL.Modelo
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_LOGIN", pIN_EMAILParameter, pIN_PASSWORDParameter, pIN_TIPO_USUARIOParameter, rET_ID_PERSONA, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     
-        public virtual int SP_PEDIDO(Nullable<System.Guid> pIN_ID_PEDIDO, Nullable<int> pIN_ID_PERSONA_PIDE, Nullable<int> pIN_ID_DIRECCION_ENTREGA, Nullable<int> pIN_ID_PERSONA_ENTREGA, string pIN_OBSERVACIONES, string pIN_FOLIO, Nullable<int> pIN_ID_METODO_PAGO, Nullable<int> pIN_ID_ESTATUS, string pIN_DETALLE, string pIN_TIPO_MOVIMIENTO, string pIN_REFERENCIA_PAGO, Nullable<decimal> pIN_COSTO_ENVIO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
+        public virtual int SP_PEDIDO(Nullable<System.Guid> pIN_ID_PEDIDO, Nullable<int> pIN_ID_PERSONA_PIDE, Nullable<int> pIN_ID_DIRECCION_ENTREGA, Nullable<int> pIN_ID_PERSONA_ENTREGA, string pIN_OBSERVACIONES, string pIN_FOLIO, Nullable<int> pIN_ID_METODO_PAGO, Nullable<int> pIN_ID_ESTATUS, string pIN_DETALLE, string pIN_TIPO_MOVIMIENTO, string pIN_REFERENCIA_PAGO, Nullable<decimal> pIN_COSTO_ENVIO, Nullable<byte> pIN_TIPO_PEDIDO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
         {
             var pIN_ID_PEDIDOParameter = pIN_ID_PEDIDO.HasValue ?
                 new ObjectParameter("PIN_ID_PEDIDO", pIN_ID_PEDIDO) :
@@ -324,7 +325,11 @@ namespace Viajes.DAL.Modelo
                 new ObjectParameter("PIN_COSTO_ENVIO", pIN_COSTO_ENVIO) :
                 new ObjectParameter("PIN_COSTO_ENVIO", typeof(decimal));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_PEDIDO", pIN_ID_PEDIDOParameter, pIN_ID_PERSONA_PIDEParameter, pIN_ID_DIRECCION_ENTREGAParameter, pIN_ID_PERSONA_ENTREGAParameter, pIN_OBSERVACIONESParameter, pIN_FOLIOParameter, pIN_ID_METODO_PAGOParameter, pIN_ID_ESTATUSParameter, pIN_DETALLEParameter, pIN_TIPO_MOVIMIENTOParameter, pIN_REFERENCIA_PAGOParameter, pIN_COSTO_ENVIOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
+            var pIN_TIPO_PEDIDOParameter = pIN_TIPO_PEDIDO.HasValue ?
+                new ObjectParameter("PIN_TIPO_PEDIDO", pIN_TIPO_PEDIDO) :
+                new ObjectParameter("PIN_TIPO_PEDIDO", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_PEDIDO", pIN_ID_PEDIDOParameter, pIN_ID_PERSONA_PIDEParameter, pIN_ID_DIRECCION_ENTREGAParameter, pIN_ID_PERSONA_ENTREGAParameter, pIN_OBSERVACIONESParameter, pIN_FOLIOParameter, pIN_ID_METODO_PAGOParameter, pIN_ID_ESTATUSParameter, pIN_DETALLEParameter, pIN_TIPO_MOVIMIENTOParameter, pIN_REFERENCIA_PAGOParameter, pIN_COSTO_ENVIOParameter, pIN_TIPO_PEDIDOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     
         public virtual int SP_PERSONA(string pIN_NOMBRE, string pIN_TELEFONO, string pIN_FOTOGRAFIA, string pIN_EMAIL, string pIN_PASSWORD, Nullable<byte> pIN_TIPO_USUARIO, string pIN_TOKEN_FIREBASE, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)

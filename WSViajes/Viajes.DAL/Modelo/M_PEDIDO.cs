@@ -20,6 +20,7 @@ namespace Viajes.DAL.Modelo
             this.M_DETALLE_PEDIDO = new HashSet<M_DETALLE_PEDIDO>();
             this.R_PEDIDO_PREGRUNTA = new HashSet<R_PEDIDO_PREGRUNTA>();
             this.TBL_COORDENADAS_CONDUCTOR = new HashSet<TBL_COORDENADAS_CONDUCTOR>();
+            this.M_DETALLE_PEDIDO_PERSONALIZADO = new HashSet<M_DETALLE_PEDIDO_PERSONALIZADO>();
         }
     
         public int id_persona_pide { get; set; }
@@ -38,6 +39,7 @@ namespace Viajes.DAL.Modelo
         public string referencia_pago { get; set; }
         public System.Guid id_pedido { get; set; }
         public decimal costo_envio { get; set; }
+        public byte tipo_pedido { get; set; }
     
         public virtual CTL_DIRECCIONES CTL_DIRECCIONES { get; set; }
         public virtual CTL_ESTATUS_PEDIDO CTL_ESTATUS_PEDIDO { get; set; }
@@ -50,5 +52,7 @@ namespace Viajes.DAL.Modelo
         public virtual ICollection<R_PEDIDO_PREGRUNTA> R_PEDIDO_PREGRUNTA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<M_DETALLE_PEDIDO_PERSONALIZADO> M_DETALLE_PEDIDO_PERSONALIZADO { get; set; }
     }
 }

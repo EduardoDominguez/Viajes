@@ -56,6 +56,8 @@
         <AssociationConnector Association="ViajesModel.FK_M_DETALLE_PEDIDO_M_PEDIDO" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_R_PREGUNTA_M_PEDIDO" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ViajesModel.M_DETALLE_PEDIDO_PERSONALIZADO" Width="1.5" PointX="10.25" PointY="17.875" />
+        <AssociationConnector Association="ViajesModel.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

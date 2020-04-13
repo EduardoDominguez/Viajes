@@ -74,6 +74,7 @@ namespace WSViajes.Controllers
                             if(pago.ErrorMessage == null)
                             {
                                 pRequest.Pedido.ReferenciaPago = pago.Id;
+                                pRequest.Pedido.TipoPedido = 1;
                                 var respuestaDireccion = new PedidoNegocio().Agregar(pRequest.Pedido);
 
                                 if (respuestaDireccion.RET_NUMEROERROR == 0)
@@ -781,6 +782,259 @@ namespace WSViajes.Controllers
 
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
+
+        [HttpPost]
+        [Route("Personalizado")]
+        public async Task<HttpResponseMessage> CreaPersonalizado([FromBody] InsertaActualizaPedidoPersonalizadoRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - CreaPedidoPersonalizado ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                
+                else if (String.IsNullOrEmpty(pRequest.IdDireccionEntrega.ToString()) || pRequest.IdDireccionEntrega == 0)
+                    respuesta.Mensaje = "El elemento <<IdDireccionEntrega>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersonaPide.ToString()) || pRequest.IdPersonaPide == 0)
+                    respuesta.Mensaje = "El elemento <<IdPersonaPide>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdMetodoPago.ToString()) || pRequest.IdMetodoPago <= 0)
+                    respuesta.Mensaje = "El elemento <<IdMetodoPago>> no puede estar vacío ni igual o menor a cero.";
+                else if (String.IsNullOrEmpty(pRequest.SessionId) && pRequest.IdMetodoPago == 2)
+                    respuesta.Mensaje = "El elemento <<SessionId>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.TokenTarjeta) && pRequest.IdMetodoPago == 2)
+                    respuesta.Mensaje = "El elemento <<TokenTarjeta>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.CostoEnvio.ToString()))
+                    respuesta.Mensaje = "El elemento <<CostoEnvio>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Pedido.ToString()))
+                    respuesta.Mensaje = "El elemento <<Pedido>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Nombrelocal.ToString()))
+                    respuesta.Mensaje = "El elemento <<Nombrelocal>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Direccion.ToString()))
+                    respuesta.Mensaje = "El elemento <<Direccion>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Referencias.ToString()))
+                    respuesta.Mensaje = "El elemento <<Referencias>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Latitud.ToString()) || pRequest.Latitud == 0)
+                    respuesta.Mensaje = "El elemento <<Latitud>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Longitud.ToString()) || pRequest.Longitud == 0)
+                    respuesta.Mensaje = "El elemento <<Longitud>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.LimiteInferion.ToString()) || pRequest.LimiteInferion == 0)
+                    respuesta.Mensaje = "El elemento <<LimiteInferion>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.LimiteSuperior.ToString()) || pRequest.LimiteSuperior == 0)
+                    respuesta.Mensaje = "El elemento <<LimiteSuperior>> no puede estar vacío ni igual a cero.";
+                else
+                {
+                    /**
+                    * IdMetodoPago 1 = efectivo, 2 = tarjeta, 3 = paypal
+                    * */
+                    if (pRequest.IdMetodoPago == 2)
+                    {
+                        string CustomerId = await new PersonaNegocio().ConsultarClienteIdOpenPay(pRequest.IdPersonaPide);
+
+                        if (string.IsNullOrEmpty(CustomerId))
+                        {
+                            respuesta.CodigoError = 10001;
+                            respuesta.Mensaje = $"El usuario indicado no cuenta con una relación a openpay interna.";
+                        }
+                        else
+                        {
+                            var pago = new OpenPayFunctions().CreateCharge(CustomerId, pRequest.TokenTarjeta, "", pRequest.CostoEnvio, pRequest.SessionId);
+
+                            if (pago.ErrorMessage == null)
+                            {
+                                //pRequest.ReferenciaPago = pago.Id;
+                                E_PEDIDO_PERSONALIZADO pedidoPersonalizado = new E_PEDIDO_PERSONALIZADO
+                                {
+                                    ReferenciaPago = pago.Id,
+                                    TipoPedido = 2,
+                                    Observaciones = pRequest.Observaciones,
+                                    CostoEnvio = pRequest.CostoEnvio, 
+                                    IdMetodoPago = pRequest.IdMetodoPago
+                                };
+
+                                pedidoPersonalizado.PersonaPide.IdPersona = pRequest.IdPersonaPide;
+                                pedidoPersonalizado.DireccionEntrega.IdDireccion = pRequest.IdDireccionEntrega;
+
+                                pedidoPersonalizado.Detalle = new E_PEDIDO_PERSONALIZADO_DETALLE
+                                {
+                                    Pedido = pRequest.Pedido,
+                                    Direccion = pRequest.Direccion,
+                                    Latitud = pRequest.Latitud,
+                                    Longitud = pRequest.Longitud,
+                                    LimiteInferion = pRequest.LimiteInferion,
+                                    LimiteSuperior = pRequest.LimiteSuperior,
+                                    NombreLocal = pRequest.Nombrelocal, 
+                                    Referencias = pRequest.Referencias
+                                };
+
+                                var respuestaDireccion = new PedidoNegocio().AgregarPersonalizado(pedidoPersonalizado);
+
+                                if (respuestaDireccion.RET_NUMEROERROR == 0)
+                                {
+                                    respuesta.Exito = true;
+                                    respuesta.Mensaje = "Pedido registrado con éxito";//respuestaDireccion.RET_VALORDEVUELTO;
+                                }
+                                else
+                                {
+                                    respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                                    respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                                }
+                            }
+                            else
+                            {
+                                respuesta.CodigoError = -2000;
+                                respuesta.Mensaje = pago.ErrorMessage;
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        E_PEDIDO_PERSONALIZADO pedidoPersonalizado = new E_PEDIDO_PERSONALIZADO
+                        {
+                            TipoPedido = 2,
+                            Observaciones = pRequest.Observaciones,
+                            CostoEnvio = pRequest.CostoEnvio,
+                            IdMetodoPago = pRequest.IdMetodoPago
+                        };
+
+                        pedidoPersonalizado.PersonaPide.IdPersona = pRequest.IdPersonaPide;
+                        pedidoPersonalizado.DireccionEntrega.IdDireccion = pRequest.IdDireccionEntrega;
+
+                        pedidoPersonalizado.Detalle = new E_PEDIDO_PERSONALIZADO_DETALLE
+                        {
+                            Pedido = pRequest.Pedido,
+                            Direccion = pRequest.Direccion,
+                            Latitud = pRequest.Latitud,
+                            Longitud = pRequest.Longitud,
+                            LimiteInferion = pRequest.LimiteInferion,
+                            LimiteSuperior = pRequest.LimiteSuperior,
+                            NombreLocal = pRequest.Nombrelocal,
+                            Referencias = pRequest.Referencias
+                        };
+
+                        var respuestaDireccion = new PedidoNegocio().AgregarPersonalizado(pedidoPersonalizado);
+
+                        if (respuestaDireccion.RET_NUMEROERROR == 0)
+                        {
+                            respuesta.Exito = true;
+                            respuesta.Mensaje = "Pedido registrado con éxito";//respuestaDireccion.RET_VALORDEVUELTO;
+                        }
+                        else
+                        {
+                            respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                            respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                        }
+                    }
+
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpGet]
+        [Route("Personalizado")]
+        public async Task<HttpResponseMessage> ConsultaPedidoPersonalizado()
+        {
+            var respuesta = new ConsultarTodoResponse<E_PEDIDO_PERSONALIZADO> { };
+            var strMetodo = "WSViajes - ConsultaPedidoPersonalizado ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new PedidoNegocio().ConsultarPersonalizadosTodo();
+
+                if (respuesta.Data.Count > 0)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen pedidos con los parámetros solicitados";
+                }
+
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpGet]
+        [Route("Personalizado/{idPedido}")]
+        public async Task<HttpResponseMessage> ConsultaPedidoPersonalizadoPorId(Guid idPedido)
+        {
+            var respuesta = new ConsultaPorIdResponse<E_PEDIDO_PERSONALIZADO> { };
+            var strMetodo = "WSViajes - ConsultaPedidoPersonalizadoPorId ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new PedidoNegocio().ConsultarPersonalizadosPorId(idPedido);
+
+                if (respuesta.Data != null)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen pedidos con los parámetros solicitados";
+                }
+
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
 
         private decimal getTotalPedido(List<E_DETALLE_PEDIDO> productos)
         {

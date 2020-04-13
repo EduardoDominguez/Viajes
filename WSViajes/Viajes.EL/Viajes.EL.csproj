@@ -56,6 +56,8 @@
     <Compile Include="Extras\E_MENSAJE.cs" />
     <Compile Include="Extras\E_METODO_PAGO.cs" />
     <Compile Include="Extras\E_PEDIDO.cs" />
+    <Compile Include="Extras\E_PEDIDO_PERSONALIZADO.cs" />
+    <Compile Include="Extras\E_PEDIDO_PERSONALIZADO_DETALLE.cs" />
     <Compile Include="Extras\E_PERSONA.cs" />
     <Compile Include="Extras\E_PREGUNTA_SERVICIO.cs" />
     <Compile Include="Extras\E_PRODUCTO.cs" />

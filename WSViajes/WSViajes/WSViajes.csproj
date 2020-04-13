@@ -228,6 +228,7 @@
     <Compile Include="Models\Request\EnviaNotificacionRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaDireccionRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaLocalRequest.cs" />
+    <Compile Include="Models\Request\InsertaActualizaPedidoPersonalizadoRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaPedidoRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaProducto.cs" />
     <Compile Include="Models\Request\InsertaActualizaProductoFavorito.cs" />

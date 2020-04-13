@@ -30,7 +30,7 @@ namespace Viajes.EL.Extras
         public string ReferenciaPago { get; set; }
         public decimal CostoEnvio { get; set; }
         public List<E_DETALLE_PEDIDO> Detalle { get; set; }
-
+        public byte TipoPedido { get; set; }
         public E_PEDIDO()
         {
             

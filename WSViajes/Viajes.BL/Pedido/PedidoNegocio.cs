@@ -67,6 +67,44 @@ namespace Viajes.BL.Pedido
         }
 
         /// <summary>
+        /// Método para consultar pedidos personalizados
+        /// <param name="SoloActivos">Consultar solo activos o no</param>
+        /// <returns> Objeto tipo E_PEDIDO_PERSONALIZADO con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PEDIDO_PERSONALIZADO>> ConsultarPersonalizadosTodo(int? idPersona = null)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                return await pDatos.ConsultarPersonalizadosTodo(pIdPersonaPide: idPersona);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar pedidos personalizados por id
+        /// <param name="pIdPedido">Id del pedido a consultar</param>
+        /// <returns> Objeto tipo E_PEDIDO_PERSONALIZADO con los datos solicitados </returns>  
+        /// </summary>       
+        public async Task<E_PEDIDO_PERSONALIZADO> ConsultarPersonalizadosPorId(Guid pIdPedido)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                var pResultado = await pDatos.ConsultarPersonalizadosTodo(pIdPedido);
+                return pResultado.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
         /// Método para consultar historial de pedidos por conductor
         /// <param name="SoloActivos">Consultar solo activos o no</param>
         /// <returns> Objeto tipo E_PEDIDO con los datos solicitados </returns>  
@@ -235,6 +273,26 @@ namespace Viajes.BL.Pedido
             {
                 PedidoOperaciones pDatos = new PedidoOperaciones();
                 return pDatos.AgregarRespuestaPreguntaServicio(pIdPedido, pIdPregunta, pRespuesta);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Método para agregar pedido personalizado
+        /// <param name="Entidad">Datos del pedido personalizado a agregar</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE AgregarPersonalizado(E_PEDIDO_PERSONALIZADO Entidad)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                return pDatos.AgregarPersonalizado(Entidad);
             }
             catch (Exception ex)
             {

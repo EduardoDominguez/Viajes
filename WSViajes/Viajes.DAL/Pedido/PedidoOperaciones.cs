@@ -69,7 +69,7 @@ namespace Viajes.DAL.Pedido
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
                                          pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I", pPedido.ReferenciaPago,
-                                         pPedido.CostoEnvio,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
                                         
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -81,6 +81,64 @@ namespace Viajes.DAL.Pedido
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Método para insertar pedidos personalizados
+        /// <param name="pPedido">Objeto de tipo E_PEDIDO con datos a insertar</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
+        /// </summary>
+        public E_MENSAJE AgregarPersonalizado(E_PEDIDO_PERSONALIZADO pPedido)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+
+                    pPedido.IdPedido = Guid.NewGuid();
+
+                    XElement xmlPedido = new XElement("PEDIDO_PERSONALIZADO");
+
+                    //foreach (var detalle in pPedido.Detalle)
+                    //{
+                       
+                        XElement xDetallePedido = new XElement("DETALLE");
+                        xDetallePedido.Add(
+                            new XAttribute("ID_DETALLE_PEDIDO_PERSONALIZADO", Guid.NewGuid()),
+                            new XAttribute("ID_PEDIDO", pPedido.IdPedido),
+                            new XAttribute("NOMBRE_LOCAL", pPedido.Detalle.NombreLocal),
+                            new XAttribute("DIRECCION", pPedido.Detalle.Direccion),
+                            new XAttribute("REFERENCIAS", pPedido.Detalle.Referencias),
+                            new XAttribute("PEDIDO", pPedido.Detalle.Pedido),
+                            new XAttribute("LATITUD", pPedido.Detalle.Latitud),
+                            new XAttribute("LONGITUD", pPedido.Detalle.Longitud),
+                            new XAttribute("LIMITE_INFERIOR", pPedido.Detalle.LimiteInferion),
+                            new XAttribute("LIMITE_SUPERIOR", pPedido.Detalle.LimiteSuperior)
+
+                        );
+                        xmlPedido.Add(xDetallePedido);
+                    //}
+
+                    ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
+                    ObjectParameter RET_MENSAJEERROR = new ObjectParameter("RET_MENSAJEERROR", typeof(string));
+                    ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
+
+
+                    context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
+                                        pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I", pPedido.ReferenciaPago,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido,
+                                        RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
+
+                    E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
+                    return vMensaje;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         /// <summary>
         /// Método para actualizar pedido
@@ -131,8 +189,9 @@ namespace Viajes.DAL.Pedido
                 {
                     var pedidos = await (from s in context.M_PEDIDO
                                    where
-                                   (pIdPedido == null || (pIdPedido != null && s.id_pedido == pIdPedido))
-                                    && (pIdPersonaPide == null || (pIdPersonaPide != null && s.id_persona_pide == pIdPersonaPide))
+                                   s.tipo_pedido == 1 //Pedidos normales
+                                   && (pIdPedido == null || (pIdPedido != null && s.id_pedido == pIdPedido))
+                                   && (pIdPersonaPide == null || (pIdPersonaPide != null && s.id_persona_pide == pIdPersonaPide)) 
                                     orderby s.fecha_pedido descending, s.hora_pedido descending
                                    select s).ToListAsync<M_PEDIDO>();
 
@@ -162,6 +221,7 @@ namespace Viajes.DAL.Pedido
                     var pedidos = await (from s in context.M_PEDIDO
                                    where
                                    //s.id_persona_pide == pIdPersonaPide
+                                   s.tipo_pedido == 1 &&  //Pedidos normales
                                    (pIdPersonaPide == null || (pIdPersonaPide != null && s.id_persona_pide == pIdPersonaPide))
                                    && (pIdPersonaEntrega == null || (pIdPersonaEntrega != null && s.id_persona_entrega == pIdPersonaEntrega))
                                    && (s.id_estatus == 1 || s.id_estatus == 2 || s.id_estatus == 3 || s.id_estatus == 4)
@@ -190,7 +250,8 @@ namespace Viajes.DAL.Pedido
                 {
                     var pedidos = await (from s in context.M_PEDIDO
                                    where
-                                   s.id_estatus == 1 
+                                   s.id_estatus == 1
+                                   &&  s.tipo_pedido == 1   //Pedidos normales
                                    //&& s.fecha_pedido == DateTime.Now
                                    select s).ToListAsync<M_PEDIDO>();
 
@@ -220,6 +281,7 @@ namespace Viajes.DAL.Pedido
                                          join per in context.CTL_PERSONA on p.id_persona_entrega equals per.id_persona
                                          join ap in context.CTL_ACCESO_PERSONA on per.id_persona equals ap.id_persona
                                          where
+                                         p.tipo_pedido == 1 &&  //Pedidos normales
                                          p.id_persona_entrega == pIdPersona && ap.tipo_usuario == 2
                                          orderby p.fecha_entrega
                                          select p).ToListAsync<M_PEDIDO>();
@@ -253,7 +315,8 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "C", pPedido.ReferenciaPago, pPedido.CostoEnvio,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "C", pPedido.ReferenciaPago,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -285,7 +348,8 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "A", pPedido.ReferenciaPago, pPedido.CostoEnvio,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "A", pPedido.ReferenciaPago,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -318,7 +382,8 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "AE", pPedido.ReferenciaPago, pPedido.CostoEnvio,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "AE", pPedido.ReferenciaPago,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -444,8 +509,74 @@ namespace Viajes.DAL.Pedido
             }
         }
 
-        private async Task<List<E_PEDIDO>> ProcesaListaPedidos(List<M_PEDIDO> pPedidos)
+        /// <summary>
+        /// Método para consultar pedidos personalizados
+        /// <param name="pIdPedido">Id del pedido a consultar</param>
+        /// <param name="pIdPersonaPide">Folio del pedido</param>
+        /// <param name="pFolio">Folio del pedido</param>
+        /// <returns> Objeto tipo List<E_PEDIDO_PERSONALIZADO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PEDIDO_PERSONALIZADO>> ConsultarPersonalizadosTodo(Guid? pIdPedido = null, int? pIdPersonaPide = null, string pFolio = null)
         {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    var pedidos = await (from s in context.M_PEDIDO
+                                         where
+                                         s.tipo_pedido == 2 //Pedidos normales
+                                         && (pIdPedido == null || (pIdPedido != null && s.id_pedido == pIdPedido))
+                                         && (pIdPersonaPide == null || (pIdPersonaPide != null && s.id_persona_pide == pIdPersonaPide))
+                                         orderby s.fecha_pedido descending, s.hora_pedido descending
+                                         select s).ToListAsync<M_PEDIDO>();
+
+                    return await ProcesaListaPedidosPersonalizados(pedidos);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async Task<List<E_PEDIDO_PERSONALIZADO>> ProcesaListaPedidosPersonalizados(List<M_PEDIDO> pPedidos)
+        {
+            var listaPedidos = new List<E_PEDIDO_PERSONALIZADO>();
+
+            foreach (var pedido in pPedidos)
+            {
+                var direccion = await new DireccionOperaciones().ConsultarDirecciones(pIdDireccion: pedido.id_direccion_entrega);
+                var estatus = await new EstatusOperaciones().Consultar(pIdEstatus: pedido.id_estatus);
+                var cliente = await new PersonaOperaciones().Consultar(pIdPersona: pedido.id_persona_pide);
+                var conductor = await new ConductorOperaciones().Consultar(pIdPersona: (pedido.id_persona_entrega == null) ? 0 : pedido.id_persona_entrega);
+                listaPedidos.Add(new E_PEDIDO_PERSONALIZADO
+                {
+                    IdPedido = pedido.id_pedido,
+                    //IdPersonaPide = pedido.id_persona_pide,
+                    PersonaPide = cliente.FirstOrDefault(),
+                    DireccionEntrega = direccion.FirstOrDefault(),
+                    PersonaEntrega = conductor.FirstOrDefault(),
+                    IdMetodoPago = pedido.id_metodo_pago,
+                    IdEncuesta = pedido.id_encuesta,
+                    Estatus = estatus.FirstOrDefault(),
+                    Calificacion = pedido.calificacion ?? 0,
+                    Observaciones = pedido.observaciones,
+                    FechaPedido = pedido.fecha_pedido,
+                    HoraPedido = pedido.hora_pedido,
+                    FechaEntrega = pedido.fecha_entrega ?? DateTime.MinValue,
+                    HoraEntrega = pedido.hora_entrega ?? TimeSpan.MinValue,
+                    Folio = pedido.folio,
+                    ReferenciaPago = pedido.referencia_pago,
+                    CostoEnvio = pedido.costo_envio,
+                    Detalle = await new DetallePedidoPersonalizadoOperaciones().Consultar(pIdPedido: pedido.id_pedido)
+                }); 
+            }
+
+            return listaPedidos;
+        }
+
+        private async Task<List<E_PEDIDO>> ProcesaListaPedidos(List<M_PEDIDO> pPedidos)
+        {   
             var listaPedidos = new List<E_PEDIDO>();
 
             foreach (var pedido in pPedidos)
