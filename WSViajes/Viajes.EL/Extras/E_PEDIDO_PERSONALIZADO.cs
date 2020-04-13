@@ -36,6 +36,5 @@ namespace Viajes.EL.Extras
                 this.PersonaPide = new E_PERSONA();
             }
 
-    }
-    }
+        }
 }
