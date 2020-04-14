@@ -55,6 +55,7 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<IdPersonaCrea>> no puede estar vacío ni igual o menor a cero.";*/
                 else
                 {
+                    pRequest.Pedido.TipoPedido = 1;
                     /**
                     * IdMetodoPago 1 = efectivo, 2 = tarjeta, 3 = paypal
                     * */
@@ -74,7 +75,6 @@ namespace WSViajes.Controllers
                             if(pago.ErrorMessage == null)
                             {
                                 pRequest.Pedido.ReferenciaPago = pago.Id;
-                                pRequest.Pedido.TipoPedido = 1;
                                 var respuestaDireccion = new PedidoNegocio().Agregar(pRequest.Pedido);
 
                                 if (respuestaDireccion.RET_NUMEROERROR == 0)
@@ -795,7 +795,6 @@ namespace WSViajes.Controllers
             {
                 if (pRequest == null)
                     respuesta.Mensaje = "No se recibió datos de petición.";
-                
                 else if (String.IsNullOrEmpty(pRequest.IdDireccionEntrega.ToString()) || pRequest.IdDireccionEntrega == 0)
                     respuesta.Mensaje = "El elemento <<IdDireccionEntrega>> no puede estar vacío ni igual a cero.";
                 else if (String.IsNullOrEmpty(pRequest.IdPersonaPide.ToString()) || pRequest.IdPersonaPide == 0)

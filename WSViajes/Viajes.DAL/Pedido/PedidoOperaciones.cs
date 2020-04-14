@@ -125,7 +125,7 @@ namespace Viajes.DAL.Pedido
 
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
-                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I", pPedido.ReferenciaPago,
+                                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "IP", pPedido.ReferenciaPago,
                                          pPedido.CostoEnvio, pPedido.TipoPedido,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
@@ -221,7 +221,7 @@ namespace Viajes.DAL.Pedido
                     var pedidos = await (from s in context.M_PEDIDO
                                    where
                                    //s.id_persona_pide == pIdPersonaPide
-                                   s.tipo_pedido == 1 &&  //Pedidos normales
+                                   //s.tipo_pedido == 1 &&  //Pedidos normales
                                    (pIdPersonaPide == null || (pIdPersonaPide != null && s.id_persona_pide == pIdPersonaPide))
                                    && (pIdPersonaEntrega == null || (pIdPersonaEntrega != null && s.id_persona_entrega == pIdPersonaEntrega))
                                    && (s.id_estatus == 1 || s.id_estatus == 2 || s.id_estatus == 3 || s.id_estatus == 4)
@@ -251,7 +251,7 @@ namespace Viajes.DAL.Pedido
                     var pedidos = await (from s in context.M_PEDIDO
                                    where
                                    s.id_estatus == 1
-                                   &&  s.tipo_pedido == 1   //Pedidos normales
+                                   //&& s.tipo_pedido == 1   //Pedidos normales
                                    //&& s.fecha_pedido == DateTime.Now
                                    select s).ToListAsync<M_PEDIDO>();
 
@@ -568,6 +568,7 @@ namespace Viajes.DAL.Pedido
                     Folio = pedido.folio,
                     ReferenciaPago = pedido.referencia_pago,
                     CostoEnvio = pedido.costo_envio,
+                    TipoPedido = pedido.tipo_pedido,
                     Detalle = await new DetallePedidoPersonalizadoOperaciones().Consultar(pIdPedido: pedido.id_pedido)
                 }); 
             }
@@ -604,6 +605,7 @@ namespace Viajes.DAL.Pedido
                     Folio = pedido.folio,
                     ReferenciaPago = pedido.referencia_pago,
                     CostoEnvio = pedido.costo_envio,
+                    TipoPedido = pedido.tipo_pedido,
                     Detalle = await new DetallePedidoOperaciones().Consultar(pIdPedido: pedido.id_pedido),
                 }); ; ;
             }
