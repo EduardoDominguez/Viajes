@@ -363,6 +363,112 @@ namespace Viajes.DAL.Producto
         }
 
         /// <summary>
+        /// Método para insertar extras a productos.
+        /// <param name="pNombre">Nombre del extra</param>
+        /// <param name="pIdProducto">Id del producto a relacionar</param>
+        /// <param name="pPrecio">Precio del extra</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
+        /// </summary>
+        public E_MENSAJE AgregarExtraProducto(string pNombre, int pIdProducto, decimal pPrecio, int pIdPersonaAlta)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    E_MENSAJE vMensaje = new E_MENSAJE();
+
+                    var existeRegistro = (from s in context.CTL_EXTRAS_PRODUCTO
+                                          where
+                                          s.nombre.ToLower().Trim() == pNombre.ToLower().Trim() && s.id_producto == pIdProducto
+                                          select s).ToList<CTL_EXTRAS_PRODUCTO>().FirstOrDefault();
+
+                    if (existeRegistro == null)
+                    {
+                        context.CTL_EXTRAS_PRODUCTO.Add(new CTL_EXTRAS_PRODUCTO() {id_extra = Guid.NewGuid(), nombre = pNombre.Trim(), id_producto = pIdProducto, precio = pPrecio, id_persona_alta = pIdPersonaAlta, fecha_alta = DateTime.Now });
+                        var resultado = context.SaveChanges();
+
+                        if (resultado <= 0)
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo insertar, intente más tarde", RET_VALORDEVUELTO = "No se pudo insertar, intente más tarde" };
+                        else
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Insertado", RET_VALORDEVUELTO = "Insertado" };
+                    }
+                    else
+                    {
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -200, RET_MENSAJEERROR = "Ya existe un extra con este nombre para el producto.", RET_VALORDEVUELTO = "Ya existe un extra con este nombre para el producto." };
+                    }
+
+
+                    return vMensaje;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para actualizar extras a productos
+        /// <param name="pIdExtra">Identificador del extra</param>
+        /// <param name="pNombre">Nombre del extra</param>
+        /// <param name="pIdProducto">Id del producto a relacionar</param>
+        /// <param name="pPrecio">Precio del extra</param>
+        /// <param name="pEstatus">Estatus del extra</param>
+        /// <param name="pIdPersonaMod">Persona que actualiza el extra</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
+        /// </summary>
+        public E_MENSAJE ActualizarExtrasProducto(Guid pIdExtra, string pNombre, int pIdProducto, decimal pPrecio, byte pEstatus, int pIdPersonaMod)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    E_MENSAJE vMensaje = new E_MENSAJE();   
+
+                    var existeRegistro = (from s in context.CTL_EXTRAS_PRODUCTO
+                                          where
+                                          s.nombre.ToLower().Trim() == pNombre.ToLower().Trim() && s.id_producto == pIdProducto
+                                          select s).ToList<CTL_EXTRAS_PRODUCTO>().FirstOrDefault();
+
+                    if(existeRegistro != null && existeRegistro.id_extra != pIdExtra)
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -200, RET_MENSAJEERROR = "Ya existe un extra con este nombre para el producto.", RET_VALORDEVUELTO = "Ya existe un extra con este nombre para el producto." };
+                    else
+                    {
+                        var extra = (from s in context.CTL_EXTRAS_PRODUCTO
+                                     where
+                                     s.id_extra == pIdExtra
+                                     select s).ToList<CTL_EXTRAS_PRODUCTO>().FirstOrDefault();
+
+                        if (extra != null)
+                        {
+                            extra.id_persona_mod = pIdPersonaMod;
+                            extra.fecha_mod = DateTime.Now;
+                            extra.precio = pPrecio;
+                            extra.nombre = pNombre.Trim();
+                            extra.estatus = pEstatus;
+                            var resultado = context.SaveChanges();
+
+                            if (resultado <= 0)
+                                vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo actualizar, intente más tarde", RET_VALORDEVUELTO = "No se pudo actualizar, intente más tarde" };
+                            else
+                                vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Actrualizado", RET_VALORDEVUELTO = "Actrualizado" };
+                        }
+                        else
+                        {
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = -200, RET_MENSAJEERROR = "No se pudo actualizar.", RET_VALORDEVUELTO = "No se pudo actualizar." };
+                        }
+                    }
+
+                    return vMensaje;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Método para consultar  extras de productos 
         /// <param name="pIdProducto">Id del producto</param>
         /// <returns> Objeto tipo List<E_EXTRAS_PRODUCTO> con los datos solicitados </returns>  

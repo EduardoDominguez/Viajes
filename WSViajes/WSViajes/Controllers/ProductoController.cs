@@ -629,5 +629,119 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
+        [HttpPost]
+        [Route("Extras")]
+        public HttpResponseMessage AgregaExtraProducto([FromBody] InsertaActualizaExtraRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - AgregaExtraProducto ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (String.IsNullOrEmpty(pRequest.IdProducto.ToString()) || pRequest.IdProducto == 0)
+                    respuesta.Mensaje = "El elemento <<IdProducto>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento <<Nombre>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Precio.ToString()) || pRequest.Precio == 0)
+                    respuesta.Mensaje = "El elemento <<Precio>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersona.ToString()) || pRequest.IdPersona == 0)
+                    respuesta.Mensaje = "El elemento <<IdPersona>> no puede estar vacío ni igual a cero.";
+                else
+                {
+
+                    var respuestaDireccion = new ProductoNegocio().AgregarExtrasProducto(pRequest.Nombre, pRequest.IdProducto, pRequest.Precio, pRequest.IdPersona);
+
+                    if (respuestaDireccion.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                        respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                        respuesta.Mensaje = respuestaDireccion.RET_MENSAJEERROR;
+                    }
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpPut]
+        [Route("Extras")]
+        public HttpResponseMessage ActualizaExtraProducto([FromBody] InsertaActualizaExtraRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - ActualizaExtraProducto ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (String.IsNullOrEmpty(pRequest.IdProducto.ToString()) || pRequest.IdProducto == 0)
+                    respuesta.Mensaje = "El elemento <<IdProducto>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento <<Nombre>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Precio.ToString()) || pRequest.Precio == 0)
+                    respuesta.Mensaje = "El elemento <<Precio>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersona.ToString()) || pRequest.IdPersona == 0)
+                    respuesta.Mensaje = "El elemento <<IdPersona>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Estatus.ToString()) || pRequest.Estatus == 0)
+                    respuesta.Mensaje = "El elemento <<Estatus>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdExtra.ToString()))
+                    respuesta.Mensaje = "El elemento <<IdExtra>> no puede estar vacío.";
+                else
+                {
+
+                    var respuestaDireccion = new ProductoNegocio().ActualizarExtrasProducto(pRequest.IdExtra, pRequest.Nombre, pRequest.IdProducto, pRequest.Precio, pRequest.Estatus, pRequest.IdPersona);
+
+                    if (respuestaDireccion.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                        respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                        respuesta.Mensaje = respuestaDireccion.RET_MENSAJEERROR;
+                    }
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
     }
 }

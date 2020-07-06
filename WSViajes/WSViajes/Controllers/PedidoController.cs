@@ -11,8 +11,14 @@ using WSViajes.Models;
 using WSViajes.Models.Request;
 using WSViajes.Models.Response;
 using WSViajes.Comunes;
+using Viajes.BL.Direccion;
+using Viajes.BL.Local;
 using Viajes.BL.Persona;
 using System.Collections.Generic;
+using Viajes.EL.Enum;
+using System.Configuration;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace WSViajes.Controllers
 {
@@ -217,7 +223,7 @@ namespace WSViajes.Controllers
                             var token = await enviarMensaje.GetTokenUser(pedido.PersonaPide.IdPersona);
                             var persona = await new PersonaNegocio().ConsultarPorId(pedido.PersonaPide.IdPersona);
                             if (!string.IsNullOrEmpty(token))
-                                await enviarMensaje.SendMessage(token, "FastRun", mensaje);
+                                await enviarMensaje.SendMessage(token, "FastRun", mensaje, (byte)NotificacionFirebase.Cliente);
 
                             mailer.Send(persona.Acceso.Email, "Novedades en tu pedido", mensaje, persona.Nombre);
 
@@ -252,7 +258,7 @@ namespace WSViajes.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<HttpResponseMessage> Consulta()
+        public async Task<HttpResponseMessage> Consulta(string pListaIdEstatus = null)
         {
             var respuesta = new ConsultarTodoResponse<E_PEDIDO> { };
             var strMetodo = "WSViajes - ConsultaPedidos ";
@@ -264,6 +270,12 @@ namespace WSViajes.Controllers
 
                 if (respuesta.Data.Count > 0)
                 {
+                    if(!String.IsNullOrEmpty(pListaIdEstatus))
+                    {
+                        var estatus = pListaIdEstatus.Split(',');
+
+                        respuesta.Data = respuesta.Data.Where(p => estatus.Contains(p.Estatus.IdEstatus.ToString())).ToList();
+                    }
                     respuesta.Exito = true;
                     respuesta.Mensaje = $"Registros cargados con éxito";
                 }
@@ -605,6 +617,49 @@ namespace WSViajes.Controllers
         }
 
         [HttpGet]
+        [Route("Historial/Local/{pIdLocal}")]
+        public async Task<HttpResponseMessage> ConsultaHistorialLocal(int pIdLocal, int? pIdEstatus = null)
+        {
+            var respuesta = new ConsultarTodoResponse<E_PEDIDO> { };
+            var strMetodo = "WSViajes - ConsultaHistorialLocal ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new PedidoNegocio().ConsultarHistorialLocal(pIdLocal, pIdEstatus);
+
+                if (respuesta.Data != null)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen pedidos con los parámetros solicitados";
+                }
+
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpGet]
         [Route("{idPedido}/Preguntas/{tipoPreguntas}")]
         public async Task<HttpResponseMessage> ConsultaPreguntasPendientesPedido(Guid idPedido, byte tipoPreguntas)
         {
@@ -742,9 +797,9 @@ namespace WSViajes.Controllers
 
         [HttpPost]
         [Route("CostoEntrega")]
-        public HttpResponseMessage CalculaCostoEntrega([FromBody] CalculaCostoEntrega pRequest)
+        public async Task<HttpResponseMessage> CalculaCostoEntrega([FromBody] CalculaCostoEntrega pRequest)
         {
-            var respuesta = new ConsultaPorIdResponse<double> { };
+            var respuesta = new ConsultaPorIdResponse<decimal> { };
             var strMetodo = "WSViajes - CalculaCostoEntrega ";
             string sid = Guid.NewGuid().ToString();
 
@@ -759,9 +814,34 @@ namespace WSViajes.Controllers
                 else
                 {
 
+                    var DireccionEntrega = await new DireccionNegocio().ConsultarPorId(pRequest.IdDireccionEntrega);
+                    var DireccionRecoge = await new LocalNegocio().ConsultarPorId(pRequest.DireccionesRecoge[0]);
+                    var uriApiMaps = ConfigurationManager.AppSettings["URI_API_MAPS_DISTANCE"];
+                    int DistanciaMetros = 0;
+                    E_TAFIRA_ENVIO costoEnvio = null;
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(uriApiMaps);
+                        client.DefaultRequestHeaders.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                        HttpResponseMessage response = await client.GetAsync(string.Format("?origin={0}&destination={1}&key={2}", $"{DireccionEntrega.Latitud.ToString().Replace(",", ".")},{DireccionEntrega.Longitud.ToString().Replace(",", ".")}", $"{DireccionRecoge.Latitud.ToString().Replace(",", ".")},{DireccionRecoge.Longitud.ToString().Replace(",", ".")}", ConfigurationManager.AppSettings["SERVER_KEY_MAPS"]));
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var jsonDeserializado = JsonConvert.DeserializeObject<E_RESPOSE_DISTANCE>(response.Content.ReadAsStringAsync().Result);
+                            if (jsonDeserializado.status.ToLower().Equals("ok"))
+                            {
+                        
+                                string metrosApi = jsonDeserializado.routes[0]["legs"][0]["distance"]["value"];
+                                DistanciaMetros = Int32.Parse(metrosApi);
+                                costoEnvio = await new PedidoNegocio().ConsultaCotoEnvioByDistancia(DistanciaMetros);
+                            }
+                        }
+                    }
+
                     respuesta.Exito = true;
                     respuesta.Mensaje = "Datos cargados con éxito.";
-                    respuesta.Data = 34.13;
+                    respuesta.Data = costoEnvio.CostoEnvio;
 
                 }
             }

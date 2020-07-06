@@ -18,9 +18,9 @@ namespace Viajes.DAL.Modelo
         public M_PEDIDO()
         {
             this.M_DETALLE_PEDIDO = new HashSet<M_DETALLE_PEDIDO>();
+            this.M_DETALLE_PEDIDO_PERSONALIZADO = new HashSet<M_DETALLE_PEDIDO_PERSONALIZADO>();
             this.R_PEDIDO_PREGRUNTA = new HashSet<R_PEDIDO_PREGRUNTA>();
             this.TBL_COORDENADAS_CONDUCTOR = new HashSet<TBL_COORDENADAS_CONDUCTOR>();
-            this.M_DETALLE_PEDIDO_PERSONALIZADO = new HashSet<M_DETALLE_PEDIDO_PERSONALIZADO>();
         }
     
         public int id_persona_pide { get; set; }
@@ -49,10 +49,10 @@ namespace Viajes.DAL.Modelo
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_DETALLE_PEDIDO> M_DETALLE_PEDIDO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<M_DETALLE_PEDIDO_PERSONALIZADO> M_DETALLE_PEDIDO_PERSONALIZADO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<R_PEDIDO_PREGRUNTA> R_PEDIDO_PREGRUNTA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_DETALLE_PEDIDO_PERSONALIZADO> M_DETALLE_PEDIDO_PERSONALIZADO { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ViajesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ViajesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CTL_ACCESO_PERSONA">
           <Key>
             <PropertyRef Name="id_persona" />
@@ -203,7 +203,7 @@
           <Property Name="id_detalle_pedido_personalizado" Type="uniqueidentifier" Nullable="false" />
           <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
           <Property Name="nombre_local" Type="nvarchar" MaxLength="300" Nullable="false" />
-          <Property Name="direccion" Type="nvarchar" MaxLength="600" Nullable="false" />
+          <Property Name="direccion" Type="nvarchar" MaxLength="1000" />
           <Property Name="referencias" Type="nvarchar" MaxLength="700" Nullable="false" />
           <Property Name="pedido" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="latitud" Type="decimal" Precision="9" Scale="6" Nullable="false" />
@@ -301,7 +301,7 @@
           <Property Name="longitud" Type="decimal" Precision="9" Scale="6" Nullable="false" />
           <Property Name="fecha" Type="datetime" Nullable="false" />
           <Property Name="id_coordenada" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id_pedido" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="TBL_QR_TIENDA">
           <Key>
@@ -314,6 +314,15 @@
           <Property Name="longitud" Type="decimal" Precision="9" Scale="6" />
           <Property Name="aplicacion" Type="nvarchar" MaxLength="10" />
           <Property Name="fecha_alta" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_TARIFA_ENVIO">
+          <Key>
+            <PropertyRef Name="id_tarifa" />
+          </Key>
+          <Property Name="id_tarifa" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="distancia_menor" Type="int" Nullable="false" />
+          <Property Name="distancia_mayor" Type="int" Nullable="false" />
+          <Property Name="costo_envio" Type="money" Nullable="false" />
         </EntityType>
         <Association Name="FK__CTL_ACCES__id_pe__34C8D9D1">
           <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
@@ -664,7 +673,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO">
-          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="0..1" />
           <End Role="TBL_COORDENADAS_CONDUCTOR" Type="Self.TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="M_PEDIDO">
@@ -825,6 +834,7 @@
           <EntitySet Name="TBL_BANNERS" EntityType="Self.TBL_BANNERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_COORDENADAS_CONDUCTOR" EntityType="Self.TBL_COORDENADAS_CONDUCTOR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_QR_TIENDA" EntityType="Self.TBL_QR_TIENDA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_TARIFA_ENVIO" EntityType="Self.TBL_TARIFA_ENVIO" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CTL_ACCES__id_pe__34C8D9D1" Association="Self.FK__CTL_ACCES__id_pe__34C8D9D1">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_ACCESO_PERSONA" EntitySet="CTL_ACCESO_PERSONA" />
@@ -946,7 +956,8 @@
             <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ViajesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1125,8 +1136,8 @@
           <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_persona_mod" Type="Int32" />
           <Property Name="fecha_mod" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="R_PEDIDO_PREGRUNTA" Relationship="Self.FK_R_PREGUNTA_CTL_PREGUNTA" FromRole="CTL_PREGUNTA_SERVICIO" ToRole="R_PEDIDO_PREGRUNTA" />
           <Property Name="orden" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="R_PEDIDO_PREGRUNTA" Relationship="Self.FK_R_PREGUNTA_CTL_PREGUNTA" FromRole="CTL_PREGUNTA_SERVICIO" ToRole="R_PEDIDO_PREGRUNTA" />
         </EntityType>
         <EntityType Name="CTL_PRODUCTO">
           <Key>
@@ -1179,6 +1190,23 @@
           <NavigationProperty Name="R_DETALLE_PEDIDO_EXTRAS" Relationship="Self.FK_DETALLE" FromRole="M_DETALLE_PEDIDO" ToRole="R_DETALLE_PEDIDO_EXTRAS" />
           <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_M_PEDIDO" FromRole="M_DETALLE_PEDIDO" ToRole="M_PEDIDO" />
         </EntityType>
+        <EntityType Name="M_DETALLE_PEDIDO_PERSONALIZADO">
+          <Key>
+            <PropertyRef Name="id_detalle_pedido_personalizado" />
+          </Key>
+          <Property Name="id_detalle_pedido_personalizado" Type="Guid" Nullable="false" />
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <Property Name="nombre_local" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="direccion" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="referencias" Type="String" MaxLength="700" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pedido" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="latitud" Type="Decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="longitud" Type="Decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="limite_inferior" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="limite_superior" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="costo" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" FromRole="M_DETALLE_PEDIDO_PERSONALIZADO" ToRole="M_PEDIDO" />
+        </EntityType>
         <EntityType Name="M_PEDIDO">
           <Key>
             <PropertyRef Name="id_pedido" />
@@ -1198,17 +1226,17 @@
           <Property Name="id_metodo_pago" Type="Int32" Nullable="false" />
           <Property Name="referencia_pago" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
           <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <Property Name="costo_envio" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="tipo_pedido" Type="Byte" Nullable="false" />
           <NavigationProperty Name="CTL_DIRECCIONES" Relationship="Self.FK_M_PEDIDO_CTL_DIRECCIONES" FromRole="M_PEDIDO" ToRole="CTL_DIRECCIONES" />
           <NavigationProperty Name="CTL_ESTATUS_PEDIDO" Relationship="Self.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" FromRole="M_PEDIDO" ToRole="CTL_ESTATUS_PEDIDO" />
           <NavigationProperty Name="CTL_METODO_PAGO" Relationship="Self.FK_M_PEDIDO_CTL_METODO_PAGO" FromRole="M_PEDIDO" ToRole="CTL_METODO_PAGO" />
           <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA" FromRole="M_PEDIDO" ToRole="CTL_PERSONA" />
           <NavigationProperty Name="CTL_PERSONA1" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA1" FromRole="M_PEDIDO" ToRole="CTL_PERSONA" />
           <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="M_DETALLE_PEDIDO" />
+          <NavigationProperty Name="M_DETALLE_PEDIDO_PERSONALIZADO" Relationship="Self.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="M_DETALLE_PEDIDO_PERSONALIZADO" />
           <NavigationProperty Name="R_PEDIDO_PREGRUNTA" Relationship="Self.FK_R_PREGUNTA_M_PEDIDO" FromRole="M_PEDIDO" ToRole="R_PEDIDO_PREGRUNTA" />
           <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="M_PEDIDO" ToRole="TBL_COORDENADAS_CONDUCTOR" />
-          <Property Name="costo_envio" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="tipo_pedido" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="M_DETALLE_PEDIDO_PERSONALIZADO" Relationship="ViajesModel.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="M_DETALLE_PEDIDO_PERSONALIZADO" />
         </EntityType>
         <EntityType Name="R_DETALLE_PEDIDO_EXTRAS">
           <Key>
@@ -1287,7 +1315,7 @@
           <Property Name="longitud" Type="Decimal" Precision="9" Scale="6" Nullable="false" />
           <Property Name="fecha" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_coordenada" Type="Guid" Nullable="false" />
-          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <Property Name="id_pedido" Type="Guid" />
           <NavigationProperty Name="CTL_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" FromRole="TBL_COORDENADAS_CONDUCTOR" ToRole="CTL_CONDUCTOR" />
           <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="TBL_COORDENADAS_CONDUCTOR" ToRole="M_PEDIDO" />
         </EntityType>
@@ -1302,6 +1330,15 @@
           <Property Name="longitud" Type="Decimal" Precision="9" Scale="6" />
           <Property Name="aplicacion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="TBL_TARIFA_ENVIO">
+          <Key>
+            <PropertyRef Name="id_tarifa" />
+          </Key>
+          <Property Name="id_tarifa" Type="Guid" Nullable="false" />
+          <Property Name="distancia_menor" Type="Int32" Nullable="false" />
+          <Property Name="distancia_mayor" Type="Int32" Nullable="false" />
+          <Property Name="costo_envio" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
         </EntityType>
         <Association Name="FK__CTL_ACCES__id_pe__34C8D9D1">
           <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
@@ -1627,6 +1664,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PEDIDO_PERSONALIZADO_M_PEDIDO">
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="M_DETALLE_PEDIDO_PERSONALIZADO" Type="Self.M_DETALLE_PEDIDO_PERSONALIZADO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="M_DETALLE_PEDIDO_PERSONALIZADO">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_R_PREGUNTA_M_PEDIDO">
           <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
           <End Role="R_PEDIDO_PREGRUNTA" Type="Self.R_PEDIDO_PREGRUNTA" Multiplicity="*" />
@@ -1640,7 +1689,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO">
-          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="0..1" />
           <End Role="TBL_COORDENADAS_CONDUCTOR" Type="Self.TBL_COORDENADAS_CONDUCTOR" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="M_PEDIDO">
@@ -1665,6 +1714,7 @@
           <EntitySet Name="CTL_PRODUCTO" EntityType="Self.CTL_PRODUCTO" />
           <EntitySet Name="CTL_TIPO_LOCAL" EntityType="Self.CTL_TIPO_LOCAL" />
           <EntitySet Name="M_DETALLE_PEDIDO" EntityType="Self.M_DETALLE_PEDIDO" />
+          <EntitySet Name="M_DETALLE_PEDIDO_PERSONALIZADO" EntityType="Self.M_DETALLE_PEDIDO_PERSONALIZADO" />
           <EntitySet Name="M_PEDIDO" EntityType="Self.M_PEDIDO" />
           <EntitySet Name="R_DETALLE_PEDIDO_EXTRAS" EntityType="Self.R_DETALLE_PEDIDO_EXTRAS" />
           <EntitySet Name="R_PEDIDO_PREGRUNTA" EntityType="Self.R_PEDIDO_PREGRUNTA" />
@@ -1674,6 +1724,7 @@
           <EntitySet Name="TBL_BANNERS" EntityType="Self.TBL_BANNERS" />
           <EntitySet Name="TBL_COORDENADAS_CONDUCTOR" EntityType="Self.TBL_COORDENADAS_CONDUCTOR" />
           <EntitySet Name="TBL_QR_TIENDA" EntityType="Self.TBL_QR_TIENDA" />
+          <EntitySet Name="TBL_TARIFA_ENVIO" EntityType="Self.TBL_TARIFA_ENVIO" />
           <AssociationSet Name="FK__CTL_ACCES__id_pe__34C8D9D1" Association="Self.FK__CTL_ACCES__id_pe__34C8D9D1">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_ACCESO_PERSONA" EntitySet="CTL_ACCESO_PERSONA" />
@@ -1781,6 +1832,10 @@
           <AssociationSet Name="FK_M_DETALLE_PEDIDO_M_PEDIDO" Association="Self.FK_M_DETALLE_PEDIDO_M_PEDIDO">
             <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
             <End Role="M_DETALLE_PEDIDO" EntitySet="M_DETALLE_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PEDIDO_PERSONALIZADO_M_PEDIDO" Association="Self.FK_PEDIDO_PERSONALIZADO_M_PEDIDO">
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+            <End Role="M_DETALLE_PEDIDO_PERSONALIZADO" EntitySet="M_DETALLE_PEDIDO_PERSONALIZADO" />
           </AssociationSet>
           <AssociationSet Name="FK_R_PREGUNTA_M_PEDIDO" Association="Self.FK_R_PREGUNTA_M_PEDIDO">
             <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
@@ -1912,11 +1967,6 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <EntitySet Name="M_DETALLE_PEDIDO_PERSONALIZADO" EntityType="ViajesModel.M_DETALLE_PEDIDO_PERSONALIZADO" />
-          <AssociationSet Name="FK_PEDIDO_PERSONALIZADO_M_PEDIDO" Association="ViajesModel.FK_PEDIDO_PERSONALIZADO_M_PEDIDO">
-            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
-            <End Role="M_DETALLE_PEDIDO_PERSONALIZADO" EntitySet="M_DETALLE_PEDIDO_PERSONALIZADO" />
-          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1929,35 +1979,6 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="M_DETALLE_PEDIDO_PERSONALIZADO">
-          <Key>
-            <PropertyRef Name="id_detalle_pedido_personalizado" />
-          </Key>
-          <Property Name="id_detalle_pedido_personalizado" Type="Guid" Nullable="false" />
-          <Property Name="id_pedido" Type="Guid" Nullable="false" />
-          <Property Name="nombre_local" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="direccion" Type="String" Nullable="false" MaxLength="600" FixedLength="false" Unicode="true" />
-          <Property Name="referencias" Type="String" Nullable="false" MaxLength="700" FixedLength="false" Unicode="true" />
-          <Property Name="pedido" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="latitud" Type="Decimal" Nullable="false" Precision="9" Scale="6" />
-          <Property Name="longitud" Type="Decimal" Nullable="false" Precision="9" Scale="6" />
-          <Property Name="limite_inferior" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="limite_superior" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" FromRole="M_DETALLE_PEDIDO_PERSONALIZADO" ToRole="M_PEDIDO" />
-          <Property Name="costo" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-        </EntityType>
-        <Association Name="FK_PEDIDO_PERSONALIZADO_M_PEDIDO">
-          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="1" />
-          <End Type="ViajesModel.M_DETALLE_PEDIDO_PERSONALIZADO" Role="M_DETALLE_PEDIDO_PERSONALIZADO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_PEDIDO">
-              <PropertyRef Name="id_pedido" />
-            </Principal>
-            <Dependent Role="M_DETALLE_PEDIDO_PERSONALIZADO">
-              <PropertyRef Name="id_pedido" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2111,7 +2132,6 @@
           <EntitySetMapping Name="CTL_PREGUNTA_SERVICIO">
             <EntityTypeMapping TypeName="ViajesModel.CTL_PREGUNTA_SERVICIO">
               <MappingFragment StoreEntitySet="CTL_PREGUNTA_SERVICIO">
-                <ScalarProperty Name="orden" ColumnName="orden" />
                 <ScalarProperty Name="id_pregunta" ColumnName="id_pregunta" />
                 <ScalarProperty Name="pregunta" ColumnName="pregunta" />
                 <ScalarProperty Name="tipo_pregunta" ColumnName="tipo_pregunta" />
@@ -2119,6 +2139,7 @@
                 <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
                 <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
                 <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
+                <ScalarProperty Name="orden" ColumnName="orden" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2167,11 +2188,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="M_DETALLE_PEDIDO_PERSONALIZADO">
+            <EntityTypeMapping TypeName="ViajesModel.M_DETALLE_PEDIDO_PERSONALIZADO">
+              <MappingFragment StoreEntitySet="M_DETALLE_PEDIDO_PERSONALIZADO">
+                <ScalarProperty Name="id_detalle_pedido_personalizado" ColumnName="id_detalle_pedido_personalizado" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="nombre_local" ColumnName="nombre_local" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="referencias" ColumnName="referencias" />
+                <ScalarProperty Name="pedido" ColumnName="pedido" />
+                <ScalarProperty Name="latitud" ColumnName="latitud" />
+                <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="limite_inferior" ColumnName="limite_inferior" />
+                <ScalarProperty Name="limite_superior" ColumnName="limite_superior" />
+                <ScalarProperty Name="costo" ColumnName="costo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="M_PEDIDO">
             <EntityTypeMapping TypeName="ViajesModel.M_PEDIDO">
               <MappingFragment StoreEntitySet="M_PEDIDO">
-                <ScalarProperty Name="tipo_pedido" ColumnName="tipo_pedido" />
-                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
                 <ScalarProperty Name="id_persona_pide" ColumnName="id_persona_pide" />
                 <ScalarProperty Name="id_direccion_entrega" ColumnName="id_direccion_entrega" />
                 <ScalarProperty Name="id_persona_entrega" ColumnName="id_persona_entrega" />
@@ -2187,6 +2223,8 @@
                 <ScalarProperty Name="id_metodo_pago" ColumnName="id_metodo_pago" />
                 <ScalarProperty Name="referencia_pago" ColumnName="referencia_pago" />
                 <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
+                <ScalarProperty Name="tipo_pedido" ColumnName="tipo_pedido" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2275,6 +2313,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TBL_TARIFA_ENVIO">
+            <EntityTypeMapping TypeName="ViajesModel.TBL_TARIFA_ENVIO">
+              <MappingFragment StoreEntitySet="TBL_TARIFA_ENVIO">
+                <ScalarProperty Name="id_tarifa" ColumnName="id_tarifa" />
+                <ScalarProperty Name="distancia_menor" ColumnName="distancia_menor" />
+                <ScalarProperty Name="distancia_mayor" ColumnName="distancia_mayor" />
+                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="ViajesModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="ViajesModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="SP_DIRECCION" FunctionName="ViajesModel.Store.SP_DIRECCION" />
@@ -2305,23 +2353,6 @@
           <FunctionImportMapping FunctionImportName="SP_PRODUCTO" FunctionName="ViajesModel.Store.SP_PRODUCTO" />
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ViajesModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ViajesModel.Store.sp_upgraddiagrams" />
-          <EntitySetMapping Name="M_DETALLE_PEDIDO_PERSONALIZADO">
-            <EntityTypeMapping TypeName="ViajesModel.M_DETALLE_PEDIDO_PERSONALIZADO">
-              <MappingFragment StoreEntitySet="M_DETALLE_PEDIDO_PERSONALIZADO">
-                <ScalarProperty Name="costo" ColumnName="costo" />
-                <ScalarProperty Name="limite_superior" ColumnName="limite_superior" />
-                <ScalarProperty Name="limite_inferior" ColumnName="limite_inferior" />
-                <ScalarProperty Name="longitud" ColumnName="longitud" />
-                <ScalarProperty Name="latitud" ColumnName="latitud" />
-                <ScalarProperty Name="pedido" ColumnName="pedido" />
-                <ScalarProperty Name="referencias" ColumnName="referencias" />
-                <ScalarProperty Name="direccion" ColumnName="direccion" />
-                <ScalarProperty Name="nombre_local" ColumnName="nombre_local" />
-                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
-                <ScalarProperty Name="id_detalle_pedido_personalizado" ColumnName="id_detalle_pedido_personalizado" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

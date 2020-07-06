@@ -10,7 +10,7 @@ namespace Viajes.EL.Extras
     {
         public Guid IdCoordenada { get; set; }
         public int IdPersona { get; set; }
-        public Guid IdPedido { get; set; }
+        public Guid? IdPedido { get; set; }
         public decimal Latitud { get; set; }
         public decimal Longitud { get; set; }
         public DateTime Fecha { get; set; }

@@ -149,6 +149,9 @@
     <Compile Include="Modelo\TBL_QR_TIENDA.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\TBL_TARIFA_ENVIO.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
     <Compile Include="Pedido\DetallePedidoOperaciones.cs" />
     <Compile Include="Pedido\DetallePedidoPersonalizadoOperaciones.cs" />
     <Compile Include="Pedido\EstatusOperaciones.cs" />
@@ -180,7 +183,6 @@
       <Name>Viajes.EL</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Modelo\ModeloViajes.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

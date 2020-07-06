@@ -124,6 +124,50 @@ namespace Viajes.BL.Producto
         }
 
         /// <summary>
+        /// Método para agregar extras a productos
+        /// <param name="pNombre">Nombre del extra</param>
+        /// <param name="pIdProducto">Id del producto a relacionar</param>
+        /// <param name="pPrecio">Precio del extra</param>
+        /// <param name="pIdPersonaAlta">Persona que registra el extra</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
+        /// </summary>
+        public E_MENSAJE AgregarExtrasProducto(string pNombre, int pIdProducto, decimal pPrecio, int pIdPersonaAlta)
+        {
+            try
+            {
+                ProductoOperaciones pDatos = new ProductoOperaciones();
+                return pDatos.AgregarExtraProducto(pNombre, pIdProducto, pPrecio, pIdPersonaAlta);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para actualizar extras a productos
+        /// <param name="pIdExtra">Identificador del extra</param>
+        /// <param name="pNombre">Nombre del extra</param>
+        /// <param name="pIdProducto">Id del producto a relacionar</param>
+        /// <param name="pPrecio">Precio del extra</param>
+        /// <param name="pEstatus">Estatus del extra</param>
+        /// <param name="pIdPersonaMod">Persona que registra el extra</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
+        /// </summary>
+        public E_MENSAJE ActualizarExtrasProducto(Guid pIdExtra, string pNombre, int pIdProducto, decimal pPrecio, byte pEstatus, int pIdPersonaMod)
+        {
+            try
+            {
+                ProductoOperaciones pDatos = new ProductoOperaciones();
+                return pDatos.ActualizarExtrasProducto(pIdExtra, pNombre, pIdProducto, pPrecio, pEstatus, pIdPersonaMod);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Método para consultar todos productos favoritos de una persona
         /// <param name="pIdPersona">Id persona a consultar productos</param>        
         /// <returns> Objeto tipo List<E_PRODUCTO> con los datos solicitados </returns>  

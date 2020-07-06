@@ -4,29 +4,31 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cedb48b2a2524f83b47f06df91e46387" Name="Diagram1" ZoomLevel="74">
-        <EntityTypeShape EntityType="ViajesModel.CTL_ACCESO_PERSONA" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_CONDUCTOR" Width="1.5" PointX="3" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_COSTO" Width="1.5" PointX="1.5" PointY="19.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_DIRECCIONES" Width="1.5" PointX="5.75" PointY="23.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_ESTATUS_PEDIDO" Width="1.5" PointX="5.75" PointY="28.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_EXTRAS_PRODUCTO" Width="1.5" PointX="3" PointY="15.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_LOCAL" Width="1.5" PointX="1.5" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_METODO_PAGO" Width="1.5" PointX="5.75" PointY="32" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_PERSONA" Width="1.5" PointX="0.75" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_PREGUNTA_SERVICIO" Width="1.5" PointX="11" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_PRODUCTO" Width="1.5" PointX="3.75" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.CTL_TIPO_LOCAL" Width="1.5" PointX="1.5" PointY="28.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.M_DETALLE_PEDIDO" Width="1.5" PointX="10.25" PointY="13.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.M_PEDIDO" Width="1.5" PointX="8" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.R_DETALLE_PEDIDO_EXTRAS" Width="1.5" PointX="5.25" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.R_PEDIDO_PREGRUNTA" Width="1.5" PointX="13.25" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.R_PERSONA_OPENPAY" Width="1.5" PointX="3" PointY="26" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.R_PERSONA_PRODUCTO_FAVORITO" Width="1.5" PointX="6" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.TBL_BANNERS" Width="1.5" PointX="6" PointY="19.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.TBL_COORDENADAS_CONDUCTOR" Width="1.5" PointX="5.25" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ViajesModel.TBL_QR_TIENDA" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+      <Diagram DiagramId="5b8e01e98bfc42e3a034a1cb4331e2b1" Name="Diagram1">
+        <EntityTypeShape EntityType="ViajesModel.CTL_ACCESO_PERSONA" Width="1.5" PointX="3" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_CONDUCTOR" Width="1.5" PointX="3" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_COSTO" Width="1.5" PointX="1.5" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_DIRECCIONES" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_ESTATUS_PEDIDO" Width="1.5" PointX="5.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_EXTRAS_PRODUCTO" Width="1.5" PointX="3" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_LOCAL" Width="1.5" PointX="1.5" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_METODO_PAGO" Width="1.5" PointX="5.75" PointY="31.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_PERSONA" Width="1.5" PointX="0.75" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_PREGUNTA_SERVICIO" Width="1.5" PointX="11" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_PRODUCTO" Width="1.5" PointX="3.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_TIPO_LOCAL" Width="1.5" PointX="1.5" PointY="24.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.M_DETALLE_PEDIDO" Width="1.5" PointX="10.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.M_DETALLE_PEDIDO_PERSONALIZADO" Width="1.5" PointX="10.25" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.M_PEDIDO" Width="1.5" PointX="8" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.R_DETALLE_PEDIDO_EXTRAS" Width="1.5" PointX="5.25" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.R_PEDIDO_PREGRUNTA" Width="1.5" PointX="13.25" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.R_PERSONA_OPENPAY" Width="1.5" PointX="3" PointY="30.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.R_PERSONA_PRODUCTO_FAVORITO" Width="1.5" PointX="6" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_BANNERS" Width="1.5" PointX="6" PointY="23.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_COORDENADAS_CONDUCTOR" Width="1.5" PointX="5.25" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_QR_TIENDA" Width="1.5" PointX="5.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_TARIFA_ENVIO" Width="1.5" PointX="7.75" PointY="2.875" IsExpanded="true" />
         <AssociationConnector Association="ViajesModel.FK__CTL_ACCES__id_pe__34C8D9D1" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK__CTL_ACCES__id_pe__36B12243" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_CTL_CONDUCTOR_CTL_PERSONA" ManuallyRouted="false" />
@@ -54,10 +56,9 @@
         <AssociationConnector Association="ViajesModel.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PRODUCTO" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_DETALLE" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_M_DETALLE_PEDIDO_M_PEDIDO" ManuallyRouted="false" />
+        <AssociationConnector Association="ViajesModel.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_R_PREGUNTA_M_PEDIDO" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ViajesModel.M_DETALLE_PEDIDO_PERSONALIZADO" Width="1.5" PointX="10.25" PointY="17.875" />
-        <AssociationConnector Association="ViajesModel.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

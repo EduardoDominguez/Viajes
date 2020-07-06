@@ -40,6 +40,7 @@ namespace Viajes.DAL.Modelo
         public virtual DbSet<CTL_PRODUCTO> CTL_PRODUCTO { get; set; }
         public virtual DbSet<CTL_TIPO_LOCAL> CTL_TIPO_LOCAL { get; set; }
         public virtual DbSet<M_DETALLE_PEDIDO> M_DETALLE_PEDIDO { get; set; }
+        public virtual DbSet<M_DETALLE_PEDIDO_PERSONALIZADO> M_DETALLE_PEDIDO_PERSONALIZADO { get; set; }
         public virtual DbSet<M_PEDIDO> M_PEDIDO { get; set; }
         public virtual DbSet<R_DETALLE_PEDIDO_EXTRAS> R_DETALLE_PEDIDO_EXTRAS { get; set; }
         public virtual DbSet<R_PEDIDO_PREGRUNTA> R_PEDIDO_PREGRUNTA { get; set; }
@@ -49,7 +50,7 @@ namespace Viajes.DAL.Modelo
         public virtual DbSet<TBL_BANNERS> TBL_BANNERS { get; set; }
         public virtual DbSet<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
         public virtual DbSet<TBL_QR_TIENDA> TBL_QR_TIENDA { get; set; }
-        public virtual DbSet<M_DETALLE_PEDIDO_PERSONALIZADO> M_DETALLE_PEDIDO_PERSONALIZADO { get; set; }
+        public virtual DbSet<TBL_TARIFA_ENVIO> TBL_TARIFA_ENVIO { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

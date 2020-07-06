@@ -11,7 +11,6 @@ using Viajes.BL.Persona;
 using WSViajes.Exceptions;
 using WSViajes.Models;
 using WSViajes.Models.Request;
-using WSViajes.Comunes; 
 
 namespace WSViajes.Controllers
 {
@@ -42,12 +41,14 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<Mensaje>>  no puede estar vacío.";
                 else if (String.IsNullOrEmpty(pEnvivioNotificacion.IdPersona.ToString()) || pEnvivioNotificacion.IdPersona == 0)
                     respuesta.Mensaje = "El elemento <<IdPersona>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pEnvivioNotificacion.TipoNotificacion.ToString()) || pEnvivioNotificacion.TipoNotificacion == 0)
+                    respuesta.Mensaje = "El elemento <<IdPersona>> no puede estar vacío ni igual a cero.";
                 else
                 {
                     var token = await GetTokenUser(pEnvivioNotificacion.IdPersona);
                     if (!string.IsNullOrEmpty(token))
                     {
-                        var resultado = await SendMessage(token, pEnvivioNotificacion.Titulo, pEnvivioNotificacion.Mensaje);
+                        var resultado = await SendMessage(token, pEnvivioNotificacion.Titulo, pEnvivioNotificacion.Mensaje, pEnvivioNotificacion.TipoNotificacion);
 
                         if (!resultado.Equals("-1"))
                         {
@@ -91,11 +92,29 @@ namespace WSViajes.Controllers
             }*/
         }
 
-        public async Task<string> SendMessage(string pTokenDestinatario, string pTitle, string pBoby)
+        /// <sumary>
+        /// Envia notificación mediante firebase 
+        /// </sumary>
+        /// <param name="pTokenDestinatario">Token de firabase del destinatario de la notificación</param>
+        /// <param name="pTitle">Título de la notificación.</param>
+        /// <param name="pBoby"></param>
+        /// <param name="pTipoNotificacion">Indica el destino de la notificación 1=Cliente, 2=Conductor</param>
+        public async Task<string> SendMessage(string pTokenDestinatario, string pTitle, string pBoby, byte pTipoNotificacion)
         {
-            string serverKey = ConfigurationManager.AppSettings["SERVER_KEY_FIREBASE"];
-            string senderId = ConfigurationManager.AppSettings["SENDER_ID_FIREBASE"];
+            string serverKey = string.Empty;
+            string senderId = string.Empty;
 
+            if (pTipoNotificacion == 1)
+            {
+                serverKey = ConfigurationManager.AppSettings["SERVER_KEY_FIREBASE_CLIENTE"];
+                senderId = ConfigurationManager.AppSettings["SENDER_ID_FIREBASE_CLIENTE"];
+            }
+            else
+            {
+                serverKey = ConfigurationManager.AppSettings["SERVER_KEY_FIREBASE_CONDUCTOR"];
+                senderId = ConfigurationManager.AppSettings["SENDER_ID_FIREBASE_CONDUCTOR"];
+            }
+            
             try
             {
                 var result = "-1";

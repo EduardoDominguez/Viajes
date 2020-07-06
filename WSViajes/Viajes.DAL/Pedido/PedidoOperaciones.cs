@@ -295,6 +295,41 @@ namespace Viajes.DAL.Pedido
             }
         }
 
+        /// <summary>
+        /// Método para consultar historal de pedidos por conductor
+        /// <param name="pIdLocal">Identificador del local a consultar historial</param>
+        /// <param name="pidEstatus">Identificador de estatus</param>
+        /// <returns> Objeto tipo List<E_PEDIDO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PEDIDO>> ConsultarHistorialLocal(int pIdLocal, int? pidEstatus = null)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+
+                    var listaPeidos = await new DetallePedidoOperaciones().ConsultarPedidosByIdLocal(pIdLocal);
+
+                    var listaIds = listaPeidos.Select(p => p.IdPedido).ToArray();
+
+
+                    var pedidos = await (from s in context.M_PEDIDO
+                                         where
+                                         s.tipo_pedido == 1 //Pedidos normales
+                                         && listaIds.Contains(s.id_pedido)
+                                         && (pidEstatus == null || (pidEstatus != null && s.id_estatus == pidEstatus))
+                                         orderby s.fecha_pedido descending, s.hora_pedido descending
+                                         select s).ToListAsync<M_PEDIDO>();
+
+                    return await ProcesaListaPedidos(pedidos);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         /// <summary>
         /// Método para cancelar pedidos
@@ -531,6 +566,36 @@ namespace Viajes.DAL.Pedido
                                          select s).ToListAsync<M_PEDIDO>();
 
                     return await ProcesaListaPedidosPersonalizados(pedidos);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar en que rango entra el costo en base a un pedido
+        /// <paramref name="pMetros"/>
+        /// <returns> Objeto tipo E_TAFIRA_ENVIO con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_TAFIRA_ENVIO>> ConsultaCotoEnvioByDistancia(int pMetros)
+        {
+            try
+            {
+
+                using (context = new ViajesEntities())
+                {
+                    var tarifas = await (from s in context.TBL_TARIFA_ENVIO
+                                         where  (pMetros >= s.distancia_menor  && pMetros <= s.distancia_mayor)
+                                         select new E_TAFIRA_ENVIO {
+                                             CostoEnvio = s.costo_envio,
+                                             DistanciaMayor = s.distancia_mayor,
+                                             DistanciaMenor = s.distancia_menor,
+                                             IdTarifa = s.id_tarifa
+                                         }).ToListAsync();
+
+                    return tarifas;
                 }
             }
             catch (Exception ex)

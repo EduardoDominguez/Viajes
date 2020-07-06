@@ -142,16 +142,22 @@ namespace Viajes.DAL.Persona
                 using (context = new ViajesEntities())
                 {
                     var accesos = context.CTL_ACCESO_PERSONA.Where(p => p.id_persona == pIdPersona).FirstOrDefault();
-
+                    
                     if (accesos != null)
-                        accesos.token_firebase = pToken;
-
-
-                    if (context.SaveChanges() > 0)
-                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Token actualizado correctamente", RET_VALORDEVUELTO = "Token actualizado correctamente" };
+                    {
+                        if (accesos.token_firebase != pToken)
+                        {
+                            accesos.token_firebase = pToken;
+                            if (context.SaveChanges() > 0)
+                                vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Token actualizado correctamente", RET_VALORDEVUELTO = "Token actualizado correctamente" };
+                            else
+                                vMensaje = new E_MENSAJE { RET_NUMEROERROR = -1000, RET_MENSAJEERROR = "No se pudo actualizar el token", RET_VALORDEVUELTO = "No se pudo actualizar el token" };
+                        }
+                        else
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "El token registrado es igual al nuevo, no se actualizará.", RET_VALORDEVUELTO = "Token actualizado correctamente" };
+                    }
                     else
-                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -1000, RET_MENSAJEERROR = "No se pudo actualizar el token", RET_VALORDEVUELTO = "No se pudo actualizar el token" };
-
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -1001, RET_MENSAJEERROR = "No se encontró la persona que indicó, no se actualizará.", RET_VALORDEVUELTO = "Token actualizado correctamente" };
                     return vMensaje;
                 }
             }

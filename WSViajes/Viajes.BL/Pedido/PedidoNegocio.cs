@@ -122,6 +122,25 @@ namespace Viajes.BL.Pedido
             }
         }
 
+        /// <summary>
+        /// Método para consultar historial de pedidos por local
+        /// <param name="idLocal">Identificador del local</param>
+        /// <param name="idEstatus">Identificador del estatus</param>
+        /// <returns> Objeto tipo E_PEDIDO con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PEDIDO>> ConsultarHistorialLocal(int idLocal, int? idEstatus = null)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                return await pDatos.ConsultarHistorialLocal(idLocal, idEstatus);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public E_MENSAJE Editar(E_PEDIDO Entidad)
         {
             throw new NotImplementedException();
@@ -293,6 +312,26 @@ namespace Viajes.BL.Pedido
             {
                 PedidoOperaciones pDatos = new PedidoOperaciones();
                 return pDatos.AgregarPersonalizado(Entidad);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar en que rango entra el costo en base a un pedido
+        /// <paramref name="pMetros"/>
+        /// <returns> Objeto tipo E_TAFIRA_ENVIO con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<E_TAFIRA_ENVIO> ConsultaCotoEnvioByDistancia(int pMetros)
+        {
+            try
+            {
+
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                var tarifa = await pDatos.ConsultaCotoEnvioByDistancia(pMetros);
+                return tarifa.FirstOrDefault();
             }
             catch (Exception ex)
             {

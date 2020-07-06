@@ -12,16 +12,11 @@ namespace Viajes.DAL.Modelo
     using System;
     using System.Collections.Generic;
     
-    public partial class TBL_COORDENADAS_CONDUCTOR
+    public partial class TBL_TARIFA_ENVIO
     {
-        public int id_persona { get; set; }
-        public decimal latitud { get; set; }
-        public decimal longitud { get; set; }
-        public System.DateTime fecha { get; set; }
-        public System.Guid id_coordenada { get; set; }
-        public Nullable<System.Guid> id_pedido { get; set; }
-    
-        public virtual CTL_CONDUCTOR CTL_CONDUCTOR { get; set; }
-        public virtual M_PEDIDO M_PEDIDO { get; set; }
+        public System.Guid id_tarifa { get; set; }
+        public int distancia_menor { get; set; }
+        public int distancia_mayor { get; set; }
+        public decimal costo_envio { get; set; }
     }
 }

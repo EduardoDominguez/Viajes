@@ -62,6 +62,38 @@ namespace Viajes.DAL.Pedido
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Método para consultar detalle de pedidos
+        /// <param name="pIdLocal">Identificador del local</param>
+        /// <returns> Objeto tipo List<E_DETALLE_PEDIDO> con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_PEDIDO>> ConsultarPedidosByIdLocal(int pIdLocal)
+        {
+            try
+            {
+                //var listaDetallePedidos = new List<E_DETALLE_PEDIDO>();
+                using (context = new ViajesEntities())
+                {
+                    var pedidos = await (from s in context.M_DETALLE_PEDIDO
+                                          join p in context.M_PEDIDO on s.id_pedido equals p.id_pedido
+                                          where
+                                          s.id_local == pIdLocal
+                                          group p by p.id_pedido into pe
+                                          select new E_PEDIDO
+                                          {
+                                              IdPedido = pe.Key
+                                          }).ToListAsync();
+
+                    return pedidos;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
