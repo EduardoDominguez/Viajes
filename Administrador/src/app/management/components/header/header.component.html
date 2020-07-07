@@ -1,0 +1,26 @@
+<div>
+    <nav class="navbar">
+        <i class="fas fa-bars icono-navbar" [ngClass]="{'rotate-left':_menuToggler}" (click)="toggleMenu($event)"> </i>
+        <a [routerLink]="['./']">
+            <img class="navbar-brand" width="70px" src="./assets/img/logo.png">
+        </a>
+        <h4 class="titulo-sistema ">{{nombreSistema}}</h4>
+        <div class="navbar-expand ml-auto navbar-nav align-items-center">
+            <div class="navbar-nav align-items-center contenedor-sesion" matTooltip="Abrir men&uacute;" [matMenuTriggerFor]="menu">
+                <!-- <span class="mr-2 nombre-usuario">mdominguez</span> -->
+                <img class="img-perfil" src="{{storageService.getCurrentSession().Persona.Fotografia}}" alt="Foto perfil"/>
+                <!-- <button color="primary" mat-mini-fab aria-label="Icono ed usuario">
+                    <mat-icon>person</mat-icon>
+                </button> -->
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item disabled>
+                        <mat-icon>perm_identity</mat-icon> {{nombrePersona}}
+                    </button>
+                    <button mat-menu-item (click)="onLoggedout()" href="#!">
+                        <mat-icon>exit_to_app</mat-icon> Cerrar sesi&oacute;n
+                    </button>
+                </mat-menu>
+            </div>
+        </div>
+    </nav>
+</div>

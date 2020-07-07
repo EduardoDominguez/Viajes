@@ -1,0 +1,104 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
+  <div class="list-group">
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('administracion')" title="Programaci&oacute;n">
+        &nbsp;<i class="fas fa-cogs"></i>&nbsp;
+        <span>Administraci&oacute;n</span>
+        <i class="fas angle-expand"
+          [ngClass]="{'fa-angle-right': showMenu != 'administracion', 'fa-angle-down': showMenu === 'administracion'}"></i>
+      </a>
+      <li class="nested" [class.expand]="showMenu === 'administracion'">
+        <ul class="submenu">
+          <li>
+            <a [routerLink]="['administracion/locales']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Administraci&oacute;n de locales" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-store"></i>
+              <span>Locales</span>
+            </a>
+          </li>
+          <!-- <li>
+            <a [routerLink]="['administracion/productos']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Administraci&oacute;n de productos" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-shopping-basket"></i>
+              <span>Productos</span>
+            </a>
+          </li> -->
+        </ul>
+      </li>
+    </div>
+
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('configuracion')" title="Repartidores">
+        &nbsp;<i class="fas fa-address-card"></i> &nbsp;
+        <span>Repartidores</span>
+        <i class="fas angle-expand"
+          [ngClass]="{'fa-angle-right': showMenu != 'configuracion', 'fa-angle-down': showMenu === 'configuracion'}"></i>
+      </a>
+      <li class="nested" [class.expand]="showMenu === 'configuracion'">
+        <ul class="submenu">
+          <!-- <li>
+            <a [routerLink]="['/administracion/repartidor/agregar']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Agregar nuevo" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-user-plus"></i>
+              <span>Agregar nuevo repartidor</span>
+            </a>
+          </li> -->
+          <li>
+            <a [routerLink]="['administracion/repartidor']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Consulta repartidores" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-tasks"></i>
+              <span>Consulta de repartidores</span>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['configuracion/mensaje']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Enviar mensaje al repartidor" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-envelope-open-text"></i>
+              <span>Mensajes</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </div>
+
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('Pedidos')" title="Pedidos">
+        &nbsp;<i class="fas fa-motorcycle"></i> &nbsp;
+        <span>Pedidos</span>
+        <i class="fas angle-expand"
+          [ngClass]="{'fa-angle-right': showMenu != 'Pedidos', 'fa-angle-down': showMenu === 'viajes'}"></i>
+      </a>
+      <li class="nested" [class.expand]="showMenu === 'Pedidos'">
+        <ul class="submenu">
+          <!-- <li>
+            <a [routerLink]="['pedidos/mensaje']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Agregar de costos por zona" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-map-marked-alt"></i>
+              <span>Alta de costos por zona</span>
+            </a>
+          </li> -->
+          <li>
+            <a [routerLink]="['pedidos/consulta']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Consulta pedidos" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-tasks"></i>
+              <span>Consulta de viajes</span>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['pedidos/mensaje']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Enviar mensaje al repartidor" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-balance-scale"></i>
+              <span>Balance</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </div>
+
+    <a [routerLink]="['ayuda']" [routerLinkActive]="['router-link-active']" (click)="addExpandClass('0')"
+      class="list-group-item" matTooltip="Ayuda" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+      &nbsp;<i class="fas fa-question"></i> &nbsp;
+      <span>Ayuda</span>
+    </a>
+  </div>
+</nav>
