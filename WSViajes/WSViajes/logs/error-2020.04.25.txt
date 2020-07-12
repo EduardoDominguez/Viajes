@@ -1,0 +1,32 @@
+2020-04-25 00:12:04,805 [8] ERROR WSViajes.Controllers.NotificacionesController [(null)] ID=(null) - [WSViajes - Notificacion/Enviar ][SID:f0c58644-0de9-4e33-a1a9-dd0d14244249]Error Interno del Servicio [GUID: 0c3fe42f-c1d6-4730-b3d8-7ddfdda2f75c].
+System.Net.WebException: Error en el servidor remoto: (401) No autorizado.
+   en WSViajes.Controllers.NotificacionesController.<SendMessage>d__3.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 149
+--- Fin del seguimiento de la pila de la ubicación anterior donde se produjo la excepción ---
+   en System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   en WSViajes.Controllers.NotificacionesController.<Enviar>d__1.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 52
+2020-04-25 00:17:45,895 [8] ERROR WSViajes.Controllers.NotificacionesController [(null)] ID=(null) - [WSViajes - Notificacion/Enviar ][SID:99999867-24e5-4b69-b4ee-3b7ed39efcce]Error Interno del Servicio [GUID: b825908f-4b3c-4d1d-b7ba-0163084d6c76].
+System.Net.WebException: Error en el servidor remoto: (401) No autorizado.
+   en WSViajes.Controllers.NotificacionesController.<SendMessage>d__3.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 149
+--- Fin del seguimiento de la pila de la ubicación anterior donde se produjo la excepción ---
+   en System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   en WSViajes.Controllers.NotificacionesController.<Enviar>d__1.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 52
+2020-04-25 00:46:21,980 [6] ERROR WSViajes.Controllers.NotificacionesController [(null)] ID=(null) - [WSViajes - Notificacion/Enviar ][SID:b290e610-ff48-4c5f-a590-ff34e1015118]Error Interno del Servicio [GUID: fd91fabd-76eb-4bb9-889b-fe678abb1bdd].
+System.Net.WebException: Error en el servidor remoto: (401) No autorizado.
+   en WSViajes.Controllers.NotificacionesController.<SendMessage>d__3.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 149
+--- Fin del seguimiento de la pila de la ubicación anterior donde se produjo la excepción ---
+   en System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   en WSViajes.Controllers.NotificacionesController.<Enviar>d__1.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 52
+2020-04-25 00:48:23,678 [10] ERROR WSViajes.Controllers.NotificacionesController [(null)] ID=(null) - [WSViajes - Notificacion/Enviar ][SID:9c63fb73-c5fb-454c-abb8-97d1fb7db8c8]Error Interno del Servicio [GUID: 7008c57f-8762-480a-9483-412b9c04db5a].
+System.Net.WebException: Error en el servidor remoto: (401) No autorizado.
+   en WSViajes.Controllers.NotificacionesController.<SendMessage>d__3.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 149
+--- Fin del seguimiento de la pila de la ubicación anterior donde se produjo la excepción ---
+   en System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   en System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   en WSViajes.Controllers.NotificacionesController.<Enviar>d__1.MoveNext() en C:\Users\black\Documents\Proyectos\Viajes\WSViajes\WSViajes\Controllers\NotificacionesController.cs:línea 52
