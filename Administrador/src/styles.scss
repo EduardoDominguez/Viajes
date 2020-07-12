@@ -139,3 +139,7 @@ th.mat-header-cell {
 .spacer-toolbar {
   flex: 1 1 auto;
 }
+
+.custom-dialog-container .mat-dialog-container {
+  padding: 0 !important;
+}

@@ -34,6 +34,7 @@ import { RepartidorAddComponent } from './components/repartidor-add/repartidor-a
 import { MenuComponent } from './components/menu/menu.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PedidosComponent } from './components/pedidos/pedidos.component';
+import { ProductoExtrasModalAeComponent } from './components/producto-extras-modal-ae/producto-extras-modal-ae.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { PedidosComponent } from './components/pedidos/pedidos.component';
     // ConductorAddComponent,
     RepartidorComponent,
     RepartidorAddComponent,
-    PedidosComponent,],
+    PedidosComponent,
+    ProductoExtrasModalAeComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,
@@ -84,6 +86,8 @@ import { PedidosComponent } from './components/pedidos/pedidos.component';
     }),
     NgxMatSelectSearchModule,
     MaterialFileInputModule,
+  ],entryComponents : [
+    ProductoExtrasModalAeComponent
   ]
 })
 export class ManagementModule { }

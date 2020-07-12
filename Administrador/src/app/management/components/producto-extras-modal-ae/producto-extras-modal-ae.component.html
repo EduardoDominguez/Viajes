@@ -1,0 +1,39 @@
+<div class="card-header primary-color text-white ">
+   Extra
+</div>
+<div class="card-body">
+  <form [formGroup]="form" novalidate (ngSubmit)="guardar()">
+      <div class="row">
+          <div class="form-group col-sm-12 col-md-6">
+              <mat-form-field>
+                  <input matInput type="text" maxlength="100" placeholder="Nombre"
+                      formControlName="frmNombre" required>
+                  <mat-error *ngIf="form.get('frmNombre').hasError('required')">
+                      Ingrese un valor
+                  </mat-error>
+                  <mat-error *ngIf="form.get('frmNombre').hasError('maxLength')">
+                      El m&aacute;ximo de caracteres permitidos es de 100.
+                  </mat-error>
+              </mat-form-field>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6">
+            <mat-form-field>
+                <input matInput type="text" maxlength="100" placeholder="Precio" OnlyNumber="true"
+                    formControlName="frmPrecio" required>
+                <mat-error *ngIf="form.get('frmPrecio').hasError('required')">
+                    Ingrese un valor
+                </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div
+              class="panel-footer-modal col-sm-12 col-md-6 offset-md-6 d-flex justify-content-around align-items-end ">
+              <button mat-flat-button class="btn-block primary-color" type="submit" color="primary">Guardar</button>
+
+              <button mat-flat-button class="btn-block primary-color" type="button" (click)="cancelar()"
+                  color="gray-custom">Cancelar</button>
+          </div>
+      </div>
+  </form>
+</div>

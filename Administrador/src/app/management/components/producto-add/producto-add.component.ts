@@ -6,7 +6,7 @@ import { globals } from '../../../core/globals/globals';
 import { ProductoService } from '../../../core/services/producto.service';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { FileValidator } from 'ngx-material-file-input';
-import { MatSelect } from '@angular/material';
+import { MatSelect, MatDialog } from '@angular/material';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Local } from 'src/app/classes/Local';
@@ -15,6 +15,8 @@ import { Producto } from 'src/app/classes/Producto';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { Location } from '@angular/common';
 import { ExtrasProducto } from 'src/app/classes/ExtrasProducto';
+import { ProductoExtrasModalAeComponent } from '../producto-extras-modal-ae/producto-extras-modal-ae.component';
+import { ExtraProductoRequest } from 'src/app/classes/request/ExtraProductoRequest';
 
 @AutoUnsubscribe()
 @Component({
@@ -49,7 +51,7 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
   //Identifiador del local a agregar  productos
   idLocal: number = 0;
 
-  listaExtras : ExtrasProducto[];
+  listaExtras: ExtrasProducto[];
 
   constructor(
     private _storageService: StorageService,
@@ -61,16 +63,14 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
     private _productoService: ProductoService,
     private _localService: LocalService,
     private _location: Location,
-    ) {
+    public _dialogService: MatDialog,
+  ) {
     this.procesaRutas();
   }
 
   form: FormGroup;
   imagen: string;
   maxSize: number = 10000000;
-  // txtNombreProducto: string;
-  // txtDescripcion: string;
-  // txtPrecio: number;
   tipoOperacion: string = "n";//n = nuevo, e= editar, c= consultar
   isDisabled: boolean = false;
   idProducto: number = 0;
@@ -81,7 +81,7 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
       file: [
         //{ value: undefined, disabled: this.isDisabled },
         undefined,
-        [Validators.required, FileValidator.maxContentSize(this.maxSize),],
+        [FileValidator.maxContentSize(this.maxSize),],
 
       ],
       frmNombre: [
@@ -98,13 +98,13 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
         [Validators.required,]
       ],
       nodoCtrl: [
-        {value: null, disabled: true},
+        { value: null, disabled: true },
         [Validators.required]
       ],
     });
 
     setTimeout(() => {
-      if(this.idLocal > 0)
+      if (this.idLocal > 0)
         this.getLocalByID(this.idLocal);
       else
         this.getLocales();
@@ -250,6 +250,7 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
   private getProducto(pIdProducto: number) {
     this._productoService.getProductoByID(pIdProducto).subscribe(
       respuesta => {
+        console.log(respuesta)
         if (respuesta.Exito) {
           this.cargaDatosProducto(respuesta.Data)
         } else
@@ -284,12 +285,12 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
         request.Nombre = this.form.controls['frmNombre'].value.trim();
         request.Descripcion = this.form.controls['frmDescripcion'].value.trim();
         request.IdLocal = this.form.controls['nodoCtrl'].value.IdLocal;// this.nodoSelectedValue.IdLocal;
-        request.Precio = parseFloat(this.form.controls['frmPrecio'].value);//this.txtPrecio;
+        request.Precio = this.form.controls['frmPrecio'].value;
 
         console.log(request);
         //if (request.tipo_operacion == 'n') {
         if (this.tipoOperacion == 'n') {
-          request.Fotografia = this.imgPreview.nativeElement.src;
+          request.Fotografia = (this.imgPreview.nativeElement.src) ? this.imgPreview.nativeElement.src : null;
           //request.etapa.nombre_imagen = this.removableInput.value._fileNames;
           request.IdPersonaAlta = this._storageService.getCurrentUser().IdPersona;//this._storageService.getCurrentSession().user.idpersona;
 
@@ -320,7 +321,8 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
           this._productoService.editar(request).subscribe(
             respuesta => {
               if (respuesta.Exito) {
-                this.router.navigate(['/admin-dashboard/administracion/productos']);
+                // this.router.navigate(['/admin-dashboard/administracion/productos']);
+                this.goBack();
                 this._alertService.showSuccess(respuesta.Mensaje);
                 //this.limpiaCamposFormulario();
 
@@ -380,4 +382,23 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
     //console.log(file)
   }
 
+  /**
+   * Abre el panel para agregar una adscripción
+   */
+  openAgregarExtra(): void {
+    let datos = new ExtraProductoRequest();
+    datos.IdProducto = this.idProducto;
+    const dialogRef = this._dialogService.open(ProductoExtrasModalAeComponent, {
+      // width: '600px',
+      // height: 'calc(100% - 100px)',
+      panelClass: 'custom-dialog-container',
+      data: datos,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // this.reLoadGridPage();
+      }
+    });
+  }
 }

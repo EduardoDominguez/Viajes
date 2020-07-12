@@ -8,6 +8,7 @@ import { globals } from '../globals/globals';
 import { environment } from '../../../environments/environment';
 import { Respuesta } from '../../classes/Respuesta';
 import { Producto } from '../../classes/Producto';
+import { ExtraProductoRequest } from 'src/app/classes/request/ExtraProductoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -102,4 +103,27 @@ export class ProductoService {
       map(res => res as Respuesta),
     );
   }
+
+
+  /**
+  * Comsume Web service para agregar extras a producto
+  * @param pExtra - Objeto de tipo  ExtraProductoRequest con datos a insertar.
+  * @returns Observable de tipo Respuesta
+  */
+  agregarExtras(pExtra: ExtraProductoRequest): Observable<Respuesta> {
+    return this.http.post<Respuesta>(`${this.basePath}Extras`, pExtra, this.globales.HTTP_OPTIONS).pipe(
+      map(res => res as Respuesta),
+    );
+  }
+
+  /**
+  * Comsume Web service para editar extras a producto
+  * @param pExtra - Objeto de tipo  ExtraProductoRequest con datos a insertar.
+  * @returns Observable de tipo Respuesta
+  */
+ aditarExtras(pExtra: ExtraProductoRequest): Observable<Respuesta> {
+  return this.http.put<Respuesta>(`${this.basePath}Extras`, pExtra, this.globales.HTTP_OPTIONS).pipe(
+    map(res => res as Respuesta),
+  );
+}
 }

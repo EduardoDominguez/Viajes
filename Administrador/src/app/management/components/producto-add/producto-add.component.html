@@ -57,16 +57,16 @@
 
           <div class="form-group col-sm-12 col-md-12" *ngIf="!isDisabled">
             <mat-form-field>
-              <ngx-mat-file-input #removableInput required formControlName="file" placeholder="Selecciona imagen"
+              <ngx-mat-file-input #removableInput formControlName="file" placeholder="Selecciona imagen"
                 [accept]="'.png, .jpg, .jpeg, .svg'" (change)="cambiaImagen()">
               </ngx-mat-file-input>
               <button mat-icon-button matSuffix *ngIf="!removableInput.empty"
                 (click)="removableInput.clear($event);cambiaImagen()">
                 <mat-icon>clear</mat-icon>
               </button>
-              <mat-error *ngIf="form.get('file').hasError('required')">
+              <!-- <mat-error *ngIf="form.get('file').hasError('required')">
                 Por favor seleccione una imagen
-              </mat-error>
+              </mat-error> -->
               <mat-error *ngIf="form.get('file').hasError('maxContentSize')">
                 El tamaño total permitido se excede
                 {{form.get('file')?.getError('maxContentSize').maxSize | byteFormat}} ({{form.get('file')?.getError('maxContentSize').actualSize
@@ -82,14 +82,15 @@
             </blockquote>
           </div>
           <div class="form-group col-sm-12 col-md-6">
-            <img src="" #imgPreview class="img-thumbnail mx-auto d-block" width="200px" />
+            <img src="" #imgPreview class="img-thumbnail mx-auto d-block" width="400px" />
           </div>
 
 
-          <div class="form-group col-sm-12 col-md-6" *ngIf="isDisabled">
+          <div class="form-group col-sm-12 col-md-6">
             <mat-card class="example-card">
               <mat-card-header>
-              <h4>Extras</h4>
+              <h4>Extras</h4>   <button type="button" mat-raised-button color="primary" (click)="openAgregarExtra()">Agregar</button>
+
               </mat-card-header>
               <mat-card-content>
                 <table>
