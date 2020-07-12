@@ -224,8 +224,9 @@ namespace Viajes.DAL.Pedido
                                    //s.tipo_pedido == 1 &&  //Pedidos normales
                                    (pIdPersonaPide == null || (pIdPersonaPide != null && s.id_persona_pide == pIdPersonaPide))
                                    && (pIdPersonaEntrega == null || (pIdPersonaEntrega != null && s.id_persona_entrega == pIdPersonaEntrega))
-                                   && (s.id_estatus == 1 || s.id_estatus == 2 || s.id_estatus == 3 || s.id_estatus == 4)
-                                   select s).ToListAsync<M_PEDIDO>();
+                                   && (s.id_estatus == 1 || s.id_estatus == 2 || s.id_estatus == 3 || s.id_estatus == 4 || s.id_estatus == 8 || s.id_estatus == 9 || s.id_estatus == 10)
+                                         //&& (s.id_estatus == 1 || s.id_estatus == 2 || s.id_estatus == 3 || s.id_estatus == 4)
+                                         select s).ToListAsync<M_PEDIDO>();
 
 
                     return await ProcesaListaPedidos(pedidos);
@@ -250,10 +251,11 @@ namespace Viajes.DAL.Pedido
                 {
                     var pedidos = await (from s in context.M_PEDIDO
                                    where
-                                   s.id_estatus == 1
-                                   //&& s.tipo_pedido == 1   //Pedidos normales
-                                   //&& s.fecha_pedido == DateTime.Now
-                                   select s).ToListAsync<M_PEDIDO>();
+                                   //s.id_estatus == 1
+                                   s.id_estatus == 8
+                                         //&& s.tipo_pedido == 1   //Pedidos normales
+                                         //&& s.fecha_pedido == DateTime.Now
+                                         select s).ToListAsync<M_PEDIDO>();
 
 
                     return await ProcesaListaPedidos(pedidos);
@@ -301,7 +303,7 @@ namespace Viajes.DAL.Pedido
         /// <param name="pidEstatus">Identificador de estatus</param>
         /// <returns> Objeto tipo List<E_PEDIDO> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_PEDIDO>> ConsultarHistorialLocal(int pIdLocal, int? pidEstatus = null)
+        public async Task<List<E_PEDIDO>> ConsultarHistorialLocal(int pIdLocal, string[] pidEstatus = null)
         {
             try
             {
@@ -312,14 +314,28 @@ namespace Viajes.DAL.Pedido
 
                     var listaIds = listaPeidos.Select(p => p.IdPedido).ToArray();
 
+                    List<M_PEDIDO> pedidos = null;
 
-                    var pedidos = await (from s in context.M_PEDIDO
+                    if(pidEstatus != null && pidEstatus.Length > 0)
+                    {
+                        pedidos = await (from s in context.M_PEDIDO
                                          where
                                          s.tipo_pedido == 1 //Pedidos normales
                                          && listaIds.Contains(s.id_pedido)
-                                         && (pidEstatus == null || (pidEstatus != null && s.id_estatus == pidEstatus))
+                                         && pidEstatus.Contains(s.id_estatus.ToString())
                                          orderby s.fecha_pedido descending, s.hora_pedido descending
                                          select s).ToListAsync<M_PEDIDO>();
+                    }
+                    else
+                    {
+                        pedidos = await (from s in context.M_PEDIDO
+                                         where
+                                         s.tipo_pedido == 1 //Pedidos normales
+                                         && listaIds.Contains(s.id_pedido)
+                                         orderby s.fecha_pedido descending, s.hora_pedido descending
+                                         select s).ToListAsync<M_PEDIDO>();
+                    }
+                   
 
                     return await ProcesaListaPedidos(pedidos);
                 }

@@ -128,7 +128,7 @@ namespace Viajes.BL.Pedido
         /// <param name="idEstatus">Identificador del estatus</param>
         /// <returns> Objeto tipo E_PEDIDO con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_PEDIDO>> ConsultarHistorialLocal(int idLocal, int? idEstatus = null)
+        public async Task<List<E_PEDIDO>> ConsultarHistorialLocal(int idLocal, string[] idEstatus = null)
         {
             try
             {

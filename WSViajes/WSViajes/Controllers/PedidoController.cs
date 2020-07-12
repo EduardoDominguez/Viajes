@@ -618,15 +618,20 @@ namespace WSViajes.Controllers
 
         [HttpGet]
         [Route("Historial/Local/{pIdLocal}")]
-        public async Task<HttpResponseMessage> ConsultaHistorialLocal(int pIdLocal, int? pIdEstatus = null)
+        public async Task<HttpResponseMessage> ConsultaHistorialLocal(int pIdLocal, string pIdEstatus = null)
         {
             var respuesta = new ConsultarTodoResponse<E_PEDIDO> { };
             var strMetodo = "WSViajes - ConsultaHistorialLocal ";
             string sid = Guid.NewGuid().ToString();
-
+            string[] listaEstatus = null;
             try
             {
-                respuesta.Data = await new PedidoNegocio().ConsultarHistorialLocal(pIdLocal, pIdEstatus);
+                if (!String.IsNullOrEmpty(pIdEstatus) && pIdEstatus.Contains(","))
+                    listaEstatus = pIdEstatus.Split(',');
+                else if(!String.IsNullOrEmpty(pIdEstatus))
+                    listaEstatus = new string[]{ pIdEstatus };
+
+                respuesta.Data = await new PedidoNegocio().ConsultarHistorialLocal(pIdLocal, listaEstatus);
 
                 if (respuesta.Data != null)
                 {
