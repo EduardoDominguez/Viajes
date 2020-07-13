@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { StorageService } from "../services/storage.service";
-import { TooltipPosition } from '@angular/material';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 @Injectable()
 export class globals {

@@ -121,9 +121,20 @@ export class ProductoService {
   * @param pExtra - Objeto de tipo  ExtraProductoRequest con datos a insertar.
   * @returns Observable de tipo Respuesta
   */
- aditarExtras(pExtra: ExtraProductoRequest): Observable<Respuesta> {
-  return this.http.put<Respuesta>(`${this.basePath}Extras`, pExtra, this.globales.HTTP_OPTIONS).pipe(
-    map(res => res as Respuesta),
-  );
-}
+  aditarExtras(pExtra: ExtraProductoRequest): Observable<Respuesta> {
+    return this.http.put<Respuesta>(`${this.basePath}Extras`, pExtra, this.globales.HTTP_OPTIONS).pipe(
+      map(res => res as Respuesta),
+    );
+  }
+
+  /**
+ * Comsume Web service para consultar extras por producto
+ * @param pIdProducto - Producto a consultar
+ * @returns Observable de tipo Respuesta
+ */
+  getExtrasByIdProducto(pIdProducto: number): Observable<Respuesta> {
+    return this.http.get<Respuesta>(`${this.basePath}${pIdProducto}/extras`, this.globales.HTTP_OPTIONS).pipe(
+      map(res => res as Respuesta),
+    );
+  }
 }

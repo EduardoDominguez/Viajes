@@ -37,8 +37,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "No se recibió datos de petición.";
                 else if (String.IsNullOrEmpty(pRequest.Producto.Nombre))
                     respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
-                else if (String.IsNullOrEmpty(pRequest.Producto.Fotografia))
-                    respuesta.Mensaje = "El elemento <<Fotografia>> no puede estar vacío.";
+                //else if (String.IsNullOrEmpty(pRequest.Producto.Fotografia))
+                //    respuesta.Mensaje = "El elemento <<Fotografia>> no puede estar vacío.";
                 else if (String.IsNullOrEmpty(pRequest.Producto.IdLocal.ToString()) || pRequest.Producto.IdLocal == 0)
                     respuesta.Mensaje = "El elemento <<IdLocal>> no puede estar vacío ni igual a cero.";
                 else if (String.IsNullOrEmpty(pRequest.Producto.Precio.ToString()) || pRequest.Producto.Precio == 0)
@@ -47,35 +47,39 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<IdPersonaAlta>> no puede estar vacío ni igual o menor a cero.";
                 else
                 {
-                    var extension = Funciones.getExtensionImagenBasae64(pRequest.Producto.Fotografia);
-                    var rutaImagen = Funciones.uploadImagen(pRequest.Producto.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
-                                                            System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"),
-                                                            string.Empty, extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Productos"), "Assets/Img/Productos/");
 
-                    if (!string.IsNullOrEmpty(rutaImagen))
+                    if(!String.IsNullOrEmpty(pRequest.Producto.Fotografia))
                     {
+                        var extension = Funciones.getExtensionImagenBasae64(pRequest.Producto.Fotografia);
+                        var rutaImagen = Funciones.uploadImagen(pRequest.Producto.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
+                                                                System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"),
+                                                                string.Empty, extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Productos"), "Assets/Img/Productos/");
 
-                        pRequest.Producto.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
 
-                        var respuestaOperacion = new ProductoNegocio().Agregar(pRequest.Producto);
 
-                        if (respuestaOperacion.RET_NUMEROERROR == 0)
-                        {
-                            respuesta.Exito = true;
-                            respuesta.Mensaje = respuestaOperacion.RET_VALORDEVUELTO;
-                        }
+                        if (!string.IsNullOrEmpty(rutaImagen))
+                            pRequest.Producto.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
                         else
                         {
-                            respuesta.CodigoError = respuestaOperacion.RET_NUMEROERROR;
-                            respuesta.Mensaje = respuestaOperacion.RET_MENSAJEERROR;
+                            respuesta.CodigoError = -3000;
+                            respuesta.Mensaje = "No se pudo crear la imagen, intente más tarde";
                         }
+
+                    }
+
+
+                    var respuestaOperacion = new ProductoNegocio().Agregar(pRequest.Producto);
+
+                    if (respuestaOperacion.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                        respuesta.Mensaje = respuestaOperacion.RET_VALORDEVUELTO;
                     }
                     else
                     {
-                        respuesta.CodigoError = -3000;
-                        respuesta.Mensaje = "No se pudo crear la imagen, intente más tarde";
+                        respuesta.CodigoError = respuestaOperacion.RET_NUMEROERROR;
+                        respuesta.Mensaje = respuestaOperacion.RET_MENSAJEERROR;
                     }
-
                 }
             }
             catch (ServiceException Ex)

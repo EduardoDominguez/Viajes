@@ -482,6 +482,7 @@ namespace Viajes.DAL.Producto
                     var extras = await (from s in context.CTL_EXTRAS_PRODUCTO
                                            where
                                            s.id_producto == pIdProducto
+                                           orderby s.nombre
                                            select s).ToListAsync<CTL_EXTRAS_PRODUCTO>();
 
                     return procesaExtras(extras);

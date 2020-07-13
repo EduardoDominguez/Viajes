@@ -6,7 +6,7 @@ import { StorageService } from 'src/app/core/services/storage.service';
 import { globals } from '../../../core/globals/globals';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { FileValidator } from 'ngx-material-file-input';
-import { MatSelect } from '@angular/material';
+import { MatSelect } from '@angular/material/select';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Local } from 'src/app/classes/Local';

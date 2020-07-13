@@ -28,7 +28,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeMX from '@angular/common/locales/es-MX';
 import { PaginatorEspañol } from '../locales/spanish-paginator-intl';
-import { MatPaginatorIntl } from '@angular/material';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 //Directives
 // import { OnlyNumber } from './directives/OnlyNumbers';

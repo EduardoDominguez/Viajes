@@ -1,10 +1,24 @@
 import { NgModule } from '@angular/core';
 
-import {
-  MatTableModule, MatInputModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule,
-  MatFormFieldModule, MatSelectModule, MatToolbarModule, MatIconModule, MatButtonModule,
-  MatTooltipModule, MatMenuModule, MatPaginatorIntl, MatSlideToggleModule, MatCardModule, MatNativeDateModule, MatProgressBarModule, MatAutocompleteModule, MatChipsModule
-} from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCardModule } from '@angular/material/card';
+// import { MatNativeDateModule } from '@angular/material/na';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -36,7 +50,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDividerModule,
     MatExpansionModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    // MatNativeDateModule,
     MatDialogModule,
     MatAutocompleteModule,
   ],
@@ -60,7 +74,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDividerModule,
     MatExpansionModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    // MatNativeDateModule,
     MatDialogModule,
     MatProgressBarModule,
     MatAutocompleteModule,

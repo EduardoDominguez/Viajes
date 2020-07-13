@@ -8,8 +8,7 @@
         <div class="row">
           <div class="form-group col-sm-12">
             <mat-form-field>
-              <mat-select formControlName="nodoCtrl" placeholder="Local" required #cmbNodo
-                [disableControl]="isDisabled">
+              <mat-select formControlName="nodoCtrl" placeholder="Local" required #cmbNodo>
                 <mat-option>
                   <ngx-mat-select-search [formControl]="nodoFilterCtrl" [placeholderLabel]="'Buscar local ...'"
                     [noEntriesFoundLabel]="'Sin resultados'">
@@ -26,8 +25,7 @@
 
           <div class="form-group col-sm-12 col-md-6">
             <mat-form-field>
-              <input matInput placeholder="Nombre producto" formControlName="frmNombre" maxlength="150" required
-                [disableControl]="isDisabled">
+              <input matInput placeholder="Nombre producto" formControlName="frmNombre" maxlength="150" required>
               <mat-error *ngIf="form.get('frmNombre').hasError('required')">
                 Ingrese un nombre
               </mat-error>
@@ -36,8 +34,8 @@
 
           <div class="form-group col-sm-12  col-md-6">
             <mat-form-field>
-              <input matInput placeholder="Precio" formControlName="frmPrecio" maxlength="5" required
-                [disableControl]="isDisabled" type="text" OnlyNumber="true">
+              <input matInput placeholder="Precio" formControlName="frmPrecio" maxlength="5" required type="text"
+                OnlyNumber="true">
               <mat-error *ngIf="form.get('frmPrecio').hasError('required')">
                 Ingrese el precio
               </mat-error>
@@ -47,7 +45,7 @@
           <div class="form-group col-sm-12">
             <mat-form-field>
               <textarea matInput rows="5" placeholder="Descripci&oacute;n" formControlName="frmDescripcion"
-                maxlength="250" required [disableControl]="isDisabled">
+                maxlength="250" required>
                                 </textarea>
               <mat-error *ngIf="form.get('frmDescripcion').hasError('required')">
                 Ingrese descripci&oacute;n
@@ -82,22 +80,34 @@
             </blockquote>
           </div>
           <div class="form-group col-sm-12 col-md-6">
+            <!-- <img src="" #imgPreview class="img-thumbnail mx-auto d-block" width="400px" *ngIf="form.get('file').value"/> -->
             <img src="" #imgPreview class="img-thumbnail mx-auto d-block" width="400px" />
+            <!-- <h4 *ngIf="!form.get('file').value">Ninguna imagen seleccionada</h4> -->
           </div>
 
 
           <div class="form-group col-sm-12 col-md-6">
             <mat-card class="example-card">
-              <mat-card-header>
-              <h4>Extras</h4>   <button type="button" mat-raised-button color="primary" (click)="openAgregarExtra()">Agregar</button>
+              <div class="d-flex justify-content-between">
+                <h4>Extras</h4> <button *ngIf="!isDisabled" type="button" mat-raised-button color="primary"
+                  (click)="openAgregarExtra()">Agregar</button>
+              </div>
+              <hr />
 
-              </mat-card-header>
               <mat-card-content>
                 <table>
-                  <tr *ngFor="let extra of listaExtras">
-                    <td>{{extra.Nombre}}</td>
-                    <td>${{extra.Precio | thousandsPipe}}</td>
-                  </tr>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let extra of listaExtras">
+                      <td>{{extra.Nombre}}</td>
+                      <td>${{extra.Precio | thousandsPipe}}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </mat-card-content>
             </mat-card>

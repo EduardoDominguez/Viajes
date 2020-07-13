@@ -6,7 +6,8 @@ import { globals } from '../../../core/globals/globals';
 import { ProductoService } from '../../../core/services/producto.service';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { FileValidator } from 'ngx-material-file-input';
-import { MatSelect, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelect } from '@angular/material/select';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Local } from 'src/app/classes/Local';
@@ -200,22 +201,26 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   cargaDatosProducto(pProducto: Producto) {
-    //console.log(pProducto);
+    console.log(pProducto);
+    console.log(this.imgPreview.nativeElement);
     this.form.controls['frmNombre'].setValue(pProducto.Nombre);
     this.form.controls['frmDescripcion'].setValue(pProducto.Descripcion);
     this.form.controls['frmPrecio'].setValue(pProducto.Precio);
     this.form.controls['nodoCtrl'].setValue(pProducto.Local);
 
-    // this.txtNombreProducto = pProducto.Nombre;
-    // this.nodoSelectedValue = pProducto.Local;
-    // this.txtPrecio = pProducto.Precio;
-    // this.txtDescripcion = pProducto.Descripcion;
-    this.imgPreview.nativeElement.src = pProducto.Fotografia;
+    if (pProducto.Fotografia != null)
+      this.imgPreview.nativeElement.src = pProducto.Fotografia;
+
     this.listaExtras = pProducto.Extras;
 
     if (!this.isDisabled) {
       this.form.get('file').clearValidators();
       this.form.get('file').updateValueAndValidity();
+    } else {
+      this.form.get("nodoCtrl").disable();
+      this.form.get("frmNombre").disable();
+      this.form.get("frmPrecio").disable();
+      this.form.get("frmDescripcion").disable();
     }
   }
 
@@ -250,9 +255,22 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
   private getProducto(pIdProducto: number) {
     this._productoService.getProductoByID(pIdProducto).subscribe(
       respuesta => {
-        console.log(respuesta)
+        // console.log(respuesta)
         if (respuesta.Exito) {
           this.cargaDatosProducto(respuesta.Data)
+        } else
+          this._alertService.showWarning(respuesta.Mensaje);
+
+      }, error => {
+        this._alertService.showError(error.message);
+      });
+  }
+
+  private getExtrasByIdProducto(pIdProducto: number): void {
+    this._productoService.getExtrasByIdProducto(pIdProducto).subscribe(
+      respuesta => {
+        if (respuesta.Exito) {
+          this.listaExtras = respuesta.Data;
         } else
           this._alertService.showWarning(respuesta.Mensaje);
 
@@ -287,10 +305,11 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
         request.IdLocal = this.form.controls['nodoCtrl'].value.IdLocal;// this.nodoSelectedValue.IdLocal;
         request.Precio = this.form.controls['frmPrecio'].value;
 
-        console.log(request);
+        // console.log(request);
         //if (request.tipo_operacion == 'n') {
         if (this.tipoOperacion == 'n') {
-          request.Fotografia = (this.imgPreview.nativeElement.src) ? this.imgPreview.nativeElement.src : null;
+          // console.log(this.form.get("file").value);
+          request.Fotografia = (this.form.get("file").value != null) ? this.imgPreview.nativeElement.src : null;
           //request.etapa.nombre_imagen = this.removableInput.value._fileNames;
           request.IdPersonaAlta = this._storageService.getCurrentUser().IdPersona;//this._storageService.getCurrentSession().user.idpersona;
 
@@ -397,7 +416,7 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // this.reLoadGridPage();
+        this.getExtrasByIdProducto(this.idProducto);
       }
     });
   }
