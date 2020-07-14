@@ -28,6 +28,7 @@ namespace Viajes.DAL.Modelo
             this.M_PEDIDO = new HashSet<M_PEDIDO>();
             this.M_PEDIDO1 = new HashSet<M_PEDIDO>();
             this.R_PERSONA_PRODUCTO_FAVORITO = new HashSet<R_PERSONA_PRODUCTO_FAVORITO>();
+            this.TBL_RECHAZO_PEDIDO = new HashSet<TBL_RECHAZO_PEDIDO>();
         }
     
         public int id_persona { get; set; }
@@ -65,5 +66,7 @@ namespace Viajes.DAL.Modelo
         public virtual ICollection<M_PEDIDO> M_PEDIDO1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<R_PERSONA_PRODUCTO_FAVORITO> R_PERSONA_PRODUCTO_FAVORITO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TBL_RECHAZO_PEDIDO> TBL_RECHAZO_PEDIDO { get; set; }
     }
 }

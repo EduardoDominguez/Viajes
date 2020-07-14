@@ -69,7 +69,7 @@ namespace Viajes.DAL.Pedido
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
                                          pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I", pPedido.ReferenciaPago,
-                                         pPedido.CostoEnvio, pPedido.TipoPedido,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido, pPedido.Propina, pPedido.IdEstatusFactura, pPedido.Iva,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
                                         
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -126,7 +126,7 @@ namespace Viajes.DAL.Pedido
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
                                          pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "IP", pPedido.ReferenciaPago,
-                                         pPedido.CostoEnvio, pPedido.TipoPedido,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido, pPedido.Propina, pPedido.IdEstatusFactura, pPedido.Iva,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -367,7 +367,7 @@ namespace Viajes.DAL.Pedido
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
                                          pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "C", pPedido.ReferenciaPago,
-                                         pPedido.CostoEnvio, pPedido.TipoPedido,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido, pPedido.Propina, pPedido.IdEstatusFactura, pPedido.Iva,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -400,7 +400,7 @@ namespace Viajes.DAL.Pedido
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
                                          pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "A", pPedido.ReferenciaPago,
-                                         pPedido.CostoEnvio, pPedido.TipoPedido,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido, pPedido.Propina, pPedido.IdEstatusFactura, pPedido.Iva,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -434,7 +434,7 @@ namespace Viajes.DAL.Pedido
                     context.SP_PEDIDO(pPedido.IdPedido, pPedido.PersonaPide.IdPersona, pPedido.DireccionEntrega.IdDireccion,
                                         pPedido.PersonaEntrega.IdPersona, pPedido.Observaciones, pPedido.Folio,
                                          pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, null, "AE", pPedido.ReferenciaPago,
-                                         pPedido.CostoEnvio, pPedido.TipoPedido,
+                                         pPedido.CostoEnvio, pPedido.TipoPedido, pPedido.Propina, pPedido.IdEstatusFactura, pPedido.Iva,
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -561,6 +561,86 @@ namespace Viajes.DAL.Pedido
         }
 
         /// <summary>
+        /// Método para consultar agregar pedido
+        /// <param name="pIdPersona">Identificador de la persona que rechaza</param>
+        /// <param name="pIdPedido">Identificador del pedido</param>
+        /// <param name="pMotivo">Motivo de rechazo</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE AgregaRechazoPedido(int pIdPersona, Guid pIdPedido, string pMotivo)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    E_MENSAJE vMensaje = new E_MENSAJE();
+
+                    context.TBL_RECHAZO_PEDIDO.Add(new TBL_RECHAZO_PEDIDO() { id_persona = pIdPersona, id_pedido = pIdPedido, motivo = pMotivo, fecha =  DateTime.Now }); // fecha_alta = DateTime.Now 
+                    var resultado = context.SaveChanges();
+
+                    if (resultado <= 0)
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo insertar, intente más tarde", RET_VALORDEVUELTO = "No se pudo insertar, intente más tarde" };
+                    else
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Insertado", RET_VALORDEVUELTO = "Insertado" };
+
+
+                    return vMensaje;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar agregar pedido
+        /// <param name="pTiempoEspera">Tiempo de espera en minutos del pedido</param>
+        /// <param name="pIdPedido">Identificador del pedido</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE AgregaTiempoEspera(int pTiempoEspera, Guid pIdPedido)
+        {
+            try
+            {
+                E_MENSAJE vMensaje = new E_MENSAJE();
+                using (context = new ViajesEntities())
+                {
+
+                    var pedido = (from s in context.M_PEDIDO
+                                  where
+                                  s.id_pedido.Equals(pIdPedido)
+                                  select s).ToList<M_PEDIDO>().FirstOrDefault();
+
+
+                    if (pedido != null)
+                    {
+                        
+                        pedido.tiempo_espera = pTiempoEspera;
+                        var resultado = context.SaveChanges();
+
+                        if (resultado <= 0)
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo actualizar, intente más tarde", RET_VALORDEVUELTO = "No se pudo actualizar, intente más tarde" };
+                        else
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Actrualizado", RET_VALORDEVUELTO = "Actrualizado" };
+                    }
+                    else
+                    {
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -200, RET_MENSAJEERROR = "No se pudo encontrar el pedido.", RET_VALORDEVUELTO = "No se pudo encontrar el pedido." };
+                    }
+                   
+                    return vMensaje;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Método para consultar pedidos personalizados
         /// <param name="pIdPedido">Id del pedido a consultar</param>
         /// <param name="pIdPersonaPide">Folio del pedido</param>
@@ -650,6 +730,9 @@ namespace Viajes.DAL.Pedido
                     ReferenciaPago = pedido.referencia_pago,
                     CostoEnvio = pedido.costo_envio,
                     TipoPedido = pedido.tipo_pedido,
+                    Propina = pedido.propina,
+                    IdEstatusFactura = pedido.id_estatus_factura,
+                    Iva = pedido.iva,
                     Detalle = await new DetallePedidoPersonalizadoOperaciones().Consultar(pIdPedido: pedido.id_pedido)
                 }); 
             }
@@ -687,6 +770,10 @@ namespace Viajes.DAL.Pedido
                     ReferenciaPago = pedido.referencia_pago,
                     CostoEnvio = pedido.costo_envio,
                     TipoPedido = pedido.tipo_pedido,
+                    Propina = pedido.propina,
+                    IdEstatusFactura = pedido.id_estatus_factura,
+                    Iva = pedido.iva,
+                    TiempoEspera = pedido.tiempo_espera,
                     Detalle = await new DetallePedidoOperaciones().Consultar(pIdPedido: pedido.id_pedido),
                 }); ; ;
             }

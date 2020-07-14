@@ -233,8 +233,10 @@
     <Compile Include="Models\Request\InsertaActualizaPedidoRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaProducto.cs" />
     <Compile Include="Models\Request\InsertaActualizaProductoFavorito.cs" />
+    <Compile Include="Models\Request\InsertaActualizaTiempoEsperaPedidoRequest.cs" />
     <Compile Include="Models\Request\InsertaCoordenadasConductor.cs" />
     <Compile Include="Models\Request\InsertaPersonaRequest.cs" />
+    <Compile Include="Models\Request\InsertaRechazoPedido.cs" />
     <Compile Include="Models\Request\InsertaRespuestaServicio.cs" />
     <Compile Include="Models\Request\LoginRequest.cs" />
     <Compile Include="Models\Request\UploadFileRequest.cs" />

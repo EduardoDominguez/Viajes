@@ -71,6 +71,9 @@
     <Compile Include="Modelo\CTL_DIRECCIONES.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\CTL_ESTATUS_FACTURA.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modelo\CTL_ESTATUS_PEDIDO.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
@@ -147,6 +150,9 @@
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
     <Compile Include="Modelo\TBL_QR_TIENDA.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modelo\TBL_RECHAZO_PEDIDO.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
     <Compile Include="Modelo\TBL_TARIFA_ENVIO.cs">

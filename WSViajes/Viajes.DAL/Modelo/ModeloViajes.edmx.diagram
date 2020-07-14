@@ -59,6 +59,11 @@
         <AssociationConnector Association="ViajesModel.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_R_PREGUNTA_M_PEDIDO" ManuallyRouted="false" />
         <AssociationConnector Association="ViajesModel.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ViajesModel.CTL_ESTATUS_FACTURA" Width="1.5" PointX="5.75" PointY="35" />
+        <EntityTypeShape EntityType="ViajesModel.TBL_RECHAZO_PEDIDO" Width="1.5" PointX="13.25" PointY="21.75" />
+        <AssociationConnector Association="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_FACTURA" />
+        <AssociationConnector Association="ViajesModel.FK_RECHAZO_CTL_PERSONA" />
+        <AssociationConnector Association="ViajesModel.FK_RECHAZO_M_PEDIDO" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

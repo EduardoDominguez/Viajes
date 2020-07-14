@@ -21,6 +21,7 @@ namespace Viajes.DAL.Modelo
             this.M_DETALLE_PEDIDO_PERSONALIZADO = new HashSet<M_DETALLE_PEDIDO_PERSONALIZADO>();
             this.R_PEDIDO_PREGRUNTA = new HashSet<R_PEDIDO_PREGRUNTA>();
             this.TBL_COORDENADAS_CONDUCTOR = new HashSet<TBL_COORDENADAS_CONDUCTOR>();
+            this.TBL_RECHAZO_PEDIDO = new HashSet<TBL_RECHAZO_PEDIDO>();
         }
     
         public int id_persona_pide { get; set; }
@@ -40,6 +41,10 @@ namespace Viajes.DAL.Modelo
         public System.Guid id_pedido { get; set; }
         public decimal costo_envio { get; set; }
         public byte tipo_pedido { get; set; }
+        public decimal propina { get; set; }
+        public byte id_estatus_factura { get; set; }
+        public decimal iva { get; set; }
+        public int tiempo_espera { get; set; }
     
         public virtual CTL_DIRECCIONES CTL_DIRECCIONES { get; set; }
         public virtual CTL_ESTATUS_PEDIDO CTL_ESTATUS_PEDIDO { get; set; }
@@ -54,5 +59,8 @@ namespace Viajes.DAL.Modelo
         public virtual ICollection<R_PEDIDO_PREGRUNTA> R_PEDIDO_PREGRUNTA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TBL_COORDENADAS_CONDUCTOR> TBL_COORDENADAS_CONDUCTOR { get; set; }
+        public virtual CTL_ESTATUS_FACTURA CTL_ESTATUS_FACTURA { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TBL_RECHAZO_PEDIDO> TBL_RECHAZO_PEDIDO { get; set; }
     }
 }

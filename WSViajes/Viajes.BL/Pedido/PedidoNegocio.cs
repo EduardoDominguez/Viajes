@@ -338,6 +338,45 @@ namespace Viajes.BL.Pedido
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Método para consultar agregar pedido
+        /// <param name="pIdPersona">Identificador de la persona que rechaza</param>
+        /// <param name="pIdPedido">Identificador del pedido</param>
+        /// <param name="pMotivo">Motivo de rechazo</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE AgregaRechazoPedido(int pIdPersona, Guid pIdPedido, string pMotivo)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                return pDatos.AgregaRechazoPedido(pIdPersona, pIdPedido, pMotivo);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar agregar pedido
+        /// <param name="pTiempoEspera">Tiempo de espera en minutos del pedido</param>
+        /// <param name="pIdPedido">Identificador del pedido</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE AgregaTiempoEspera(int pTiempoEspera, Guid pIdPedido)
+        {
+            try
+            {
+                PedidoOperaciones pDatos = new PedidoOperaciones();
+                return pDatos.AgregaTiempoEspera(pTiempoEspera, pIdPedido);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

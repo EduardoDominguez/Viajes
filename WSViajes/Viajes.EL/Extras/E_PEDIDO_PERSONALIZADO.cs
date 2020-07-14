@@ -26,7 +26,9 @@ namespace Viajes.EL.Extras
             public decimal CostoEnvio { get; set; }
             public E_PEDIDO_PERSONALIZADO_DETALLE Detalle { get; set; }
             public byte TipoPedido { get; set; }
-
+            public decimal Propina { get; set; }
+            public byte IdEstatusFactura { get; set; }
+            public decimal Iva { get; set; }
             public E_PEDIDO_PERSONALIZADO()
             {
 
@@ -34,6 +36,9 @@ namespace Viajes.EL.Extras
                 this.Estatus = new E_ESTATUS_PEDIDO();
                 this.PersonaEntrega = new E_PERSONA();
                 this.PersonaPide = new E_PERSONA();
+                this.Iva = 0;
+                this.IdEstatusFactura = 0;
+                this.Propina = 0;
             }
 
         }

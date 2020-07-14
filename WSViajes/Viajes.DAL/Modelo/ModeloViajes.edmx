@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ViajesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ViajesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CTL_ACCESO_PERSONA">
           <Key>
             <PropertyRef Name="id_persona" />
@@ -62,6 +62,14 @@
           <Property Name="id_persona_mod" Type="int" />
           <Property Name="fecha_mod" Type="datetime" />
           <Property Name="predeterminada" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CTL_ESTATUS_FACTURA">
+          <Key>
+            <PropertyRef Name="id_estatus_factura" />
+          </Key>
+          <Property Name="id_estatus_factura" Type="tinyint" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="CTL_ESTATUS_PEDIDO">
           <Key>
@@ -233,6 +241,10 @@
           <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
           <Property Name="costo_envio" Type="money" Nullable="false" />
           <Property Name="tipo_pedido" Type="tinyint" Nullable="false" />
+          <Property Name="propina" Type="money" Nullable="false" />
+          <Property Name="id_estatus_factura" Type="tinyint" Nullable="false" />
+          <Property Name="iva" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="tiempo_espera" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="R_DETALLE_PEDIDO_EXTRAS">
           <Key>
@@ -314,6 +326,16 @@
           <Property Name="longitud" Type="decimal" Precision="9" Scale="6" />
           <Property Name="aplicacion" Type="nvarchar" MaxLength="10" />
           <Property Name="fecha_alta" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_RECHAZO_PEDIDO">
+          <Key>
+            <PropertyRef Name="id_persona" />
+            <PropertyRef Name="id_pedido" />
+          </Key>
+          <Property Name="id_persona" Type="int" Nullable="false" />
+          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="motivo" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="fecha" Type="datetime" />
         </EntityType>
         <EntityType Name="TBL_TARIFA_ENVIO">
           <Key>
@@ -552,6 +574,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_M_PEDIDO_CTL_ESTATUS_FACTURA">
+          <End Role="CTL_ESTATUS_FACTURA" Type="Self.CTL_ESTATUS_FACTURA" Multiplicity="1" />
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_ESTATUS_FACTURA">
+              <PropertyRef Name="id_estatus_factura" />
+            </Principal>
+            <Dependent Role="M_PEDIDO">
+              <PropertyRef Name="id_estatus_factura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_M_PEDIDO_CTL_ESTATUS_PEDIDO">
           <End Role="CTL_ESTATUS_PEDIDO" Type="Self.CTL_ESTATUS_PEDIDO" Multiplicity="1" />
           <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="*" />
@@ -656,6 +690,30 @@
               <PropertyRef Name="id_pedido" />
             </Principal>
             <Dependent Role="R_PEDIDO_PREGRUNTA">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RECHAZO_CTL_PERSONA">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="TBL_RECHAZO_PEDIDO" Type="Self.TBL_RECHAZO_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_RECHAZO_PEDIDO">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RECHAZO_M_PEDIDO">
+          <End Role="M_PEDIDO" Type="Self.M_PEDIDO" Multiplicity="1" />
+          <End Role="TBL_RECHAZO_PEDIDO" Type="Self.TBL_RECHAZO_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TBL_RECHAZO_PEDIDO">
               <PropertyRef Name="id_pedido" />
             </Dependent>
           </ReferentialConstraint>
@@ -774,6 +832,9 @@
           <Parameter Name="PIN_REFERENCIA_PAGO" Type="nvarchar" Mode="In" />
           <Parameter Name="PIN_COSTO_ENVIO" Type="money" Mode="In" />
           <Parameter Name="PIN_TIPO_PEDIDO" Type="tinyint" Mode="In" />
+          <Parameter Name="PIN_PROPINA" Type="money" Mode="In" />
+          <Parameter Name="PIN_ID_ESTATUS_FACTURA" Type="tinyint" Mode="In" />
+          <Parameter Name="PIN_IVA" Type="decimal" Mode="In" />
           <Parameter Name="RET_NUMEROERROR" Type="int" Mode="InOut" />
           <Parameter Name="RET_MENSAJEERROR" Type="varchar" Mode="InOut" />
           <Parameter Name="RET_VALORDEVUELTO" Type="varchar" Mode="InOut" />
@@ -815,6 +876,7 @@
           <EntitySet Name="CTL_CONDUCTOR" EntityType="Self.CTL_CONDUCTOR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_COSTO" EntityType="Self.CTL_COSTO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_DIRECCIONES" EntityType="Self.CTL_DIRECCIONES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CTL_ESTATUS_FACTURA" EntityType="Self.CTL_ESTATUS_FACTURA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_ESTATUS_PEDIDO" EntityType="Self.CTL_ESTATUS_PEDIDO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_EXTRAS_PRODUCTO" EntityType="Self.CTL_EXTRAS_PRODUCTO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CTL_LOCAL" EntityType="Self.CTL_LOCAL" Schema="dbo" store:Type="Tables" />
@@ -834,6 +896,7 @@
           <EntitySet Name="TBL_BANNERS" EntityType="Self.TBL_BANNERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_COORDENADAS_CONDUCTOR" EntityType="Self.TBL_COORDENADAS_CONDUCTOR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_QR_TIENDA" EntityType="Self.TBL_QR_TIENDA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_RECHAZO_PEDIDO" EntityType="Self.TBL_RECHAZO_PEDIDO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_TARIFA_ENVIO" EntityType="Self.TBL_TARIFA_ENVIO" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CTL_ACCES__id_pe__34C8D9D1" Association="Self.FK__CTL_ACCES__id_pe__34C8D9D1">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
@@ -911,6 +974,10 @@
             <End Role="CTL_DIRECCIONES" EntitySet="CTL_DIRECCIONES" />
             <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
           </AssociationSet>
+          <AssociationSet Name="FK_M_PEDIDO_CTL_ESTATUS_FACTURA" Association="Self.FK_M_PEDIDO_CTL_ESTATUS_FACTURA">
+            <End Role="CTL_ESTATUS_FACTURA" EntitySet="CTL_ESTATUS_FACTURA" />
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+          </AssociationSet>
           <AssociationSet Name="FK_M_PEDIDO_CTL_ESTATUS_PEDIDO" Association="Self.FK_M_PEDIDO_CTL_ESTATUS_PEDIDO">
             <End Role="CTL_ESTATUS_PEDIDO" EntitySet="CTL_ESTATUS_PEDIDO" />
             <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
@@ -947,6 +1014,14 @@
             <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
             <End Role="R_PEDIDO_PREGRUNTA" EntitySet="R_PEDIDO_PREGRUNTA" />
           </AssociationSet>
+          <AssociationSet Name="FK_RECHAZO_CTL_PERSONA" Association="Self.FK_RECHAZO_CTL_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_RECHAZO_PEDIDO" EntitySet="TBL_RECHAZO_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RECHAZO_M_PEDIDO" Association="Self.FK_RECHAZO_M_PEDIDO">
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+            <End Role="TBL_RECHAZO_PEDIDO" EntitySet="TBL_RECHAZO_PEDIDO" />
+          </AssociationSet>
           <AssociationSet Name="FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" Association="Self.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR">
             <End Role="CTL_CONDUCTOR" EntitySet="CTL_CONDUCTOR" />
             <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
@@ -956,8 +1031,7 @@
             <End Role="TBL_COORDENADAS_CONDUCTOR" EntitySet="TBL_COORDENADAS_CONDUCTOR" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ViajesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1124,6 +1198,7 @@
           <NavigationProperty Name="M_PEDIDO" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
           <NavigationProperty Name="M_PEDIDO1" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
           <NavigationProperty Name="R_PERSONA_PRODUCTO_FAVORITO" Relationship="Self.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="R_PERSONA_PRODUCTO_FAVORITO" />
+          <NavigationProperty Name="TBL_RECHAZO_PEDIDO" Relationship="ViajesModel.FK_RECHAZO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="TBL_RECHAZO_PEDIDO" />
         </EntityType>
         <EntityType Name="CTL_PREGUNTA_SERVICIO">
           <Key>
@@ -1237,6 +1312,12 @@
           <NavigationProperty Name="M_DETALLE_PEDIDO_PERSONALIZADO" Relationship="Self.FK_PEDIDO_PERSONALIZADO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="M_DETALLE_PEDIDO_PERSONALIZADO" />
           <NavigationProperty Name="R_PEDIDO_PREGRUNTA" Relationship="Self.FK_R_PREGUNTA_M_PEDIDO" FromRole="M_PEDIDO" ToRole="R_PEDIDO_PREGRUNTA" />
           <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_M_PEDIDO" FromRole="M_PEDIDO" ToRole="TBL_COORDENADAS_CONDUCTOR" />
+          <Property Name="propina" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="id_estatus_factura" Type="Byte" Nullable="false" />
+          <Property Name="iva" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="CTL_ESTATUS_FACTURA" Relationship="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_FACTURA" FromRole="M_PEDIDO" ToRole="CTL_ESTATUS_FACTURA" />
+          <NavigationProperty Name="TBL_RECHAZO_PEDIDO" Relationship="ViajesModel.FK_RECHAZO_M_PEDIDO" FromRole="M_PEDIDO" ToRole="TBL_RECHAZO_PEDIDO" />
+          <Property Name="tiempo_espera" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="R_DETALLE_PEDIDO_EXTRAS">
           <Key>
@@ -1931,6 +2012,9 @@
             <Parameter Name="PIN_REFERENCIA_PAGO" Mode="In" Type="String" />
             <Parameter Name="PIN_COSTO_ENVIO" Mode="In" Type="Decimal" />
             <Parameter Name="PIN_TIPO_PEDIDO" Mode="In" Type="Byte" />
+            <Parameter Name="PIN_PROPINA" Mode="In" Type="Decimal" />
+            <Parameter Name="PIN_ID_ESTATUS_FACTURA" Mode="In" Type="Byte" />
+            <Parameter Name="PIN_IVA" Mode="In" Type="Decimal" />
             <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
             <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
@@ -1967,6 +2051,20 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="CTL_ESTATUS_FACTURA" EntityType="ViajesModel.CTL_ESTATUS_FACTURA" />
+          <EntitySet Name="TBL_RECHAZO_PEDIDO" EntityType="ViajesModel.TBL_RECHAZO_PEDIDO" />
+          <AssociationSet Name="FK_M_PEDIDO_CTL_ESTATUS_FACTURA" Association="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_FACTURA">
+            <End Role="CTL_ESTATUS_FACTURA" EntitySet="CTL_ESTATUS_FACTURA" />
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RECHAZO_CTL_PERSONA" Association="ViajesModel.FK_RECHAZO_CTL_PERSONA">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="TBL_RECHAZO_PEDIDO" EntitySet="TBL_RECHAZO_PEDIDO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RECHAZO_M_PEDIDO" Association="ViajesModel.FK_RECHAZO_M_PEDIDO">
+            <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
+            <End Role="TBL_RECHAZO_PEDIDO" EntitySet="TBL_RECHAZO_PEDIDO" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1979,6 +2077,63 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="CTL_ESTATUS_FACTURA">
+          <Key>
+            <PropertyRef Name="id_estatus_factura" />
+          </Key>
+          <Property Name="id_estatus_factura" Type="Byte" Nullable="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_FACTURA" FromRole="CTL_ESTATUS_FACTURA" ToRole="M_PEDIDO" />
+        </EntityType>
+        <EntityType Name="TBL_RECHAZO_PEDIDO">
+          <Key>
+            <PropertyRef Name="id_persona" />
+            <PropertyRef Name="id_pedido" />
+          </Key>
+          <Property Name="id_persona" Type="Int32" Nullable="false" />
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <Property Name="motivo" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_RECHAZO_CTL_PERSONA" FromRole="TBL_RECHAZO_PEDIDO" ToRole="CTL_PERSONA" />
+          <NavigationProperty Name="M_PEDIDO" Relationship="ViajesModel.FK_RECHAZO_M_PEDIDO" FromRole="TBL_RECHAZO_PEDIDO" ToRole="M_PEDIDO" />
+        </EntityType>
+        <Association Name="FK_M_PEDIDO_CTL_ESTATUS_FACTURA">
+          <End Type="ViajesModel.CTL_ESTATUS_FACTURA" Role="CTL_ESTATUS_FACTURA" Multiplicity="1" />
+          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_ESTATUS_FACTURA">
+              <PropertyRef Name="id_estatus_factura" />
+            </Principal>
+            <Dependent Role="M_PEDIDO">
+              <PropertyRef Name="id_estatus_factura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RECHAZO_CTL_PERSONA">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
+          <End Type="ViajesModel.TBL_RECHAZO_PEDIDO" Role="TBL_RECHAZO_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="TBL_RECHAZO_PEDIDO">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RECHAZO_M_PEDIDO">
+          <End Type="ViajesModel.M_PEDIDO" Role="M_PEDIDO" Multiplicity="1" />
+          <End Type="ViajesModel.TBL_RECHAZO_PEDIDO" Role="TBL_RECHAZO_PEDIDO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TBL_RECHAZO_PEDIDO">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2208,6 +2363,10 @@
           <EntitySetMapping Name="M_PEDIDO">
             <EntityTypeMapping TypeName="ViajesModel.M_PEDIDO">
               <MappingFragment StoreEntitySet="M_PEDIDO">
+                <ScalarProperty Name="tiempo_espera" ColumnName="tiempo_espera" />
+                <ScalarProperty Name="iva" ColumnName="iva" />
+                <ScalarProperty Name="id_estatus_factura" ColumnName="id_estatus_factura" />
+                <ScalarProperty Name="propina" ColumnName="propina" />
                 <ScalarProperty Name="id_persona_pide" ColumnName="id_persona_pide" />
                 <ScalarProperty Name="id_direccion_entrega" ColumnName="id_direccion_entrega" />
                 <ScalarProperty Name="id_persona_entrega" ColumnName="id_persona_entrega" />
@@ -2353,6 +2512,25 @@
           <FunctionImportMapping FunctionImportName="SP_PRODUCTO" FunctionName="ViajesModel.Store.SP_PRODUCTO" />
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ViajesModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ViajesModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="CTL_ESTATUS_FACTURA">
+            <EntityTypeMapping TypeName="ViajesModel.CTL_ESTATUS_FACTURA">
+              <MappingFragment StoreEntitySet="CTL_ESTATUS_FACTURA">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_estatus_factura" ColumnName="id_estatus_factura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_RECHAZO_PEDIDO">
+            <EntityTypeMapping TypeName="ViajesModel.TBL_RECHAZO_PEDIDO">
+              <MappingFragment StoreEntitySet="TBL_RECHAZO_PEDIDO">
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
