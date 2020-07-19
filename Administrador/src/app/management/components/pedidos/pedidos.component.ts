@@ -59,7 +59,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
   /**
    * Consume servicio para consultar locales.
    */
-  private getPedidos(): void {
+  public getPedidos(): void {
     this.objConsultaPedidoSuscriber = this._pedidoService.getPedidos().subscribe(
       respuesta => {
         console.log(respuesta)

@@ -1,1 +1,76 @@
-<p>repartidor works!</p>
+<div class="container-fluid">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span> Repartidores </span>
+      <span class="spacer-toolbar"></span>
+      <!-- <button mat-icon-button aria-label="Limpia filtros grid" (click)="clearFilter()" matTooltip="Limpiar los filtros de busqueda">
+            <span class="custom-size-icon-toolbar"><i class="fas fa-brush"></i></span>
+        </button>
+        <button mat-icon-button aria-label="Actualiza grid" (click)="reLoadGridPage()" matTooltip="Actualiza datos">
+            <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Exportar excel" (click)="exportDataExcel()" matTooltip="Exportar a excel">
+            <span class="custom-size-icon-toolbar"><i class="far fa-file-excel"></i></span>
+        </button> -->
+      <button mat-icon-button aria-label="Ir atr&aacute;s" (click)="goBack()" matTooltip="Regresar a p&aacute;gina anterior">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="row">
+    <div class="col-12">
+      <div class="mat-elevation-z6 overflow-auto">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por palabra clave"
+            matTooltip="Click para buscar" #tooltip="matTooltip" [matTooltipPosition]='globales.POSITION_OPTIONS[2]'>
+        </mat-form-field>
+        <table mat-table matSort [dataSource]="dataSource">
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="Nombre">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre</th>
+            <td mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Tipo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+            <td mat-cell *matCellDef="let element"> {{element.Tipo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header width="5%" class="text-center"> Activo </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <mat-slide-toggle [checked]="element.Estatus == 1" color="primary"
+                matTooltip="Activar/desactivar registro" (change)="onChangeEstatus($event, element.IdProducto)">
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef width="10%" class="text-center"> Acciones </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <a routerLink="/admin-dashboard/administracion/repartidor/{{element.IdPersona}}"
+                [queryParams]="{ to: 'c'}">
+                <mat-icon aria-hidden="false" aria-label="Consultar" matTooltip="Consultar">search</mat-icon>
+              </a>
+              <a *ngIf="element.Estatus" routerLink="/admin-dashboard/administracion/repartidor/{{element.IdPersona}}"
+                [queryParams]="{ to: 'e'}">
+                <mat-icon aria-hidden="false" aria-label="Editar" matTooltip="Editar">edit</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <button [routerLink]="['/admin-dashboard/administracion/repartidor/agregar']" mat-fab
+    class="float-button primary-color add-button" color="primary" matTooltip="Agregar repartidores">
+    <mat-icon aria-hidden="false" aria-label="Agregar">add</mat-icon>
+  </button>
+</div>

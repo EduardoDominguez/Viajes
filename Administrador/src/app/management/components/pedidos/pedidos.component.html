@@ -1,106 +1,114 @@
 <div class="container-fluid">
-  <div class="card">
-    <div class="card-header text-white">
-      Productos
-    </div>
-    <div class="card-body row">
-      <div class="mb-3 col-12">
-        <div class="mat-elevation-z8 overflow-auto">
-          <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por palabra clave"
-              matTooltip="Click para buscar" #tooltip="matTooltip" [matTooltipPosition]='globales.POSITION_OPTIONS[2]'>
-          </mat-form-field>
-          <table mat-table matSort [dataSource]="dataSource">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span> Viajes </span>
+      <span class="spacer-toolbar"></span>
+      <!-- <button mat-icon-button aria-label="Limpia filtros grid" (click)="clearFilter()" matTooltip="Limpiar los filtros de busqueda">
+            <span class="custom-size-icon-toolbar"><i class="fas fa-brush"></i></span>
+        </button> -->
+      <button mat-icon-button aria-label="Actualiza grid" (click)="getPedidos()" matTooltip="Actualiza datos">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <!-- <button mat-icon-button aria-label="Exportar excel" (click)="exportDataExcel()" matTooltip="Exportar a excel">
+            <span class="custom-size-icon-toolbar"><i class="far fa-file-excel"></i></span>
+        </button>  -->
+      <!-- <button mat-icon-button aria-label="Ir atr&aacute;s" (click)="goBack()" matTooltip="Regresar a p&aacute;gina anterior">
+        <mat-icon>arrow_back</mat-icon>
+      </button> -->
 
-            <!-- id Column -->
-            <ng-container matColumnDef="folio">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header width="15%"> Folio </th>
-              <td mat-cell *matCellDef="let element"> {{element.Folio}} </td>
-            </ng-container>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="row">
+    <div class="col-12">
+      <div class="mat-elevation-z6 overflow-auto">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por palabra clave"
+            matTooltip="Click para buscar" #tooltip="matTooltip" [matTooltipPosition]='globales.POSITION_OPTIONS[2]'>
+        </mat-form-field>
+        <table mat-table matSort [dataSource]="dataSource">
 
-            <ng-container matColumnDef="fechaPedido">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
-              <td mat-cell *matCellDef="let element"> {{element.FechaPedido | date}} </td>
-            </ng-container>
+          <!-- id Column -->
+          <ng-container matColumnDef="folio">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header width="15%"> Folio </th>
+            <td mat-cell *matCellDef="let element"> {{element.Folio}} </td>
+          </ng-container>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="personaPide">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%"> Cliente</th>
-              <td mat-cell *matCellDef="let element"> {{element.PersonaPide?.Nombre}} </td>
-            </ng-container>
+          <ng-container matColumnDef="fechaPedido">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+            <td mat-cell *matCellDef="let element"> {{element.FechaPedido | date}} </td>
+          </ng-container>
 
-            <ng-container matColumnDef="direccionEntrega">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Direcci&oacute;n entrega</th>
-              <td mat-cell *matCellDef="let element"> {{element.DireccionEntrega?.Nombre}} </td>
-            </ng-container>
+          <!-- Name Column -->
+          <ng-container matColumnDef="personaPide">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%"> Cliente</th>
+            <td mat-cell *matCellDef="let element"> {{element.PersonaPide?.Nombre}} </td>
+          </ng-container>
 
-            <ng-container matColumnDef="personaEntrega">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%"> Conductor</th>
-              <td mat-cell *matCellDef="let element"> {{element.PersonaEntrega?.Nombre }} </td>
-            </ng-container>
+          <ng-container matColumnDef="direccionEntrega">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Direcci&oacute;n entrega</th>
+            <td mat-cell *matCellDef="let element"> {{element.DireccionEntrega?.Nombre}} </td>
+          </ng-container>
 
-            <ng-container matColumnDef="costoEnvio">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo env&iacute;o</th>
-              <td mat-cell *matCellDef="let element"> {{element.CostoEnvio | currency:'$' }} </td>
-            </ng-container>
+          <ng-container matColumnDef="personaEntrega">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%"> Conductor</th>
+            <td mat-cell *matCellDef="let element"> {{element.PersonaEntrega?.Nombre }} </td>
+          </ng-container>
 
-            <ng-container matColumnDef="metodoPago">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> M&eacute;todo pago </th>
-              <td mat-cell *matCellDef="let element">
-                <span *ngIf="element.IdMetodoPago == 1">Efectivo</span>
-                <span *ngIf="element.IdMetodoPago == 2">Tarjeta</span>
-                <span *ngIf="element.IdMetodoPago == 3">Paypal</span>
-              </td>
-            </ng-container>
+          <ng-container matColumnDef="costoEnvio">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo env&iacute;o</th>
+            <td mat-cell *matCellDef="let element"> {{element.CostoEnvio | currency:'$' }} </td>
+          </ng-container>
 
-            <ng-container matColumnDef="referencia">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Referencia pago (tarjetas)</th>
-              <td mat-cell *matCellDef="let element"> {{element.ReferenciaPago }} </td>
-            </ng-container>
+          <ng-container matColumnDef="metodoPago">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> M&eacute;todo pago </th>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.IdMetodoPago == 1">Efectivo</span>
+              <span *ngIf="element.IdMetodoPago == 2">Tarjeta</span>
+              <span *ngIf="element.IdMetodoPago == 3">Paypal</span>
+            </td>
+          </ng-container>
 
-            <ng-container matColumnDef="observaciones">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Observaciones</th>
-              <td mat-cell *matCellDef="let element"> {{element.Observaciones }} </td>
-            </ng-container>
+          <ng-container matColumnDef="referencia">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Referencia pago (tarjetas)</th>
+            <td mat-cell *matCellDef="let element"> {{element.ReferenciaPago }} </td>
+          </ng-container>
 
-            <ng-container matColumnDef="estatus">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header  width="10%"> Estatus
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <mat-chip-list aria-label="estatus">
-                  <mat-chip color="primary" selected *ngIf="element.Estatus?.IdEstatus != 7">
-                    {{element.Estatus?.Nombre}}</mat-chip>
-                  <mat-chip color="warn" selected *ngIf="element.Estatus?.IdEstatus == 7">
-                    {{element.Estatus?.Nombre}}</mat-chip>
-                </mat-chip-list>
-              </td>
-            </ng-container>
+          <ng-container matColumnDef="observaciones">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Observaciones</th>
+            <td mat-cell *matCellDef="let element"> {{element.Observaciones }} </td>
+          </ng-container>
 
-            <ng-container matColumnDef="acciones">
-              <th mat-header-cell *matHeaderCellDef class="text-center"  width="15%"> Acciones </th>
-              <td mat-cell *matCellDef="let element" class="text-center">
-                <a routerLink="/admin-dashboard/administracion/productos/{{element.IdProducto}}"
-                  [queryParams]="{ to: 'c'}">
-                  <mat-icon aria-hidden="false" aria-label="Consultar" matTooltip="Consultar">search</mat-icon>
-                </a>
-                <!-- <a *ngIf="element.Estatus" routerLink="/admin-dashboard/administracion/productos/{{element.IdProducto}}" [queryParams]="{ to: 'e'}">
-                  <mat-icon aria-hidden="false" aria-label="Editar" matTooltip="Editar">edit</mat-icon>
-                </a> -->
-              </td>
-            </ng-container>
+          <ng-container matColumnDef="estatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header width="10%"> Estatus
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-chip-list aria-label="estatus">
+                <mat-chip color="primary" selected *ngIf="element.Estatus?.IdEstatus != 7">
+                  {{element.Estatus?.Nombre}}</mat-chip>
+                <mat-chip color="warn" selected *ngIf="element.Estatus?.IdEstatus == 7">
+                  {{element.Estatus?.Nombre}}</mat-chip>
+              </mat-chip-list>
+            </td>
+          </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-          <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
-        </div>
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="text-center" width="15%"> Acciones </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <a routerLink="/admin-dashboard/administracion/productos/{{element.IdProducto}}"
+                [queryParams]="{ to: 'c'}">
+                <mat-icon aria-hidden="false" aria-label="Consultar" matTooltip="Consultar">search</mat-icon>
+              </a>
+              <!-- <a *ngIf="element.Estatus" routerLink="/admin-dashboard/administracion/productos/{{element.IdProducto}}" [queryParams]="{ to: 'e'}">
+                <mat-icon aria-hidden="false" aria-label="Editar" matTooltip="Editar">edit</mat-icon>
+              </a> -->
+            </td>
+          </ng-container>
 
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
-    <!--Fin panel card-body-->
-    <!-- <button [routerLink]="['/admin-dashboard/administracion/productos/agregar']" mat-fab class="float-button primary-color add-button"
-    color="primary" matTooltip="Agregar productos">
-    <mat-icon aria-hidden="false" aria-label="Agregar">add</mat-icon>
-  </button> -->
   </div>
 </div>

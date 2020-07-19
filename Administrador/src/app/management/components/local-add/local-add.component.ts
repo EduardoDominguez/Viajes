@@ -191,6 +191,7 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.controls['frmNoInt'].setValue(pLocal.NoInt);
     this.latitude = pLocal.Latitud;
     this.longitude = pLocal.Longitud
+    this.getAddress(this.latitude, this.longitude);
     this.imgPreview.nativeElement.src = pLocal.Fotografia;
 
     if (!this.isDisabled) {
@@ -275,7 +276,7 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
         //1;//this._storageService.getCurrentSession().user.idpersona;
 
 
-        console.log(request);
+        // console.log(request);
 
         if (this.tipoOperacion == 'n') {
           request.Fotografia = this.imgPreview.nativeElement.src;
