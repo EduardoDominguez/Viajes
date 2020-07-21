@@ -46,6 +46,7 @@
     <Compile Include="Enum\NotificacionFirebase.cs" />
     <Compile Include="Extras\E_ACCESO_PERSONA.cs" />
     <Compile Include="Extras\E_BANNER.cs" />
+    <Compile Include="Extras\E_CONDUCTOR.cs" />
     <Compile Include="Extras\E_COORDENADAS_CONDUCTOR.cs" />
     <Compile Include="Extras\E_COSTO.cs" />
     <Compile Include="Extras\E_DETALLE_PEDIDO.cs" />

@@ -90,46 +90,33 @@ namespace Viajes.DAL.Persona
 
 
         /// <summary>
-        /// Método para insertar conductores
-        /// <param name="pPedido">Objeto de tipo E_PEDIDO con datos a insertar</param>
-        /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
-        /// </summary>
-        public E_MENSAJE Agregar(E_PERSONA pPedido)
+        /// Método para consultar agregar conductores
+        /// <param name="Entidad">Datos generales del conductor a agregar</param>
+        /// <param name="pDatosAcceso">Datos de acceso de conductor</param>
+        /// <param name="pDatosExtras">Datos adicionales de conductor</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary> 
+        public E_MENSAJE Agregar(E_PERSONA pPersona, E_ACCESO_PERSONA pAcceso, E_CONDUCTOR pDatosExtras)
         {
             try
             {
-                //using (context = new ViajesEntities())
-                //{
-
-                //    XElement xmlPedido = new XElement("PEDIDO");
-
-                //    foreach (var detalle in pPedido.Detalle)
-                //    {
-                //        XElement xDetallePedido = new XElement("DETALLE");
-                //        xDetallePedido.Add(
-                //            new XAttribute("ID_LOCAL", detalle.Local.IdLocal),
-                //            new XAttribute("ID_PRODUCTO", detalle.IdProducto),
-                //            new XAttribute("PRECIO", detalle.Precio),
-                //            new XAttribute("CANTIDAD", detalle.Cantidad),
-                //            new XAttribute("OBSERVACIONES", detalle.Observaciones)
-                //        );
-                //        xmlPedido.Add(xDetallePedido);
-                //    }
-
-                //    ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
-                //    ObjectParameter RET_MENSAJEERROR = new ObjectParameter("RET_MENSAJEERROR", typeof(string));
-                //    ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
+                using (context = new ViajesEntities())
+                {
+                    
+                    ObjectParameter RET_ID_PERSONA = new ObjectParameter("RET_ID_PERSONA", typeof(string));
+                    ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
+                    ObjectParameter RET_MENSAJEERROR = new ObjectParameter("RET_MENSAJEERROR", typeof(string));
+                    ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
 
 
-                //    context.SP_PEDIDO(pPedido.IdPedido, pPedido.IdPersonaPide, pPedido.DireccionEntrega.IdDireccion,
-                //                        pPedido.IdPersonaEntrega, pPedido.Observaciones, pPedido.Folio,
-                //                         pPedido.IdMetodoPago, pPedido.Estatus.IdEstatus, xmlPedido.ToString(), "I",
-                //                        RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
+                    context.SP_PERSONA(pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
+                        pAcceso.Email, pAcceso.Password, pAcceso.TipoUsuario, pAcceso.TokenFirebase, pPersona.Sexo,
+                        pDatosExtras.Colonia, pDatosExtras.Calle, pDatosExtras.NoExt, pDatosExtras.NoInt, pDatosExtras.NoLicencia, pDatosExtras.NoPlacas, pDatosExtras.Tipo,
+                        RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
-                //    E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
-                //    return vMensaje;
-                //}
-                return null;
+                    E_MENSAJE vMensaje = new E_MENSAJE { RET_ID_PERSONA = int.Parse(RET_ID_PERSONA.Value.ToString()), RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
+                    return vMensaje;
+                }
             }
             catch (Exception ex)
             {
@@ -176,18 +163,21 @@ namespace Viajes.DAL.Persona
         /// <param name="pIdPersona">Id del pedido a consultar</param>
         /// <returns> Objeto tipo List<E_PERSONA> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_PERSONA>> Consultar(int? pIdPersona = null)
+        public async Task<List<E_PERSONA>> Consultar(byte? SoloActivos = null, int ? pIdPersona = null)
         {
             try
             {
                 using (context = new ViajesEntities())
                 {
-                    var pedidos = await (from s in context.CTL_PERSONA
+                    var conductores = await (from s in context.CTL_PERSONA 
+                                         join ap in context.CTL_ACCESO_PERSONA on s.id_persona equals ap.id_persona
                                    where
                                    (pIdPersona == null || (pIdPersona != null && s.id_persona == pIdPersona))
+                                   && (SoloActivos == null || (SoloActivos != null && s.estatus == SoloActivos))
+                                   && ap.tipo_usuario == 2
                                    select s).ToListAsync<CTL_PERSONA>();
 
-                    return ProcesaListaConductores(pedidos);
+                    return ProcesaListaConductores(conductores);
                 }
             }
             catch (Exception ex)

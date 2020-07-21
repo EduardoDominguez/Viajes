@@ -169,14 +169,15 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
         request.Sexo = this.form.controls['cmbSexo'].value;
         request.Telefono = this.form.controls['frmTelefono'].value;
         request.Tipo = this.form.controls['cmbTipoRepartidor'].value;
-
+        request.TipoUsuario = 2;
         request.Colonia = this.form.controls['frmColonia'].value;
         request.Calle = this.form.controls['frmCalle'].value;
         request.NoExt = this.form.controls['frmNoExt'].value;
         request.NoInt = this.form.controls['frmNoInt'].value;
         request.Telefono = this.form.controls['frmTelefono'].value;
         request.Email = this.form.controls['frmEmail'].value;
-
+        request.NoLicencia = this.form.controls['frmNoLicencia'].value;
+        request.NoPlacas = this.form.controls['frmNoPlacas'].value;
 
         console.log(request);
         //if (request.tipo_operacion == 'n') {

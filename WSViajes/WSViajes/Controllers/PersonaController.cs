@@ -12,8 +12,7 @@ using WSViajes.Models.Request;
 using WSViajes.Models.Response;
 using Openpay.Entities;
 using WSViajes.Comunes;
-
-
+using System.Configuration;
 
 namespace WSViajes.Controllers
 {
@@ -46,6 +45,109 @@ namespace WSViajes.Controllers
                 {
                     respuesta.CodigoError = 10000;
                     respuesta.Mensaje = $"No existen coordenadas con los parámetros solicitados";
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+
+        [HttpGet]
+        [Route("Conductor/Consulta")]
+        public async Task<HttpResponseMessage> ConsultaConductores(byte? soloActivos = null)
+        {
+            var respuesta = new ConsultarTodoResponse<E_PERSONA> { };
+            var strMetodo = "WSViajes - ConsultaConductores ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new ConductorNegocio().ConsultarTodo(SoloActivos: soloActivos);
+
+                if (respuesta.Data.Count > 0)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen conductores con los parámetros solicitados";
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpPost]
+        [Route("Conductor/Agrega")]
+        public HttpResponseMessage AgregarConductor(InsertaActualizaConductorRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - AgregarConductor ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió usuario.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
+                //else if (String.IsNullOrEmpty(pRequest.ApePaterno))
+                //    respuesta.Mensaje = "El elemento  <<ApePaterno>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Telefono))
+                    respuesta.Mensaje = "El elemento  <<Telefono>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Fotografia))
+                    respuesta.Mensaje = "El elemento  <<Fotografia>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Email))
+                    respuesta.Mensaje = "El elemento  <<Email>> no puede estar vacío.";
+                else
+                {
+                    var objAcceso = new E_ACCESO_PERSONA { Email = pRequest.Email, Password = "", TipoUsuario = pRequest.TipoUsuario };
+                    var objPersona = new E_PERSONA { Sexo = pRequest.Sexo, Nombre = pRequest.Nombre, Telefono = pRequest.Telefono, Fotografia = pRequest.Fotografia };
+                    var objDatosConductor = new E_CONDUCTOR { Tipo = pRequest.Tipo, Colonia = pRequest.Colonia, Calle = pRequest.Calle, NoExt = pRequest.NoExt, NoInt = pRequest.NoInt,  NoLicencia = pRequest.NoLicencia, NoPlacas = pRequest.NoPlacas};
+                    var respuestaCreaConductor = new ConductorNegocio().Agregar(objPersona, objAcceso, objDatosConductor);
+                    if (respuestaCreaConductor.RET_NUMEROERROR >= 0)
+                    {
+                        //var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
+                        //var personaRecienCreada = await new AccesoNegocio().ConsultaPorCorreo(pInsertaPersonaRequest.Email.Trim());
+                        //new PersonaNegocio().AgregarClienteOpenPay(personaRecienCreada.IdPersona, creaClienteOpen.Id);
+                        new Mailer().Send(pRequest.Email, string.Format("Bienvenido a nuestra plataforma FASTRUN", "Te damos la bienvenida a nuestra plataforma. Ingresa a la siguiente liga para crear tu contraseña y empezar a utilizar tu cuenta: {0}{1} <br/> <b>¡¡Ha empezar a entregar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", ConfigurationManager.AppSettings["URL_PASSWORD_CONDUCTOR"], respuestaCreaConductor.RET_ID_PERSONA), pRequest.Nombre);
+                    }
+
+                    respuesta.Exito = respuestaCreaConductor.RET_NUMEROERROR >= 0;
+                    respuesta.Mensaje = respuestaCreaConductor.RET_VALORDEVUELTO;
+
                 }
 
             }

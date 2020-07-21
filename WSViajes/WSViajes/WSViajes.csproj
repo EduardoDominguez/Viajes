@@ -226,6 +226,7 @@
     <Compile Include="Models\Request\CalculaCostoEntrega.cs" />
     <Compile Include="Models\Request\CreaTarjetaOpenPayRequest.cs" />
     <Compile Include="Models\Request\EnviaNotificacionRequest.cs" />
+    <Compile Include="Models\Request\InsertaActualizaConductorRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaDireccionRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaExtraRequest.cs" />
     <Compile Include="Models\Request\InsertaActualizaLocalRequest.cs" />

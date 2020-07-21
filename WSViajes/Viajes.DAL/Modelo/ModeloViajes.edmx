@@ -28,6 +28,7 @@
           <Property Name="no_ext" Type="nvarchar" MaxLength="10" />
           <Property Name="no_placas" Type="nvarchar" MaxLength="50" />
           <Property Name="no_licencia" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_tipo" Type="tinyint" />
         </EntityType>
         <EntityType Name="CTL_COSTO">
           <Key>
@@ -847,6 +848,15 @@
           <Parameter Name="PIN_PASSWORD" Type="varchar" Mode="In" />
           <Parameter Name="PIN_TIPO_USUARIO" Type="tinyint" Mode="In" />
           <Parameter Name="PIN_TOKEN_FIREBASE" Type="nvarchar" Mode="In" />
+          <Parameter Name="PIN_SEXO" Type="varchar" Mode="In" />
+          <Parameter Name="PIN_COLONIA" Type="varchar" Mode="In" />
+          <Parameter Name="PIN_CALLLE" Type="varchar" Mode="In" />
+          <Parameter Name="PIN_NO_EXT" Type="varchar" Mode="In" />
+          <Parameter Name="PIN_NO_INT" Type="varchar" Mode="In" />
+          <Parameter Name="PIN_NO_LICENCIA" Type="varchar" Mode="In" />
+          <Parameter Name="PIN_NO_PLACAS" Type="varchar" Mode="In" />
+          <Parameter Name="PIN_ID_TIPO_CONDUCTOR" Type="tinyint" Mode="In" />
+          <Parameter Name="RET_ID_PERSONA" Type="int" Mode="InOut" />
           <Parameter Name="RET_NUMEROERROR" Type="int" Mode="InOut" />
           <Parameter Name="RET_MENSAJEERROR" Type="varchar" Mode="InOut" />
           <Parameter Name="RET_VALORDEVUELTO" Type="varchar" Mode="InOut" />
@@ -1062,6 +1072,7 @@
           <Property Name="no_licencia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_CTL_CONDUCTOR_CTL_PERSONA" FromRole="CTL_CONDUCTOR" ToRole="CTL_PERSONA" />
           <NavigationProperty Name="TBL_COORDENADAS_CONDUCTOR" Relationship="Self.FK_TBL_COORDENADAS_CONDUCTOR_CTL_CONDUCTOR" FromRole="CTL_CONDUCTOR" ToRole="TBL_COORDENADAS_CONDUCTOR" />
+          <Property Name="id_tipo" Type="Byte" />
         </EntityType>
         <EntityType Name="CTL_COSTO">
           <Key>
@@ -2027,6 +2038,15 @@
             <Parameter Name="PIN_PASSWORD" Mode="In" Type="String" />
             <Parameter Name="PIN_TIPO_USUARIO" Mode="In" Type="Byte" />
             <Parameter Name="PIN_TOKEN_FIREBASE" Mode="In" Type="String" />
+            <Parameter Name="PIN_SEXO" Mode="In" Type="String" />
+            <Parameter Name="PIN_COLONIA" Mode="In" Type="String" />
+            <Parameter Name="PIN_CALLLE" Mode="In" Type="String" />
+            <Parameter Name="PIN_NO_EXT" Mode="In" Type="String" />
+            <Parameter Name="PIN_NO_INT" Mode="In" Type="String" />
+            <Parameter Name="PIN_NO_LICENCIA" Mode="In" Type="String" />
+            <Parameter Name="PIN_NO_PLACAS" Mode="In" Type="String" />
+            <Parameter Name="PIN_ID_TIPO_CONDUCTOR" Mode="In" Type="Byte" />
+            <Parameter Name="RET_ID_PERSONA" Mode="InOut" Type="Int32" />
             <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
             <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
@@ -2155,6 +2175,7 @@
           <EntitySetMapping Name="CTL_CONDUCTOR">
             <EntityTypeMapping TypeName="ViajesModel.CTL_CONDUCTOR">
               <MappingFragment StoreEntitySet="CTL_CONDUCTOR">
+                <ScalarProperty Name="id_tipo" ColumnName="id_tipo" />
                 <ScalarProperty Name="id_persona" ColumnName="id_persona" />
                 <ScalarProperty Name="calle" ColumnName="calle" />
                 <ScalarProperty Name="colonia" ColumnName="colonia" />

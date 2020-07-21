@@ -27,6 +27,7 @@ namespace Viajes.DAL.Modelo
         public string no_ext { get; set; }
         public string no_placas { get; set; }
         public string no_licencia { get; set; }
+        public Nullable<byte> id_tipo { get; set; }
     
         public virtual CTL_PERSONA CTL_PERSONA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

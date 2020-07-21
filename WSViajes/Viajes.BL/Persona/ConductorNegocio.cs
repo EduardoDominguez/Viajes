@@ -22,7 +22,9 @@ namespace Viajes.BL.Persona
             try
             {
                 ConductorOperaciones pDatos = new ConductorOperaciones();
-                return pDatos.Agregar(Entidad);
+                //return pDatos.Agregar(Entidad);
+                return null;
+                
             }
             catch (Exception ex)
             {
@@ -41,6 +43,26 @@ namespace Viajes.BL.Persona
             {
                 ConductorOperaciones pDatos = new ConductorOperaciones();
                 return pDatos.AgregarCoordenadas(Entidad);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Método para consultar agregar conductores
+        /// <param name="Entidad">Datos generales del conductor a agregar</param>
+        /// <param name="pDatosAcceso">Datos de acceso de conductor</param>
+        /// <param name="pDatosExtras">Datos adicionales de conductor</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE Agregar(E_PERSONA Entidad, E_ACCESO_PERSONA pDatosAcceso, E_CONDUCTOR pDatosExtras)
+        {
+            try
+            {
+                ConductorOperaciones pDatos = new ConductorOperaciones();
+                return pDatos.Agregar(Entidad, pDatosAcceso, pDatosExtras);
             }
             catch (Exception ex)
             {
@@ -79,7 +101,7 @@ namespace Viajes.BL.Persona
             try
             {
                 ConductorOperaciones pDatos = new ConductorOperaciones();
-                var pResultado = await pDatos.Consultar(pIdPersona);
+                var pResultado = await pDatos.Consultar(pIdPersona: pIdPersona);
                 return pResultado.FirstOrDefault();
             }
             catch (Exception ex)
@@ -98,7 +120,7 @@ namespace Viajes.BL.Persona
             try
             {
                 ConductorOperaciones pDatos = new ConductorOperaciones();
-                return await pDatos.Consultar(pIdPersona: idPersona);
+                return await pDatos.Consultar(SoloActivos, idPersona);
             }
             catch (Exception ex)
             {

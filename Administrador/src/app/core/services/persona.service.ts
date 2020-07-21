@@ -91,7 +91,7 @@ export class PersonaService {
       params = params.append('soloActivos', ((pSoloActivos == true) ? 1 : 0).toString());
     this.globales.HTTP_OPTIONS.params = params;
 
-    return this.http.get<Respuesta>(`${this.basePath}Repartidor/Consulta`, this.globales.HTTP_OPTIONS).pipe(
+    return this.http.get<Respuesta>(`${this.basePath}Conductor/Consulta`, this.globales.HTTP_OPTIONS).pipe(
       //tap(() => console.log("Petición HTTP para consultar nodos ejecutada")),
       map(res => res as Respuesta),
       //catchError(this.handleError<Sesion>('login', new Sesion()))
@@ -105,7 +105,7 @@ export class PersonaService {
   */
   agregarRepartidor(pRepartidor: Repartidor): Observable<Respuesta> {
     // this.objPeticion.Producto = pProducto;
-    return this.http.post<Respuesta>(`${this.basePath}AgregaRepartidor`, pRepartidor, this.globales.HTTP_OPTIONS).pipe(
+    return this.http.post<Respuesta>(`${this.basePath}Conductor/Agrega`, pRepartidor, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );
   }
@@ -117,7 +117,7 @@ export class PersonaService {
    */
   editarRepartidor(pRepartidor: Repartidor): Observable<Respuesta> {
     // this.objPeticion.Producto = pProducto;
-    return this.http.put<Respuesta>(`${this.basePath}EditaRepartidor`, pRepartidor, this.globales.HTTP_OPTIONS).pipe(
+    return this.http.put<Respuesta>(`${this.basePath}Conductor/Edita`, pRepartidor, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );
   }

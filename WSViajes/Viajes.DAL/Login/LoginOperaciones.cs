@@ -77,15 +77,18 @@ namespace Viajes.DAL.Login
             {
                 using (context = new ViajesEntities())
                 {
+                    ObjectParameter RET_ID_PERSONA = new ObjectParameter("RET_ID_PERSONA", typeof(string));
                     ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
                     ObjectParameter RET_MENSAJEERROR = new ObjectParameter("RET_MENSAJEERROR", typeof(string));
                     ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
 
 
                     context.SP_PERSONA(pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
-                        pAcceso.Email, pAcceso.Password, pAcceso.TipoUsuario, pAcceso.TokenFirebase, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
+                        pAcceso.Email, pAcceso.Password, pAcceso.TipoUsuario, pAcceso.TokenFirebase, "U",
+                        null, null, null, null, null, null, null,
+                        RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
-                    E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
+                    E_MENSAJE vMensaje = new E_MENSAJE { RET_ID_PERSONA = int.Parse(RET_ID_PERSONA.Value.ToString()), RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
                     return vMensaje;
                 }
             }
