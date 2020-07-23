@@ -285,7 +285,7 @@ namespace Viajes.DAL.Pedido
                                          where
                                          p.tipo_pedido == 1 &&  //Pedidos normales
                                          p.id_persona_entrega == pIdPersona && ap.tipo_usuario == 2
-                                         orderby p.fecha_entrega
+                                         orderby  p.fecha_pedido descending
                                          select p).ToListAsync<M_PEDIDO>();
 
                     return await ProcesaListaPedidos(pedidos);

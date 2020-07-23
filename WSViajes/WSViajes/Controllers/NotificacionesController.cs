@@ -101,8 +101,7 @@ namespace WSViajes.Controllers
         /// <param name="pTipoNotificacion">Indica el destino de la notificación 1=Cliente, 2=Conductor</param>
         public async Task<string> SendMessage(string pTokenDestinatario, string pTitle, string pBoby, byte pTipoNotificacion)
         {
-            string serverKey = string.Empty;
-            string senderId = string.Empty;
+            string serverKey, senderId;
 
             if (pTipoNotificacion == 1)
             {
@@ -141,6 +140,7 @@ namespace WSViajes.Controllers
                     result = await streamReader.ReadToEndAsync();
                 }
 
+                log.Info("[Envio de notificación FIRESBASE]------------>" + result);
                 return result;
             }
             catch (Exception ex)
