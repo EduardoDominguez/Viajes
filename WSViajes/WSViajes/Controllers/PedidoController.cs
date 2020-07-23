@@ -219,6 +219,7 @@ namespace WSViajes.Controllers
                         string mensajeConductor = string.Empty;
                         string tokenCliente = string.Empty;
                         string tokenConductor = string.Empty;
+                        int idPersonaCliente = 0;
                         var enviarMensaje = new NotificacionesController();
                         var pedido = await pedidoNegocio.ConsultarPorId(pRequest.Pedido.IdPedido);
 
@@ -228,11 +229,13 @@ namespace WSViajes.Controllers
                             var pedidoPersonalizado = await pedidoNegocio.ConsultarPersonalizadosPorId(pRequest.Pedido.IdPedido);
                             tokenCliente = await enviarMensaje.GetTokenUser(pedidoPersonalizado.PersonaPide.IdPersona);
                             tokenConductor = await enviarMensaje.GetTokenUser(pedidoPersonalizado.PersonaEntrega.IdPersona);
+                            idPersonaCliente = pedidoPersonalizado.PersonaPide.IdPersona;
                         }
                         else
                         {
                             tokenCliente = await enviarMensaje.GetTokenUser(pedido.PersonaPide.IdPersona);
                             tokenConductor = await enviarMensaje.GetTokenUser(pedido.PersonaEntrega.IdPersona);
+                            idPersonaCliente = pedido.PersonaPide.IdPersona;
                             //var tokenComercio = await enviarMensaje.GetTokenUser(pedido.PersonaPide.IdPersona);
                         }
 
@@ -257,7 +260,7 @@ namespace WSViajes.Controllers
                                 mensajeCliente = "Tu orden ha sido entregada. Gracias por confiar en nosotros.";
 
                                 var mailer = new Mailer();
-                                var persona = await new PersonaNegocio().ConsultarPorId(pedido.PersonaPide.IdPersona);
+                                var persona = await new PersonaNegocio().ConsultarPorId(idPersonaCliente);
                                 mailer.Send(persona.Acceso.Email, "Gracias por tu pedido", mensajeCliente, persona.Nombre);
                                 break;
                             case (int)EstatusPedido.Calificado:
