@@ -8,7 +8,8 @@ namespace Viajes.EL.Enum
 {
     public enum NotificacionFirebase : byte
     {
+        Cliente = 1,
         Conductor = 2,
-        Cliente = 1
+        Comercio = 3
     }
 }

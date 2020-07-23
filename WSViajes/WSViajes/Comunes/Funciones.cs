@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Web;
+using Viajes.EL.Enum;
 
 namespace WSViajes.Comunes
 {
@@ -95,21 +96,36 @@ namespace WSViajes.Comunes
                 string mensaje = string.Empty;
                 switch (pIdEstatus)
                 {
-                    case 1:
+                    case (int) EstatusPedido.PorAsignar:
                         mensaje = "Tu orden se ha generado, estamos asignando la persona que te entregará.";
                     break;
-                    case 2:
+                    case (int) EstatusPedido.Asignado:
                         mensaje = "Hemos asignado un repartidor para tu orden.";
                         break;
-                    case 3:
+                    case (int) EstatusPedido.EnViaje:
                         mensaje = "El repartidor ya se encuentra en camino a recoger tu pedido.";
                         break;
-                    case 4:
+                    case (int) EstatusPedido.ConProducto:
                         mensaje = "Hemos recogido tu pedido y estamos en camino a tu domicilio.";
                     break;
-                    case 5:
+                    case (int) EstatusPedido.Terminado:
                         mensaje = "Tu orden ha sido entregada. Gracias por confiar en nosotros.";
                     break;
+                    case (int)EstatusPedido.Calificado:
+                        mensaje = "Gracias por calificar tu pedido, tu opinión es muy importante para seguir mejorando o ofrecerte un mejor servicio.";
+                        break;
+                    case (int)EstatusPedido.Cancelado:
+                        mensaje = "Tu orden ha sido cancelada. Si tienes alguna duda comunicate con nosotros.";
+                        break;
+                    case (int)EstatusPedido.AceptadoComercio:
+                        mensaje = ".";
+                        break;
+                    case (int)EstatusPedido.PreparandoPedido:
+                        mensaje = "El comercio se encuentra preparando el pedido, cuando esté listo se te notificará para que puedas recogerlo.";
+                        break;
+                    case (int)EstatusPedido.EnCamino:
+                        mensaje = "Hemos recogido tu pedido y estamos en camino a tu domicilio.";
+                        break;
                 }
 
                 return mensaje;

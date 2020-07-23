@@ -214,20 +214,75 @@ namespace WSViajes.Controllers
 
                     if (respuestaDireccion.RET_NUMEROERROR == 0)
                     {
-                        var mensaje = Funciones.GetMensajeCambioEstatus(pRequest.Pedido.Estatus.IdEstatus, "");
-                        if(!string.IsNullOrEmpty(mensaje))
+                        //var mensaje = Funciones.GetMensajeCambioEstatus(pRequest.Pedido.Estatus.IdEstatus, "");
+                        string mensajeCliente = string.Empty;
+                        string mensajeConductor = string.Empty;
+                        string tokenCliente = string.Empty;
+                        string tokenConductor = string.Empty;
+                        var enviarMensaje = new NotificacionesController();
+                        var pedido = await pedidoNegocio.ConsultarPorId(pRequest.Pedido.IdPedido);
+
+                        if(pedido == null)
                         {
-                            var enviarMensaje = new NotificacionesController();
-                            var mailer = new Mailer();
-                            var pedido = await pedidoNegocio.ConsultarPorId(pRequest.Pedido.IdPedido);
-                            var token = await enviarMensaje.GetTokenUser(pedido.PersonaPide.IdPersona);
-                            var persona = await new PersonaNegocio().ConsultarPorId(pedido.PersonaPide.IdPersona);
-                            if (!string.IsNullOrEmpty(token))
-                                await enviarMensaje.SendMessage(token, "FastRun", mensaje, (byte)NotificacionFirebase.Cliente);
-
-                            mailer.Send(persona.Acceso.Email, "Novedades en tu pedido", mensaje, persona.Nombre);
-
+                            //Buscar si es personalizado
+                            var pedidoPersonalizado = await pedidoNegocio.ConsultarPersonalizadosPorId(pRequest.Pedido.IdPedido);
+                            tokenCliente = await enviarMensaje.GetTokenUser(pedidoPersonalizado.PersonaPide.IdPersona);
+                            tokenConductor = await enviarMensaje.GetTokenUser(pedidoPersonalizado.PersonaEntrega.IdPersona);
                         }
+                        else
+                        {
+                            tokenCliente = await enviarMensaje.GetTokenUser(pedido.PersonaPide.IdPersona);
+                            tokenConductor = await enviarMensaje.GetTokenUser(pedido.PersonaEntrega.IdPersona);
+                            //var tokenComercio = await enviarMensaje.GetTokenUser(pedido.PersonaPide.IdPersona);
+                        }
+
+
+                        switch (pRequest.Pedido.Estatus.IdEstatus)
+                        {
+                            case (int)EstatusPedido.PorAsignar:
+                                mensajeCliente = "Tu orden se ha generado, estamos asignando la persona que te entregará.";
+                                break;
+                            case (int)EstatusPedido.Asignado:
+                                mensajeCliente = "Hemos asignado un repartidor para tu orden.";
+                                //mensajeConductor = "El comercio se encuentra preparando el pedido, cuando esté listo se te notificará para que puedas recogerlo.";
+                                break;
+                            case (int)EstatusPedido.EnViaje:
+                                mensajeCliente = "El repartidor ya se encuentra en camino a recoger tu pedido.";
+                                mensajeConductor = "¡Todo listo!, el pedido espera por ti; ve a recogerlo.";
+                                break;
+                            case (int)EstatusPedido.ConProducto:
+                                mensajeCliente = "Hemos recogido tu pedido y estamos en camino a tu domicilio.";
+                                break;
+                            case (int)EstatusPedido.Terminado:
+                                mensajeCliente = "Tu orden ha sido entregada. Gracias por confiar en nosotros.";
+
+                                var mailer = new Mailer();
+                                var persona = await new PersonaNegocio().ConsultarPorId(pedido.PersonaPide.IdPersona);
+                                mailer.Send(persona.Acceso.Email, "Gracias por tu pedido", mensajeCliente, persona.Nombre);
+                                break;
+                            case (int)EstatusPedido.Calificado:
+                                mensajeCliente = "Gracias por calificar tu pedido, tu opinión es muy importante para seguir mejorando o ofrecerte un mejor servicio.";
+                                break;
+                            case (int)EstatusPedido.Cancelado:
+                                mensajeCliente = "Tu orden ha sido cancelada. Si tienes alguna duda comunicate con nosotros.";
+                                break;
+                            case (int)EstatusPedido.AceptadoComercio:
+                                mensajeConductor = "Hay un nuevo servicio disponible, ¿Deseas tomarlo?.";
+                                break;
+                            case (int)EstatusPedido.PreparandoPedido:
+                                mensajeConductor = "El comercio se encuentra preparando el pedido, cuando esté listo se te notificará para que puedas recogerlo.";
+                                break;
+                            case (int)EstatusPedido.EnCamino:
+                                mensajeCliente = "Hemos recogido tu pedido y estamos en camino a tu domicilio.";
+                                break;
+                        }
+
+                        if (!string.IsNullOrEmpty(tokenCliente))
+                            await enviarMensaje.SendMessage(tokenCliente, "Novedades en tu pedido", mensajeCliente, (byte)NotificacionFirebase.Cliente);
+
+                        if (!string.IsNullOrEmpty(tokenConductor))
+                            await enviarMensaje.SendMessage(tokenConductor, "Pedido Fastrun", mensajeConductor, (byte)NotificacionFirebase.Conductor);
+
                         respuesta.Exito = true;
                         respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
                     }

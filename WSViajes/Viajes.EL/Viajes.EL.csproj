@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Enum\Errores.cs" />
+    <Compile Include="Enum\EstatusPedido.cs" />
     <Compile Include="Enum\NotificacionFirebase.cs" />
     <Compile Include="Extras\E_ACCESO_PERSONA.cs" />
     <Compile Include="Extras\E_BANNER.cs" />
