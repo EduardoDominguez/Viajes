@@ -13,6 +13,7 @@ import { RepartidorAddComponent } from './components/repartidor-add/repartidor-a
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 import { PedidosComponent } from './components/pedidos/pedidos.component';
+import { PedidosViewIdComponent } from './components/pedidos-view-id/pedidos-view-id.component';
 
 
 const routesChild: Routes = [
@@ -31,7 +32,10 @@ const routesChild: Routes = [
       { path: 'administracion/productos/:id', component: ProductoAddComponent,  canActivate: [AuthGuardService] },
       { path: 'administracion/repartidor', component: RepartidorComponent, canActivate: [AuthGuardService]},
       { path: 'administracion/repartidor/agregar', component: RepartidorAddComponent, canActivate: [AuthGuardService] },
+      { path: 'administracion/repartidor/:id', component: RepartidorAddComponent, canActivate: [AuthGuardService]},
       { path: 'pedidos/consulta', component: PedidosComponent, canActivate: [AuthGuardService] },
+      { path: 'pedidos/:id', component: PedidosViewIdComponent,  canActivate: [AuthGuardService] },
+
       { path: 'no-encontrado', component: NotfoundComponent },
       { path: '**', redirectTo: 'no-encontrado' },
     ]

@@ -35,6 +35,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PedidosComponent } from './components/pedidos/pedidos.component';
 import { ProductoExtrasModalAeComponent } from './components/producto-extras-modal-ae/producto-extras-modal-ae.component';
+import { PedidosViewIdComponent } from './components/pedidos-view-id/pedidos-view-id.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ProductoExtrasModalAeComponent } from './components/producto-extras-mod
     RepartidorComponent,
     RepartidorAddComponent,
     PedidosComponent,
-    ProductoExtrasModalAeComponent,],
+    ProductoExtrasModalAeComponent,
+    PedidosViewIdComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,

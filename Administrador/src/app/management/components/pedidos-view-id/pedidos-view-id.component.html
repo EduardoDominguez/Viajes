@@ -1,0 +1,170 @@
+<div class="container-fluid">
+  <div class="card  mat-elevation-z4">
+    <div class="card-header primary-color text-white ">
+      Detalles del viaje
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" novalidate>
+        <div class="row">
+          <mat-card class="col-12">
+            <mat-card-header>
+
+              <!-- <div mat-card-avatar class="example-header-image"></div> -->
+              <mat-card-title>Estado actual -> <span
+                  [ngClass]="{'text-danger': pedidoConsultado?.Estatus?.IdEstatus == '7', 'text-success': pedidoConsultado?.Estatus?.IdEstatus == '5', 'text-info': pedidoConsultado?.Estatus?.IdEstatus != 5 && pedidoConsultado?.Estatus?.IdEstatus != 7 }">
+                  {{pedidoConsultado?.Estatus?.Nombre}} </span></mat-card-title>
+              <mat-card-subtitle>Folio pedido {{pedidoConsultado?.Folio}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>
+                <button mat-icon-button aria-label="Calendario pedido">
+                  <mat-icon>calendar_today</mat-icon>
+                </button>
+                <b>Fecha pedido: </b> {{fechaHoraPedido |  date:'medium'}}
+              </p>
+              <!-- <p *ngIf="fechaHoraEntrega">
+                <button mat-icon-button aria-label="Calendario entrega">
+                  <mat-icon>calendar_today</mat-icon>
+                </button>
+                <b>Fecha entrega: </b> {{fechaHoraEntrega |  date:'medium'}}
+              </p> -->
+              <p>
+                <button mat-icon-button aria-label="Observaciones">
+                  <mat-icon>fact_check</mat-icon>
+                </button>
+                <b>Observaciones: </b> {{pedidoConsultado?.Observaciones}}
+              </p>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="col-md-6 col-sm-12">
+            <mat-card-header>
+              <img mat-card-avatar *ngIf="pedidoConsultado?.PersonaPide?.Fotografia"
+                src="{{pedidoConsultado?.PersonaPide?.Fotografia}}" alt="Imagen cliente">
+              <!-- <div mat-card-avatar class="example-header-image"></div> -->
+              <mat-card-title>{{pedidoConsultado?.PersonaPide?.Nombre}}</mat-card-title>
+              <mat-card-subtitle>Cliente</mat-card-subtitle>
+            </mat-card-header>
+            <!-- <img mat-card-image src="{{pedidoConsultado?.PersonaEntrega?.Fotografia}}" alt="Imagen conductor"> -->
+            <mat-card-content>
+              <p>
+                <button mat-icon-button aria-label="Phone">
+                  <mat-icon>local_phone</mat-icon>
+                </button>
+                <b>Tel&eacute;fono contacto: </b> <a
+                  href="tel:{{pedidoConsultado?.PersonaPide?.Telefono}}">{{pedidoConsultado?.PersonaPide?.Telefono}}</a>
+              </p>
+              <!-- <mat-divider></mat-divider> -->
+              <p>
+                <button mat-icon-button aria-label="Casa">
+                  <mat-icon>house</mat-icon>
+                </button>
+                <b>Direcci&oacute;n de entrega: </b> {{ pedidoConsultado?.DireccionEntrega?.Calle }} <b># Ext: </b>
+                {{ pedidoConsultado?.DireccionEntrega?.NoExt }} <span *ngIf="pedidoConsultado?.DireccionEntrega?.NoInt">
+                  <b># Int: </b> {{ pedidoConsultado?.DireccionEntrega?.NoInt }} </span>
+                <b>Colonia: </b>{{ pedidoConsultado?.DireccionEntrega?.Colonia }}
+              </p>
+              <p>
+                <button mat-icon-button aria-label="Pago">
+                  <mat-icon>payment</mat-icon>
+                </button>
+                <b>Forma de pago: </b>
+                <span *ngIf="pedidoConsultado?.IdMetodoPago == 1">Efectivo.</span>
+                <span *ngIf="pedidoConsultado?.IdMetodoPago == 2">Tarjeta &nbsp; &nbsp; <b>Referencia pago:</b>
+                  {{ pedidoConsultado?.ReferenciaPago }}</span>
+                <span *ngIf="pedidoConsultado?.IdMetodoPago == 3">Paypal.</span>
+
+              </p>
+
+            </mat-card-content>
+            <!-- <mat-card-actions>
+              <button mat-button>LIKE</button>
+              <button mat-button>SHARE</button>
+            </mat-card-actions> -->
+          </mat-card>
+
+          <mat-card class="col-md-6 col-sm-12 text-center" *ngIf="!pedidoConsultado?.PersonaEntrega">
+            <mat-card-title class="text-warning">A&Uacute;N NO SE HA ASIGNA REPARTIDOR</mat-card-title>
+          </mat-card>
+          <mat-card class="col-md-6 col-sm-12" *ngIf="pedidoConsultado?.PersonaEntrega">
+            <mat-card-header>
+              <img mat-card-avatar *ngIf="pedidoConsultado?.PersonaEntrega?.Fotografia"
+                src="{{pedidoConsultado?.PersonaEntrega?.Fotografia}}" alt="Imagen conductor">
+              <!-- <div mat-card-avatar class="example-header-image"></div> -->
+              <mat-card-title>{{pedidoConsultado?.PersonaEntrega?.Nombre}}</mat-card-title>
+              <mat-card-subtitle>Conductor</mat-card-subtitle>
+            </mat-card-header>
+            <!-- <img mat-card-image src="{{pedidoConsultado?.PersonaEntrega?.Fotografia}}" alt="Imagen conductor"> -->
+            <mat-card-content>
+              <p>
+                <button mat-icon-button aria-label="Phone">
+                  <mat-icon>local_phone</mat-icon>
+                </button>
+                <b>Tel&eacute;fono contacto: </b> <a
+                  href="tel:{{pedidoConsultado?.PersonaEntrega?.Telefono}}">{{pedidoConsultado?.PersonaEntrega?.Telefono}}</a>
+              </p>
+              <p>
+                <button mat-icon-button aria-label="Propina">
+                  <mat-icon>attach_money</mat-icon>
+                </button>
+                <b>Propina: </b> ${{pedidoConsultado?.Propina | thousandsPipe}}
+              </p>
+            </mat-card-content>
+            <!-- <mat-card-actions>
+              <button mat-button>LIKE</button>
+              <button mat-button>SHARE</button>
+            </mat-card-actions> -->
+          </mat-card>
+
+          <mat-card *ngFor="let detalle of pedidoConsultado.Detalle" class="col-12">
+            <mat-card-header>
+              <img mat-card-avatar *ngIf="detalle.Local.Fotografia" src="{{detalle.Local.Fotografia}}"
+                alt="Imagen local">
+              <!-- <div mat-card-avatar class="example-header-image"></div> -->
+              <mat-card-title>{{detalle.Local.Nombre}}</mat-card-title>
+              <mat-card-subtitle>Comercio</mat-card-subtitle>
+            </mat-card-header>
+            <!-- <img mat-card-image src="{{pedidoConsultado?.PersonaEntrega?.Fotografia}}" alt="Imagen conductor"> -->
+            <mat-card-content class="">
+              <h6>Detalle del pedido</h6>
+              <div class="d-flex justify-content-between">
+                <mat-card class="child-container-flex">
+                  <p> <b>Producto: </b> {{detalle.NombreProducto}} ({{detalle.Cantidad}})</p>
+                  <p> <b>Precio: </b> ${{detalle.Precio | thousandsPipe}}</p>
+                  <p> <b>Observaciones: </b> {{detalle.Observaciones}}</p>
+                </mat-card>
+
+                <!-- <mat-divider></mat-divider> -->
+
+                <mat-card class="child-container-flex" *ngIf="detalle.Extras.length > 0">
+                  <h6>Extras</h6>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let extra of detalle.Extras">
+                        <td>{{extra.Nombre}}</td>
+                        <td>${{extra.Precio | thousandsPipe}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </mat-card>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+          <div class="form-group col">
+            <button type="button" mat-raised-button class="btn-block primary-color" (click)="goBack()"
+              color="primary">Regresar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!--Fin panel card-body-->
+  </div>
+</div>

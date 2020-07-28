@@ -7,8 +7,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AlertService } from "../../../core/services/alert.service";
 import { StorageService } from 'src/app/core/services/storage.service';
 import { globals } from '../../../core/globals/globals';
-import { ProductoService } from 'src/app/core/services/producto.service';
-import { Producto } from 'src/app/classes/Producto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { Repartidor } from 'src/app/classes/Repartidor';
@@ -21,7 +19,7 @@ import { PersonaService } from 'src/app/core/services/persona.service';
   styleUrls: ['./repartidor.component.scss']
 })
 export class RepartidorComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['acciones', 'estatus', 'Nombre', 'Tipo'];
+  displayedColumns: string[] = ['acciones', 'estatus', 'Fotografia', 'Nombre', 'Tipo'];
   dataSource: any;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -105,10 +103,10 @@ export class RepartidorComponent implements OnInit, OnDestroy {
   /**
    * Consume servicio para consultar repartidores.
    */
-  private getRepartidores(): void {
+  public getRepartidores(): void {
     this._repartidorService.getRepartidores().subscribe(
       respuesta => {
-        // console.log(respuesta)
+        console.log(respuesta)
         if (respuesta.Exito) {
           this.dataSource = new MatTableDataSource<Repartidor>(respuesta.Data);
           this.initOptionsMattable();

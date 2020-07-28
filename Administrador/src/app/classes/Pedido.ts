@@ -22,5 +22,5 @@ export class Pedido {
   public CostoEnvio: number;
   public Detalle: DetallePedido;
   public TipoPedido: number;
-
+  public Propina: number;
 }
