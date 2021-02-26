@@ -7,7 +7,8 @@ export const environment = {
   //BACKEND_BASE_URI : "http://localhost:3030",
   // BACKEND_BASE_URI: 'http://localhost:51156/api/'
   // BACKEND_BASE_URI: 'http://servicios.reddam.online/servicios/WSViajes/api/',
-  BACKEND_BASE_URI: 'https://reddam.mx/servicios/WSViajes/api/'
+  // BACKEND_BASE_URI: 'https://reddam.mx/servicios/WSViajes/api/'
+  BACKEND_BASE_URI: 'http://servicio-fr.reddam.mx/api/'
 };
 
 /*
