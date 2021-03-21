@@ -64,6 +64,7 @@
         <AssociationConnector Association="ViajesModel.FK_M_PEDIDO_CTL_ESTATUS_FACTURA" />
         <AssociationConnector Association="ViajesModel.FK_RECHAZO_CTL_PERSONA" />
         <AssociationConnector Association="ViajesModel.FK_RECHAZO_M_PEDIDO" />
+        <AssociationConnector Association="ViajesModel.FK_CTL_PERSONA_CTL_LOCAL" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

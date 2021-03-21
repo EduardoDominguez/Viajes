@@ -100,6 +100,28 @@ export class PersonaService {
   }
 
   /**
+ * Comsume Web service para consultar repartidores
+ * @param pSoloActivos - Indica si consultar solo activos o no
+ * * @param pTiposUsuarios - Indica el tipo de usuarios a consultar separados por coma
+ * @returns Observable de tipo Respuesta
+ */
+   getPersonas(pSoloActivos?: boolean, pTiposUsuarios?: string): Observable<Respuesta> {
+    let params = new HttpParams();
+    if (pSoloActivos != undefined)
+      params = params.append('soloActivos', ((pSoloActivos == true) ? 1 : 0).toString());
+    if (pTiposUsuarios != undefined)
+      params = params.append('tipoUsuario', pTiposUsuarios);
+
+    this.globales.HTTP_OPTIONS.params = params;
+
+    return this.http.get<Respuesta>(`${this.basePath}Consulta`, this.globales.HTTP_OPTIONS).pipe(
+      //tap(() => console.log("Petición HTTP para consultar nodos ejecutada")),
+      map(res => res as Respuesta),
+      //catchError(this.handleError<Sesion>('login', new Sesion()))
+    );
+  }
+
+  /**
   * Comsume Web service para agregar repartidor
   * @param pRepartidor - Objeto de tipo  Producto con datos a actualizar.
   * @returns Observable de tipo Respuesta

@@ -78,18 +78,27 @@ namespace Viajes.DAL.Persona
         /// Método para consultar personas
         /// <param name="pIdPersona">Id del producto a consultar</param>
         /// <param name="pSoloActivos">Indica si deben de consultarse solo personas activas</param>
+        /// <param name="pIdsTipoUsuario">Identificadores de idtipopersona separados por coma</param>
         /// <returns> Objeto tipo List<E_PERSONA> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_PERSONA>> Consultar(int? pIdPersona = null, byte? pSoloActivos = null)
+        public async Task<List<E_PERSONA>> Consultar(int? pIdPersona = null, byte? pSoloActivos = null, string pIdsTipoUsuario = null)
         {
             try
             {
                 using (context = new ViajesEntities())
                 {
+                    byte[] idsTipoUsuario;
+
+                    if (!string.IsNullOrEmpty(pIdsTipoUsuario))
+                        idsTipoUsuario  = Array.ConvertAll(pIdsTipoUsuario.Split(','), byte.Parse);
+
                     var personas = await (from p in context.CTL_PERSONA
-                                     where
-                                      (pIdPersona == null || (pIdPersona != null && p.id_persona == pIdPersona))
+                                          join acceso in context.CTL_ACCESO_PERSONA on p.id_persona equals acceso.id_persona
+
+                                          where
+                                           (pIdPersona == null || (pIdPersona != null && p.id_persona == pIdPersona))
                                       && (pSoloActivos == null || (pSoloActivos != null && p.estatus == pSoloActivos))
+                                      && (pIdsTipoUsuario == null || (pIdsTipoUsuario != null && pIdsTipoUsuario.Contains(acceso.tipo_usuario.ToString())))
                                      select p).ToListAsync<CTL_PERSONA>();
 
                     return await procesaPersonas(personas);

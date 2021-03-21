@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Viajes.BL.Persona
 {
-    public class PersonaNegocio : ICRUD<E_PERSONA>
+    public class PersonaNegocio
     {
         /// <summary>
         /// Método para consultar agregar persona
@@ -50,14 +50,16 @@ namespace Viajes.BL.Persona
         /// <summary>
         /// Método para consultar personas
         /// <param name="SoloActivos">Consultar solo activos o no</param>
+        /// <param name="idPersona">Identificador de la persona a consultar</param>
+        /// <param name="idsTipoUsuario">Identificadores de idtipopersona separados por coma</param>
         /// <returns> Objeto tipo E_PERSONA con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_PERSONA>> ConsultarTodo(byte? SoloActivos = null, int? idPersona = null)
+        public async Task<List<E_PERSONA>> ConsultarTodo(byte? SoloActivos = null, int? idPersona = null, string idsTipoUsuario = null)
         {
             try
             {
                 PersonaOperaciones pDatos = new PersonaOperaciones();
-                return await pDatos.Consultar(pSoloActivos: SoloActivos);
+                return await pDatos.Consultar(pSoloActivos: SoloActivos, pIdPersona: idPersona, pIdsTipoUsuario: idsTipoUsuario);
             }
             catch (Exception ex)
             {

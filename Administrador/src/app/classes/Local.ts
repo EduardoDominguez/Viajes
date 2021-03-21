@@ -1,5 +1,6 @@
 import { Costo } from './Costo';
 import { TipoLocal } from './TipoLocal';
+import { User } from './User';
 
 export class Local {
     IdLocal: number;
@@ -17,6 +18,7 @@ export class Local {
     IdPersonaAlta: number;
     Costo: Costo;
     TipoLocal: TipoLocal;
+    IdPersonaResponsable: number;
 
     constructor(){
         this.Costo = new Costo();

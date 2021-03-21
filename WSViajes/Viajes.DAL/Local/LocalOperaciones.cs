@@ -31,7 +31,7 @@ namespace Viajes.DAL.Local
 
                     context.SP_LOCAL(pLocal.IdLocal, pLocal.Nombre, pLocal.Referencias, pLocal.Latitud, pLocal.Longitud, 
                                          pLocal.Fotografia, pLocal.Calle, pLocal.Colonia, pLocal.NoExt, pLocal.NoInt, 
-                                         pLocal.Costo.IdCosto, pLocal.TipoLocal.IdTipoLocal, pLocal.IdPersonaAlta, pLocal.Estatus, "I",
+                                         pLocal.Costo.IdCosto, pLocal.TipoLocal.IdTipoLocal, pLocal.IdPersonaAlta, pLocal.IdPersonaResponsable, pLocal.Estatus, "I",
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -62,7 +62,7 @@ namespace Viajes.DAL.Local
 
                     context.SP_LOCAL(pLocal.IdLocal, pLocal.Nombre, pLocal.Referencias, pLocal.Latitud, pLocal.Longitud,
                                          pLocal.Fotografia, pLocal.Calle, pLocal.Colonia, pLocal.NoExt, pLocal.NoInt,
-                                         pLocal.Costo.IdCosto, pLocal.TipoLocal.IdTipoLocal, pLocal.IdPersonaModifica, pLocal.Estatus, "U",
+                                         pLocal.Costo.IdCosto, pLocal.TipoLocal.IdTipoLocal, pLocal.IdPersonaModifica, pLocal.IdPersonaResponsable, pLocal.Estatus, "U",
                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -91,6 +91,33 @@ namespace Viajes.DAL.Local
                     var locales = await (from s in context.CTL_LOCAL
                                          where
                                          s.id_tipo_local == pIdTipoLocal
+                                         select s).ToListAsync<CTL_LOCAL>();
+
+                    return await procesaLocales(locales);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// Método para consultar locales por tipo local
+        /// <param name="pIdPersona">Id de persona</param>
+        /// <returns> Objeto tipo E_LOCAL con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<List<E_LOCAL>> ConsultarByIdPersonaResponsable(int pIdPersona)
+        {
+            try
+            {
+                var listaLocales = new List<E_LOCAL>();
+                using (context = new ViajesEntities())
+                {
+                    var locales = await (from s in context.CTL_LOCAL
+                                         where
+                                         s.id_persona_responsable == pIdPersona
                                          select s).ToListAsync<CTL_LOCAL>();
 
                     return await procesaLocales(locales);
@@ -190,6 +217,7 @@ namespace Viajes.DAL.Local
                     NoExt = local.no_ext,
                     NoInt = local.no_int,
                     Estatus = local.estatus,
+                    IdPersonaResponsable = local.id_persona_responsable,
                     Costo = costo.FirstOrDefault(),
                     TipoLocal = tipoLocal.FirstOrDefault()
                 });

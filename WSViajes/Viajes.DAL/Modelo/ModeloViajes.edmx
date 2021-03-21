@@ -120,6 +120,7 @@
           <Property Name="id_persona_mod" Type="int" />
           <Property Name="fecha_mod" Type="datetime" />
           <Property Name="id_costo" Type="int" Nullable="false" />
+          <Property Name="id_persona_responsable" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CTL_METODO_PAGO">
           <Key>
@@ -479,6 +480,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CTL_PERSONA_CTL_LOCAL">
+          <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
+          <End Role="CTL_LOCAL" Type="Self.CTL_LOCAL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_LOCAL">
+              <PropertyRef Name="id_persona_responsable" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CTL_PRODUCTO_CTL_LOCAL">
           <End Role="CTL_LOCAL" Type="Self.CTL_LOCAL" Multiplicity="1" />
           <End Role="CTL_PRODUCTO" Type="Self.CTL_PRODUCTO" Multiplicity="*" />
@@ -804,6 +817,7 @@
           <Parameter Name="PIN_ID_COSTO" Type="int" Mode="In" />
           <Parameter Name="PIN_ID_TIPO_LOCAL" Type="int" Mode="In" />
           <Parameter Name="PIN_ID_PERSONA_MOVIMIENTO" Type="int" Mode="In" />
+          <Parameter Name="PIN_ID_PERSONA_RESPONSABLE" Type="int" Mode="In" />
           <Parameter Name="PIN_ESTATUS" Type="tinyint" Mode="In" />
           <Parameter Name="PIN_TIPO_MOVIMIENTO" Type="char" Mode="In" />
           <Parameter Name="RET_NUMEROERROR" Type="int" Mode="InOut" />
@@ -950,6 +964,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_CTL_LOCAL_CTL_TIPO_LOCAL" Association="Self.FK_CTL_LOCAL_CTL_TIPO_LOCAL">
             <End Role="CTL_TIPO_LOCAL" EntitySet="CTL_TIPO_LOCAL" />
+            <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTL_PERSONA_CTL_LOCAL" Association="Self.FK_CTL_PERSONA_CTL_LOCAL">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
           </AssociationSet>
           <AssociationSet Name="FK_CTL_PRODUCTO_CTL_LOCAL" Association="Self.FK_CTL_PRODUCTO_CTL_LOCAL">
@@ -1167,6 +1185,8 @@
           <NavigationProperty Name="CTL_TIPO_LOCAL" Relationship="Self.FK_CTL_LOCAL_CTL_TIPO_LOCAL" FromRole="CTL_LOCAL" ToRole="CTL_TIPO_LOCAL" />
           <NavigationProperty Name="CTL_PRODUCTO" Relationship="Self.FK_CTL_PRODUCTO_CTL_LOCAL" FromRole="CTL_LOCAL" ToRole="CTL_PRODUCTO" />
           <NavigationProperty Name="M_DETALLE_PEDIDO" Relationship="Self.FK_M_DETALLE_PEDIDO_CTL_LOCAL" FromRole="CTL_LOCAL" ToRole="M_DETALLE_PEDIDO" />
+          <Property Name="id_persona_responsable" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CTL_PERSONA" Relationship="ViajesModel.FK_CTL_PERSONA_CTL_LOCAL" FromRole="CTL_LOCAL" ToRole="CTL_PERSONA" />
         </EntityType>
         <EntityType Name="CTL_METODO_PAGO">
           <Key>
@@ -1210,6 +1230,7 @@
           <NavigationProperty Name="M_PEDIDO1" Relationship="Self.FK_M_PEDIDO_CTL_PERSONA1" FromRole="CTL_PERSONA" ToRole="M_PEDIDO" />
           <NavigationProperty Name="R_PERSONA_PRODUCTO_FAVORITO" Relationship="Self.FK_R_PERSONA_PRODUCTO_FAVORITO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="R_PERSONA_PRODUCTO_FAVORITO" />
           <NavigationProperty Name="TBL_RECHAZO_PEDIDO" Relationship="ViajesModel.FK_RECHAZO_CTL_PERSONA" FromRole="CTL_PERSONA" ToRole="TBL_RECHAZO_PEDIDO" />
+          <NavigationProperty Name="CTL_LOCAL" Relationship="ViajesModel.FK_CTL_PERSONA_CTL_LOCAL" FromRole="CTL_PERSONA" ToRole="CTL_LOCAL" />
         </EntityType>
         <EntityType Name="CTL_PREGUNTA_SERVICIO">
           <Key>
@@ -1994,6 +2015,7 @@
             <Parameter Name="PIN_ID_COSTO" Mode="In" Type="Int32" />
             <Parameter Name="PIN_ID_TIPO_LOCAL" Mode="In" Type="Int32" />
             <Parameter Name="PIN_ID_PERSONA_MOVIMIENTO" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ID_PERSONA_RESPONSABLE" Mode="In" Type="Int32" />
             <Parameter Name="PIN_ESTATUS" Mode="In" Type="Byte" />
             <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
             <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
@@ -2085,6 +2107,10 @@
             <End Role="M_PEDIDO" EntitySet="M_PEDIDO" />
             <End Role="TBL_RECHAZO_PEDIDO" EntitySet="TBL_RECHAZO_PEDIDO" />
           </AssociationSet>
+          <AssociationSet Name="FK_CTL_PERSONA_CTL_LOCAL" Association="ViajesModel.FK_CTL_PERSONA_CTL_LOCAL">
+            <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
+            <End Role="CTL_LOCAL" EntitySet="CTL_LOCAL" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2151,6 +2177,18 @@
             </Principal>
             <Dependent Role="TBL_RECHAZO_PEDIDO">
               <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTL_PERSONA_CTL_LOCAL">
+          <End Type="ViajesModel.CTL_PERSONA" Role="CTL_PERSONA" Multiplicity="1" />
+          <End Type="ViajesModel.CTL_LOCAL" Role="CTL_LOCAL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CTL_PERSONA">
+              <PropertyRef Name="id_persona" />
+            </Principal>
+            <Dependent Role="CTL_LOCAL">
+              <PropertyRef Name="id_persona_responsable" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2254,6 +2292,7 @@
           <EntitySetMapping Name="CTL_LOCAL">
             <EntityTypeMapping TypeName="ViajesModel.CTL_LOCAL">
               <MappingFragment StoreEntitySet="CTL_LOCAL">
+                <ScalarProperty Name="id_persona_responsable" ColumnName="id_persona_responsable" />
                 <ScalarProperty Name="id_local" ColumnName="id_local" />
                 <ScalarProperty Name="id_tipo_local" ColumnName="id_tipo_local" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />

@@ -9,7 +9,7 @@
                     <div class="form-group col-sm-12 col-md-6">
                         <mat-form-field>
                             <mat-label>Tipo local</mat-label>
-                            <mat-select required [formControlName]="'cmbTipoLocal'" [disableControl]="isDisabled">
+                            <mat-select required [formControlName]="'cmbTipoLocal'">
                                 <mat-option *ngFor="let tipoLocal of comboTipoLocal" [value]="tipoLocal.IdTipoLocal">
                                     {{tipoLocal.Nombre}}</mat-option>
                             </mat-select>
@@ -21,7 +21,7 @@
                     <div class="form-group col-sm-12 col-md-6">
                         <mat-form-field>
                             <mat-label>Categor&iacute;a costo local </mat-label>
-                            <mat-select required [formControlName]="'cmbCostoLocal'" [disableControl]="isDisabled">
+                            <mat-select required [formControlName]="'cmbCostoLocal'">
                                 <mat-option *ngFor="let costo of comboCostos"  [value]="costo.IdCosto" >{{costo.Nombre}}
                                 </mat-option>
                             </mat-select>
@@ -49,12 +49,27 @@
                         </mat-form-field>
                     </div>-->
 
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-12 col-md-8">
                         <mat-form-field>
                             <input matInput placeholder="Nombre local" formControlName="frmNombre"
-                                maxlength="150" required [disableControl]="isDisabled">
+                                maxlength="150" required>
                             <mat-error *ngIf="form.get('frmNombre').hasError('required')">
                                 Ingrese un nombre
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-4">
+                        <mat-form-field>
+                            <mat-label>Responsable local</mat-label>
+                            <mat-select required [formControlName]="'cmbResponsableLocal'">
+                                <mat-option *ngFor="let persona of comboResponsableLocal" [value]="persona.IdPersona">
+                                    <img class="icono-persona" mat-card-avatar *ngIf="persona.Fotografia" src="{{persona.Fotografia}}" alt="Imagen persona">
+                                    <span>{{persona.Nombre}}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('cmbResponsableLocal').hasError('required')">
+                                Ingrese un valor
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -80,7 +95,7 @@
 
                     <div class="form-group col-sm-12 col-md-6">
                         <mat-form-field>
-                            <input matInput placeholder="Calle" required maxlength="250" [disableControl]="isDisabled" formControlName="frmCalle">
+                            <input matInput placeholder="Calle" required maxlength="250" formControlName="frmCalle">
                             <mat-error *ngIf="form.get('frmCalle').hasError('required')">
                                 Ingrese una calle
                             </mat-error>
@@ -89,7 +104,7 @@
 
                     <div class="form-group col-sm-12 col-md-6">
                         <mat-form-field>
-                            <input matInput placeholder="Colonia" required maxlength="400" [disableControl]="isDisabled" formControlName="frmColonia">
+                            <input matInput placeholder="Colonia" required maxlength="400" formControlName="frmColonia">
                             <mat-error *ngIf="form.get('frmColonia').hasError('required')">
                                 Ingrese una colonia
                             </mat-error>
@@ -98,7 +113,7 @@
 
                     <div class="form-group col-sm-12 col-md-6">
                         <mat-form-field>
-                            <input matInput placeholder="N&uacute;mero exterior" required maxlength="10" [disableControl]="isDisabled"
+                            <input matInput placeholder="N&uacute;mero exterior" required maxlength="10" 
                                 formControlName="frmNoExt">
                             <mat-error *ngIf="form.get('frmNoExt').hasError('required')">
                                 Ingrese el n&uacute;mero exterior
@@ -108,7 +123,7 @@
 
                     <div class="form-group col-sm-12 col-md-6">
                         <mat-form-field>
-                            <input matInput placeholder="N&uacute;mero interior" maxlength="50" [disableControl]="isDisabled"
+                            <input matInput placeholder="N&uacute;mero interior" maxlength="50"
                                 formControlName="frmNoInt">
                         </mat-form-field>
                     </div>
@@ -121,8 +136,8 @@
 
                     <div class="form-group col-sm-12">
                         <mat-form-field>
-                            <textarea matInput rows="5" placeholder="Referencias" [disableControl]="isDisabled" formControlName="frmReferencias"
-                                 maxlength="500" required [disableControl]="isDisabled">
+                            <textarea matInput rows="5" placeholder="Referencias" formControlName="frmReferencias"
+                                 maxlength="500" required>
                                 </textarea>
                             <mat-error *ngIf="form.get('frmReferencias').hasError('required')">
                                 Ingrese referencias del local

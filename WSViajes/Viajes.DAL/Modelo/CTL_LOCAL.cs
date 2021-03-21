@@ -38,6 +38,7 @@ namespace Viajes.DAL.Modelo
         public Nullable<int> id_persona_mod { get; set; }
         public Nullable<System.DateTime> fecha_mod { get; set; }
         public int id_costo { get; set; }
+        public int id_persona_responsable { get; set; }
     
         public virtual CTL_COSTO CTL_COSTO { get; set; }
         public virtual CTL_TIPO_LOCAL CTL_TIPO_LOCAL { get; set; }
@@ -45,5 +46,6 @@ namespace Viajes.DAL.Modelo
         public virtual ICollection<CTL_PRODUCTO> CTL_PRODUCTO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_DETALLE_PEDIDO> M_DETALLE_PEDIDO { get; set; }
+        public virtual CTL_PERSONA CTL_PERSONA { get; set; }
     }
 }

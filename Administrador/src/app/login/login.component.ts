@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
 
     this.loading = true;
-    let login = new LoginRequest({ Email: this.usuario, Password: this.password, TipoUsuario: 1 });
+    let login = new LoginRequest({ Email: this.usuario, Password: this.password, TipoUsuario: 3 });
     this.objSuscribe = this.authenticationService.login(login).subscribe(
       data => {
         // console.log(data)

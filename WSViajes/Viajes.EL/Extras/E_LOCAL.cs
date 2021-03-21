@@ -15,6 +15,7 @@
         public byte Estatus { get; set; }
         public int IdPersonaAlta { get; set; }
         public int IdPersonaModifica { get; set; }
+        public int IdPersonaResponsable { get; set; }
         public E_COSTO Costo { get; set; }
         public E_TIPO_LOCAL TipoLocal { get; set; }
 

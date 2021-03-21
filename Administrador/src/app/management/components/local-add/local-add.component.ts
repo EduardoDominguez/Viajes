@@ -13,7 +13,9 @@ import { Local } from 'src/app/classes/Local';
 import { LocalService } from 'src/app/core/services/local.service';
 import { TipoLocal } from 'src/app/classes/TipoLocal';
 import { Costo } from 'src/app/classes/Costo';
+import { User } from 'src/app/classes/User';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+import { PersonaService } from 'src/app/core/services/persona.service';
 
 @AutoUnsubscribe()
 @Component({
@@ -27,6 +29,8 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
   comboTipoLocal: TipoLocal[];
 
   comboCostos: Costo[];
+
+  comboResponsableLocal: User[];
 
   costoSelectedValue: Costo;
   tipoLocalSelectedValue: TipoLocal;
@@ -72,6 +76,7 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
     public globales: globals,
     private fb: FormBuilder,
     private _localService: LocalService,
+    private _personaService: PersonaService,
     private _mapsAPILoader: MapsAPILoader,
     private _ngZone: NgZone) {
     this.procesaRutas();
@@ -89,43 +94,47 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form = this.fb.group({
       file: [
         //{ value: undefined, disabled: this.isDisabled },
-        undefined,
+        {value: undefined, disabled: this.isDisabled},
         [Validators.required, FileValidator.maxContentSize(this.maxSize),],
 
       ],
       frmNombre: [
-        null,
+        {value: null, disabled: this.isDisabled},
         [Validators.required, Validators.maxLength(250)]
       ],
       frmCalle: [
-        null,
+        {value: null, disabled: this.isDisabled},
         [Validators.required, Validators.maxLength(400)]
       ],
       frmNoExt: [
-        null,
+        {value: null, disabled: this.isDisabled},
         [Validators.required, Validators.maxLength(10)]
       ],
       frmNoInt: [
-        null,
+        {value: null, disabled: this.isDisabled},
         [Validators.maxLength(50), Validators.nullValidator]
       ],
       frmColonia: [
-        null,
+        {value: null, disabled: this.isDisabled},
         [Validators.required, Validators.maxLength(400)]
       ],
       frmReferencias:
         [
-          null,
+          {value: null, disabled: this.isDisabled},
           [Validators.required, Validators.maxLength(500)]
         ],
       cmbTipoLocal: [
-        '',
+        {value: '', disabled: this.isDisabled},
         [Validators.required]
       ],
       cmbCostoLocal: [
-        '',
+        {value: '', disabled: this.isDisabled},
         [Validators.required]
       ],
+      cmbResponsableLocal: [
+        {value: '', disabled: this.isDisabled},
+        [Validators.required]
+      ]
     });
 
     this.validaPermisosPantalla();
@@ -134,6 +143,7 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initialLoadMap();
       this.getTiposLocal();
       this.getCostos();
+      this.getPersonasLocal();
     });
   }
 
@@ -189,6 +199,7 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.controls['frmColonia'].setValue(pLocal.Colonia);
     this.form.controls['frmNoExt'].setValue(pLocal.NoExt);
     this.form.controls['frmNoInt'].setValue(pLocal.NoInt);
+    this.form.controls['cmbResponsableLocal'].setValue(pLocal.IdPersonaResponsable);
     this.latitude = pLocal.Latitud;
     this.longitude = pLocal.Longitud
     this.getAddress(this.latitude, this.longitude);
@@ -273,6 +284,8 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
         request.NoInt = this.form.controls['frmNoInt'].value;
         request.Latitud = this.latitude;
         request.Longitud = this.longitude;
+        request.IdPersonaResponsable = this.form.controls['cmbResponsableLocal'].value;
+        
         //1;//this._storageService.getCurrentSession().user.idpersona;
 
 
@@ -397,6 +410,26 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
         //console.log(respuesta);
         if (respuesta.Exito) {
           this.comboCostos = respuesta.Data;
+          /*if (pCosto)
+            this.comboCostos = pCosto;*/
+        } else
+          this._alertService.showWarning(respuesta.Mensaje);
+      }, error => {
+        this._alertService.showError(error.message);
+      }, () => {
+
+      });
+  }
+
+  /**
+   * Servicio para consultar usuarios posibles para responsables de local.
+   */
+  private getPersonasLocal():void{
+    this._personaService.getPersonas(true, "1,4,5").subscribe(
+      respuesta => {
+        // console.log(respuesta);
+        if (respuesta.Exito) {
+          this.comboResponsableLocal = respuesta.Data;
           /*if (pCosto)
             this.comboCostos = pCosto;*/
         } else

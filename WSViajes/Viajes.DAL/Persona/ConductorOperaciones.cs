@@ -160,7 +160,8 @@ namespace Viajes.DAL.Persona
 
         /// <summary>
         /// Método para consultar conductores
-        /// <param name="pIdPersona">Id del pedido a consultar</param>
+        /// <param name="SoloActivos">Consultar solo repartidores activos o no</param>
+        /// <param name="pIdPersona">Id del conductor  a consultar</param>
         /// <returns> Objeto tipo List<E_PERSONA> con los datos solicitados </returns>  
         /// </summary>
         public async Task<List<E_PERSONA>> Consultar(byte? SoloActivos = null, int ? pIdPersona = null)

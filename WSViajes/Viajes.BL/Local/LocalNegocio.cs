@@ -83,6 +83,26 @@ namespace Viajes.BL.Local
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Método para consultar locales por id persona responsable
+        /// <param name="idPersona">Identificador de la persona</param>
+        /// <returns> Objeto tipo E_LOCAL con los datos solicitados </returns>  
+        /// </summary>
+        public async Task<E_LOCAL> ConsultarByIdPersonaResponsable(int idPersona)
+        {
+            try
+            {
+                LocalOperaciones pDatos = new LocalOperaciones();
+                var locales = await pDatos.ConsultarByIdPersonaResponsable(idPersona);
+                return locales.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        /// <summary>
         /// <summary>
         /// Método para cambiar el estatus de locales
         /// <param name="pEntidad">Objeto con datos a actualizar</param>

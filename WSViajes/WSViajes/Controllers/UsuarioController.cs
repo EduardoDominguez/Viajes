@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using Viajes.BL.Login;
 using Viajes.BL.Persona;
+using Viajes.BL.Local;
 using Viajes.EL.Extras;
 using WSViajes.Comunes;
 using WSViajes.Exceptions;
@@ -27,7 +28,7 @@ namespace WSViajes.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public HttpResponseMessage Login([FromBody] LoginRequest pLoginRequest)
+        public async Task<HttpResponseMessage> Login([FromBody] LoginRequest pLoginRequest)
         {
             var respuesta = new LoginResponse { };
             var strMetodo = "WSViajes - Login ";
@@ -41,6 +42,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento  <<Email>> no puede estar vacío.";
                 else if (String.IsNullOrEmpty(pLoginRequest.Password))
                     respuesta.Mensaje = "Debe especificar el <<Password>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pLoginRequest.TipoUsuario.ToString()))
+                    respuesta.Mensaje = "Debe especificar el <<TipoUsuario>> no puede estar vacío.";
                 else
                 {
                     var objAcceso = new E_ACCESO_PERSONA { Email = pLoginRequest.Email, Password = pLoginRequest.Password, TipoUsuario = pLoginRequest.TipoUsuario };
@@ -52,6 +55,12 @@ namespace WSViajes.Controllers
                         respuesta.Exito = true;
                         respuesta.Persona = respuestaLogin.PERSONA;
                         respuesta.Token = CreateToken(respuesta.Persona);
+                        if (pLoginRequest.TipoUsuario == 4)
+                        {
+                            var local = await new LocalNegocio().ConsultarByIdPersonaResponsable(respuestaLogin.PERSONA.IdPersona);
+                            respuesta.IdLocal = local.IdLocal;
+                        }
+                            
                     }
                     else
                     {

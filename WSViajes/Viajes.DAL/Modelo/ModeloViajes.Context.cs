@@ -196,7 +196,7 @@ namespace Viajes.DAL.Modelo
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
         }
     
-        public virtual int SP_LOCAL(Nullable<int> pIN_ID_LOCAL, string pIN_NOMBRE, string pIN_REFERENCIAS, Nullable<decimal> pIN_LATITUD, Nullable<decimal> pIN_LONGITUD, string pIN_FOTOGRAFIA, string pIN_CALLE, string pIN_COLONIA, string pIN_NO_EXT, string pIN_NO_INT, Nullable<int> pIN_ID_COSTO, Nullable<int> pIN_ID_TIPO_LOCAL, Nullable<int> pIN_ID_PERSONA_MOVIMIENTO, Nullable<byte> pIN_ESTATUS, string pIN_TIPO_MOVIMIENTO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
+        public virtual int SP_LOCAL(Nullable<int> pIN_ID_LOCAL, string pIN_NOMBRE, string pIN_REFERENCIAS, Nullable<decimal> pIN_LATITUD, Nullable<decimal> pIN_LONGITUD, string pIN_FOTOGRAFIA, string pIN_CALLE, string pIN_COLONIA, string pIN_NO_EXT, string pIN_NO_INT, Nullable<int> pIN_ID_COSTO, Nullable<int> pIN_ID_TIPO_LOCAL, Nullable<int> pIN_ID_PERSONA_MOVIMIENTO, Nullable<int> pIN_ID_PERSONA_RESPONSABLE, Nullable<byte> pIN_ESTATUS, string pIN_TIPO_MOVIMIENTO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
         {
             var pIN_ID_LOCALParameter = pIN_ID_LOCAL.HasValue ?
                 new ObjectParameter("PIN_ID_LOCAL", pIN_ID_LOCAL) :
@@ -250,6 +250,10 @@ namespace Viajes.DAL.Modelo
                 new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", pIN_ID_PERSONA_MOVIMIENTO) :
                 new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", typeof(int));
     
+            var pIN_ID_PERSONA_RESPONSABLEParameter = pIN_ID_PERSONA_RESPONSABLE.HasValue ?
+                new ObjectParameter("PIN_ID_PERSONA_RESPONSABLE", pIN_ID_PERSONA_RESPONSABLE) :
+                new ObjectParameter("PIN_ID_PERSONA_RESPONSABLE", typeof(int));
+    
             var pIN_ESTATUSParameter = pIN_ESTATUS.HasValue ?
                 new ObjectParameter("PIN_ESTATUS", pIN_ESTATUS) :
                 new ObjectParameter("PIN_ESTATUS", typeof(byte));
@@ -258,7 +262,7 @@ namespace Viajes.DAL.Modelo
                 new ObjectParameter("PIN_TIPO_MOVIMIENTO", pIN_TIPO_MOVIMIENTO) :
                 new ObjectParameter("PIN_TIPO_MOVIMIENTO", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_LOCAL", pIN_ID_LOCALParameter, pIN_NOMBREParameter, pIN_REFERENCIASParameter, pIN_LATITUDParameter, pIN_LONGITUDParameter, pIN_FOTOGRAFIAParameter, pIN_CALLEParameter, pIN_COLONIAParameter, pIN_NO_EXTParameter, pIN_NO_INTParameter, pIN_ID_COSTOParameter, pIN_ID_TIPO_LOCALParameter, pIN_ID_PERSONA_MOVIMIENTOParameter, pIN_ESTATUSParameter, pIN_TIPO_MOVIMIENTOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_LOCAL", pIN_ID_LOCALParameter, pIN_NOMBREParameter, pIN_REFERENCIASParameter, pIN_LATITUDParameter, pIN_LONGITUDParameter, pIN_FOTOGRAFIAParameter, pIN_CALLEParameter, pIN_COLONIAParameter, pIN_NO_EXTParameter, pIN_NO_INTParameter, pIN_ID_COSTOParameter, pIN_ID_TIPO_LOCALParameter, pIN_ID_PERSONA_MOVIMIENTOParameter, pIN_ID_PERSONA_RESPONSABLEParameter, pIN_ESTATUSParameter, pIN_TIPO_MOVIMIENTOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     
         public virtual int SP_LOGIN(string pIN_EMAIL, string pIN_PASSWORD, Nullable<byte> pIN_TIPO_USUARIO, ObjectParameter rET_ID_PERSONA, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)

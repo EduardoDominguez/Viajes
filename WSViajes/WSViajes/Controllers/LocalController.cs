@@ -58,6 +58,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<Longitud>> no puede estar vacío ni igual a cero.";
                 else if (String.IsNullOrEmpty(pRequest.Local.IdPersonaAlta.ToString()) || pRequest.Local.IdPersonaAlta <= 0)
                     respuesta.Mensaje = "El elemento <<IdPersonaAlta>> no puede estar vacío ni igual o menor a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Local.IdPersonaResponsable.ToString()) || pRequest.Local.IdPersonaResponsable <= 0)
+                    respuesta.Mensaje = "El elemento <<IdPersonaResponsable>> no puede estar vacío ni igual o menor a cero.";
                 else
                 {
 
