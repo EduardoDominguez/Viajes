@@ -106,7 +106,7 @@ export class RepartidorComponent implements OnInit, OnDestroy {
   public getRepartidores(): void {
     this._repartidorService.getRepartidores().subscribe(
       respuesta => {
-        console.log(respuesta)
+        // console.log(respuesta)
         if (respuesta.Exito) {
           this.dataSource = new MatTableDataSource<Repartidor>(respuesta.Data);
           this.initOptionsMattable();

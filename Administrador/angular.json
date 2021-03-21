@@ -121,6 +121,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "plantilla"
+    }
+  },
+  "defaultProject": "plantilla",
+  "cli": {
+    "analytics": "cc4a485c-98b5-47ab-a0b1-7ac3ab0f656a"
+  }
 }

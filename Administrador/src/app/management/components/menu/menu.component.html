@@ -45,14 +45,16 @@
           </li> -->
           <li>
             <a [routerLink]="['administracion/repartidor']" [routerLinkActive]="['router-link-active']"
-              matTooltip="Consulta repartidores" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              [routerLinkActiveOptions]="{exact: true}" matTooltip="Consulta repartidores"
+              [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
               <i class="fas fa-tasks"></i>
               <span>Consulta de repartidores</span>
             </a>
           </li>
           <li>
-            <a [routerLink]="['configuracion/mensaje']" [routerLinkActive]="['router-link-active']"
-              matTooltip="Enviar mensaje al repartidor" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+            <a [routerLink]="['administracion/repartidor/mensaje']" [routerLinkActive]="['router-link-active']"
+              [routerLinkActiveOptions]="{exact: true}" matTooltip="Enviar mensaje al repartidor"
+              [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
               <i class="fas fa-envelope-open-text"></i>
               <span>Mensajes</span>
             </a>
@@ -85,7 +87,7 @@
             </a>
           </li>
           <li>
-            <a [routerLink]="['pedidos/mensaje']" [routerLinkActive]="['router-link-active']"
+            <a [routerLink]="['pedidos/balance']" [routerLinkActive]="['router-link-active']"
               matTooltip="Enviar mensaje al repartidor" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
               <i class="fas fa-balance-scale"></i>
               <span>Balance</span>

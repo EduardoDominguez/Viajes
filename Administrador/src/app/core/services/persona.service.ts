@@ -10,6 +10,7 @@ import { Respuesta } from '../../classes/Respuesta';
 import { Producto } from '../../classes/Producto';
 import { ExtraProductoRequest } from 'src/app/classes/request/ExtraProductoRequest';
 import { Repartidor } from 'src/app/classes/Repartidor';
+import { EnviarNotificacionFirebaseRequest } from 'src/app/classes/request/EnviarNotifiacionFirebaseRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -167,4 +168,17 @@ export class PersonaService {
       map(res => res as Respuesta),
     );
   }
+
+
+  /**
+  * Comsume Web service para enviar una notificación de FIrebase
+  * @param pNotificacion - Objeto de tipo  EnviarNotificacionFirebaseRequest con datos del mensaje.
+  * @returns Observable de tipo Respuesta
+  */
+   enviarNotificacionFirebase(pNotifiacion: EnviarNotificacionFirebaseRequest): Observable<Respuesta> {
+    return this.http.post<Respuesta>(`${environment.BACKEND_BASE_URI}Notificacion/`, pNotifiacion, this.globales.HTTP_OPTIONS).pipe(
+      map(res => res as Respuesta),
+    );
+  }
+
 }

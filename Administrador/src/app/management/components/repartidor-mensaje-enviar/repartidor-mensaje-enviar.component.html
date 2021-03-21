@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span> Enviar mensaje a repartidor </span>
+      <span class="spacer-toolbar"></span>
+      <!-- <button mat-icon-button aria-label="Actualiza grid" (click)="getRepartidores()" matTooltip="Actualiza datos">
+            <mat-icon>refresh</mat-icon>
+        </button>
+      <button mat-icon-button aria-label="Ir atr&aacute;s" (click)="goBack()" matTooltip="Regresar a p&aacute;gina anterior">
+        <mat-icon>arrow_back</mat-icon>
+      </button> -->
+
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="row">
+    <div class="col-12">
+      <div class="mat-elevation-z6 overflow-auto">
+        <form [formGroup]="form" novalidate (ngSubmit)="enviarMensaje()">
+          <mat-form-field>
+            <mat-label>Seleccione repartidor</mat-label>
+            <mat-select required formControlName="cmbRepartidor">
+              <mat-option *ngFor="let repartidor of listaRepartidores" [value]="repartidor.IdPersona">
+                <img class="icono-repartidor" mat-card-avatar *ngIf="repartidor.Fotografia" src="{{repartidor.Fotografia}}" alt="Imagen conductor">
+                <span>{{repartidor.Nombre}}</span>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('cmbRepartidor').hasError('required')">
+              Ingrese un valor
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="form-group">
+            <mat-label>Mensaje a enviar</mat-label>
+            <textarea matInput required autocomplete="off" formControlName="txtMensaje" maxlength="150"></textarea>
+            <mat-error *ngIf="form.get('txtMensaje').hasError('required')">
+              Ingrese un valor
+            </mat-error>
+          </mat-form-field>
+
+          <div class="form-group col">
+            <button mat-raised-button class="btn-block primary-color" type="submit"
+              color="primary">Enviar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
