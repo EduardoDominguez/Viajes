@@ -174,20 +174,42 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento  <<Email>> no puede estar vacío.";
                 else
                 {
-                    var objAcceso = new E_ACCESO_PERSONA { Email = pRequest.Email, Password = "", TipoUsuario = pRequest.TipoUsuario };
-                    var objPersona = new E_PERSONA { Sexo = pRequest.Sexo, Nombre = pRequest.Nombre, Telefono = pRequest.Telefono, Fotografia = pRequest.Fotografia };
-                    var objDatosConductor = new E_CONDUCTOR { Tipo = pRequest.Tipo, Colonia = pRequest.Colonia, Calle = pRequest.Calle, NoExt = pRequest.NoExt, NoInt = pRequest.NoInt,  NoLicencia = pRequest.NoLicencia, NoPlacas = pRequest.NoPlacas};
-                    var respuestaCreaConductor = new ConductorNegocio().Agregar(objPersona, objAcceso, objDatosConductor);
-                    if (respuestaCreaConductor.RET_NUMEROERROR >= 0)
-                    {
-                        //var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
-                        //var personaRecienCreada = await new AccesoNegocio().ConsultaPorCorreo(pInsertaPersonaRequest.Email.Trim());
-                        //new PersonaNegocio().AgregarClienteOpenPay(personaRecienCreada.IdPersona, creaClienteOpen.Id);
-                        new Mailer().Send(pRequest.Email, string.Format("Bienvenido a nuestra plataforma FASTRUN", "Te damos la bienvenida a nuestra plataforma. Ingresa a la siguiente liga para crear tu contraseña y empezar a utilizar tu cuenta: {0}{1} <br/> <b>¡¡Ha empezar a entregar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", ConfigurationManager.AppSettings["URL_PASSWORD_CONDUCTOR"], respuestaCreaConductor.RET_ID_PERSONA), pRequest.Nombre);
-                    }
+                    var extension = Funciones.getExtensionImagenBasae64(pRequest.Fotografia);
+                    var rutaImagen = Funciones.uploadImagen(pRequest.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
+                                                            System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"),
+                                                            string.Empty, extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Personas"), "Assets/Img/Personas/");
 
-                    respuesta.Exito = respuestaCreaConductor.RET_NUMEROERROR >= 0;
-                    respuesta.Mensaje = respuestaCreaConductor.RET_VALORDEVUELTO;
+                    if (!string.IsNullOrEmpty(rutaImagen))
+                    {
+
+                        pRequest.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
+
+                        var clavePassword = Guid.NewGuid().ToString();
+
+                        var objAcceso = new E_ACCESO_PERSONA { Email = pRequest.Email, Password = "", TipoUsuario = pRequest.TipoUsuario, ClavePassword = clavePassword };
+                        var objPersona = new E_PERSONA { Sexo = pRequest.Sexo, Nombre = pRequest.Nombre, Telefono = pRequest.Telefono, Fotografia = pRequest.Fotografia };
+                        var objDatosConductor = new E_CONDUCTOR { Tipo = pRequest.Tipo, Colonia = pRequest.Colonia, Calle = pRequest.Calle, NoExt = pRequest.NoExt, NoInt = pRequest.NoInt, NoLicencia = pRequest.NoLicencia, NoPlacas = pRequest.NoPlacas };
+                        var respuestaCreaConductor = new ConductorNegocio().Agregar(objPersona, objAcceso, objDatosConductor);
+                        if (respuestaCreaConductor.RET_NUMEROERROR >= 0)
+                        {
+                            //var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
+                            //var personaRecienCreada = await new AccesoNegocio().ConsultaPorCorreo(pInsertaPersonaRequest.Email.Trim());
+                            //new PersonaNegocio().AgregarClienteOpenPay(personaRecienCreada.IdPersona, creaClienteOpen.Id);
+                            new Mailer().Send(pRequest.Email, 
+                                "Bienvenido a nuestra plataforma FASTRUN",
+                                    string.Format("Te damos la bienvenida a nuestra plataforma. Ingresa a la siguiente liga para crear tu contraseña y empezar a utilizar tu cuenta: <a href=\"{0}{1}{2}/{3}\">{0}{1}{2}/{3}</a> <br/> <b>¡¡Ha empezar a entregar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", ConfigurationManager.AppSettings["URL_FRONT"], ConfigurationManager.AppSettings["URL_PASSWORD_CONDUCTOR"], respuestaCreaConductor.RET_ID_PERSONA, clavePassword),
+                                pRequest.Nombre);
+                        }
+
+                        respuesta.Exito = respuestaCreaConductor.RET_NUMEROERROR >= 0;
+                        respuesta.Mensaje = respuestaCreaConductor.RET_VALORDEVUELTO;
+
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = -3000;
+                        respuesta.Mensaje = "No se pudo crear la imagen, intente más tarde";
+                    }
 
                 }
 
@@ -495,6 +517,53 @@ namespace WSViajes.Controllers
         [HttpDelete]
         //[AllowAnonymous]
         [Route("{IdPersona}/OpenPay/Tarjeta/{CardId}")]
+
+        [HttpPatch]
+        [Route("Password")]
+        public HttpResponseMessage ActualizaPassword([FromBody] ActualizaPasswordRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - ActualizaPassword ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió ninguna deuda a registrar.";
+                else if (string.IsNullOrEmpty(pRequest.Password.Trim()))
+                    respuesta.Mensaje = "El elemento  <<Password>> no puede estar vacío.";
+                else if (pRequest.IdPersona <= 0)
+                    respuesta.Mensaje = "El elemento <<IdPersona>> debe especificar un usuario.";
+                else
+                {
+                    var resultado = new AccesoNegocio().ActualizaPassword(pRequest.IdPersona, pRequest.Password, pRequest.TokenPassword, pRequest.IdTipoUsuario);
+
+                    if (resultado.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                    }
+
+                    respuesta.Mensaje = resultado.RET_VALORDEVUELTO;
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
         public async Task<HttpResponseMessage> EliminarTarjetaCliente(int IdPersona, string CardId)
         //public HttpResponseMessage EliminarTarjetaCliente(string CustomerId, string CardId)
         {
@@ -536,5 +605,6 @@ namespace WSViajes.Controllers
 
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
+
     }
 }

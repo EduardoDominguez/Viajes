@@ -166,5 +166,38 @@ namespace Viajes.DAL.Persona
                 throw ex;
             }
         }
+
+
+        /// <summary>
+        /// Método para actualizar contraseña
+        /// <param name="pIdPersona">Persona de la contraseña a editar</param>
+        /// <param name="pPassword">Nueva contraseña</param>
+        /// <param name="pTokenPassword">En caso de existir token de seguridad</param>
+        /// <param name="pTipoUsuario">Tipo de usuario al que se le actualiza la contraseña</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE ActualizaPassword(int pIdPersona, string pPassword, string pTokenPassword, int pTipoUsuario)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
+                    ObjectParameter RET_MENSAJEERROR = new ObjectParameter("RET_MENSAJEERROR", typeof(string));
+                    ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
+
+
+                    context.SP_ACTUALIZA_PASSWORD(pIdPersona, pPassword, pTipoUsuario, pTokenPassword, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
+
+                    E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
+                    return vMensaje;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

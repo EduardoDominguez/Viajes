@@ -351,7 +351,7 @@ namespace Viajes.DAL.Modelo
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_PEDIDO", pIN_ID_PEDIDOParameter, pIN_ID_PERSONA_PIDEParameter, pIN_ID_DIRECCION_ENTREGAParameter, pIN_ID_PERSONA_ENTREGAParameter, pIN_OBSERVACIONESParameter, pIN_FOLIOParameter, pIN_ID_METODO_PAGOParameter, pIN_ID_ESTATUSParameter, pIN_DETALLEParameter, pIN_TIPO_MOVIMIENTOParameter, pIN_REFERENCIA_PAGOParameter, pIN_COSTO_ENVIOParameter, pIN_TIPO_PEDIDOParameter, pIN_PROPINAParameter, pIN_ID_ESTATUS_FACTURAParameter, pIN_IVAParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     
-        public virtual int SP_PERSONA(string pIN_NOMBRE, string pIN_TELEFONO, string pIN_FOTOGRAFIA, string pIN_EMAIL, string pIN_PASSWORD, Nullable<byte> pIN_TIPO_USUARIO, string pIN_TOKEN_FIREBASE, string pIN_SEXO, string pIN_COLONIA, string pIN_CALLLE, string pIN_NO_EXT, string pIN_NO_INT, string pIN_NO_LICENCIA, string pIN_NO_PLACAS, Nullable<byte> pIN_ID_TIPO_CONDUCTOR, ObjectParameter rET_ID_PERSONA, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
+        public virtual int SP_PERSONA(string pIN_NOMBRE, string pIN_TELEFONO, string pIN_FOTOGRAFIA, string pIN_EMAIL, string pIN_PASSWORD, Nullable<byte> pIN_TIPO_USUARIO, string pIN_TOKEN_FIREBASE, string pIN_SEXO, string pIN_COLONIA, string pIN_CALLLE, string pIN_NO_EXT, string pIN_NO_INT, string pIN_NO_LICENCIA, string pIN_NO_PLACAS, Nullable<byte> pIN_ID_TIPO_CONDUCTOR, string pIN_CLAVE_PASSWORD, ObjectParameter rET_ID_PERSONA, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
         {
             var pIN_NOMBREParameter = pIN_NOMBRE != null ?
                 new ObjectParameter("PIN_NOMBRE", pIN_NOMBRE) :
@@ -413,7 +413,11 @@ namespace Viajes.DAL.Modelo
                 new ObjectParameter("PIN_ID_TIPO_CONDUCTOR", pIN_ID_TIPO_CONDUCTOR) :
                 new ObjectParameter("PIN_ID_TIPO_CONDUCTOR", typeof(byte));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_PERSONA", pIN_NOMBREParameter, pIN_TELEFONOParameter, pIN_FOTOGRAFIAParameter, pIN_EMAILParameter, pIN_PASSWORDParameter, pIN_TIPO_USUARIOParameter, pIN_TOKEN_FIREBASEParameter, pIN_SEXOParameter, pIN_COLONIAParameter, pIN_CALLLEParameter, pIN_NO_EXTParameter, pIN_NO_INTParameter, pIN_NO_LICENCIAParameter, pIN_NO_PLACASParameter, pIN_ID_TIPO_CONDUCTORParameter, rET_ID_PERSONA, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
+            var pIN_CLAVE_PASSWORDParameter = pIN_CLAVE_PASSWORD != null ?
+                new ObjectParameter("PIN_CLAVE_PASSWORD", pIN_CLAVE_PASSWORD) :
+                new ObjectParameter("PIN_CLAVE_PASSWORD", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_PERSONA", pIN_NOMBREParameter, pIN_TELEFONOParameter, pIN_FOTOGRAFIAParameter, pIN_EMAILParameter, pIN_PASSWORDParameter, pIN_TIPO_USUARIOParameter, pIN_TOKEN_FIREBASEParameter, pIN_SEXOParameter, pIN_COLONIAParameter, pIN_CALLLEParameter, pIN_NO_EXTParameter, pIN_NO_INTParameter, pIN_NO_LICENCIAParameter, pIN_NO_PLACASParameter, pIN_ID_TIPO_CONDUCTORParameter, pIN_CLAVE_PASSWORDParameter, rET_ID_PERSONA, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     
         public virtual int SP_PRODUCTO(Nullable<int> pIN_ID_PRODUCTO, string pIN_NOMBRE, string pIN_DESCRIPCION, Nullable<decimal> pIN_PRECIO, string pIN_FOTOGRAFIA, Nullable<int> pIN_ID_LOCAL, Nullable<int> pIN_ID_PERSONA_MOVIMIENTO, Nullable<byte> pIN_ESTATUS, string pIN_TIPO_MOVIMIENTO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
@@ -477,6 +481,27 @@ namespace Viajes.DAL.Modelo
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual int SP_ACTUALIZA_PASSWORD(Nullable<int> pIN_ID_PERSONA, string pIN_PASSWORD, Nullable<int> pIN_TIPO_USUARIO, string pIN_TOKEN_PASSWORD, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
+        {
+            var pIN_ID_PERSONAParameter = pIN_ID_PERSONA.HasValue ?
+                new ObjectParameter("PIN_ID_PERSONA", pIN_ID_PERSONA) :
+                new ObjectParameter("PIN_ID_PERSONA", typeof(int));
+    
+            var pIN_PASSWORDParameter = pIN_PASSWORD != null ?
+                new ObjectParameter("PIN_PASSWORD", pIN_PASSWORD) :
+                new ObjectParameter("PIN_PASSWORD", typeof(string));
+    
+            var pIN_TIPO_USUARIOParameter = pIN_TIPO_USUARIO.HasValue ?
+                new ObjectParameter("PIN_TIPO_USUARIO", pIN_TIPO_USUARIO) :
+                new ObjectParameter("PIN_TIPO_USUARIO", typeof(int));
+    
+            var pIN_TOKEN_PASSWORDParameter = pIN_TOKEN_PASSWORD != null ?
+                new ObjectParameter("PIN_TOKEN_PASSWORD", pIN_TOKEN_PASSWORD) :
+                new ObjectParameter("PIN_TOKEN_PASSWORD", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ACTUALIZA_PASSWORD", pIN_ID_PERSONAParameter, pIN_PASSWORDParameter, pIN_TIPO_USUARIOParameter, pIN_TOKEN_PASSWORDParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
     }
 }

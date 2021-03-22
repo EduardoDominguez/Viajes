@@ -115,5 +115,27 @@ namespace Viajes.BL.Persona
             }
         }
 
-    }
+
+        /// <summary>
+        /// Método para actualizar contraseña
+        /// <param name="pIdPersona">Persona de la contraseña a editar</param>
+        /// <param name="pPassword">Nueva contraseña</param>
+        /// <param name="pTokenPassword">En caso de existir token de seguridad</param>
+        /// <param name="pTipoUsuario">Tipo de usuario al que se le actualiza la contraseña</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE ActualizaPassword(int pIdPersona, string pPassword,string pTokenPassword, int pTipoUsuario)
+        {
+            try
+            {
+                AccesoOperaciones pDatos = new AccesoOperaciones();
+                return pDatos.ActualizaPassword(pIdPersona, pPassword, pTokenPassword, pTipoUsuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        }
 }

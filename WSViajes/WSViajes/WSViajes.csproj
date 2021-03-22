@@ -222,6 +222,7 @@
     </Compile>
     <Compile Include="Handlers\TokenValidationHandler.cs" />
     <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Request\ActualizaPasswordRequest.cs" />
     <Compile Include="Models\Request\ActualizaTokenRequest.cs" />
     <Compile Include="Models\Request\CalculaCostoEntrega.cs" />
     <Compile Include="Models\Request\CreaTarjetaOpenPayRequest.cs" />

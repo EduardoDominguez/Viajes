@@ -112,7 +112,7 @@ namespace Viajes.DAL.Persona
                     context.SP_PERSONA(pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
                         pAcceso.Email, pAcceso.Password, pAcceso.TipoUsuario, pAcceso.TokenFirebase, pPersona.Sexo,
                         pDatosExtras.Colonia, pDatosExtras.Calle, pDatosExtras.NoExt, pDatosExtras.NoInt, pDatosExtras.NoLicencia, pDatosExtras.NoPlacas, pDatosExtras.Tipo,
-                        RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
+                        pAcceso.ClavePassword, RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_ID_PERSONA = int.Parse(RET_ID_PERSONA.Value.ToString()), RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
                     return vMensaje;

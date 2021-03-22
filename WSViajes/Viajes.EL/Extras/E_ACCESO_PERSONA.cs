@@ -13,6 +13,8 @@ namespace Viajes.EL.Extras
         public string Password { get; set; }
         public byte TipoUsuario { get; set; }
         public string TokenFirebase { get; set; }
+        public string ClavePassword { get; set; }
+        public DateTime? FechaClavePassword { get; set; }
 
     }
 }

@@ -20,6 +20,8 @@ namespace Viajes.DAL.Modelo
         public byte tipo_usuario { get; set; }
         public byte acepta_terminos { get; set; }
         public string token_firebase { get; set; }
+        public string clave_password { get; set; }
+        public Nullable<System.DateTime> fecha_clave_password { get; set; }
     
         public virtual CTL_PERSONA CTL_PERSONA { get; set; }
         public virtual CTL_PERSONA CTL_PERSONA1 { get; set; }

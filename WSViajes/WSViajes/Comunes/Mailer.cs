@@ -27,8 +27,10 @@ namespace WSViajes.Comunes
                 string SMTP_PWD = ConfigurationManager.AppSettings["SMTP_PWD"];
                 bool SMTP_SERVER_USE_SSL = Convert.ToBoolean(ConfigurationManager.AppSettings["SMTP_SERVER_USE_SSL"]);
 
-                var fromAddress = new MailAddress(SMTP_USER, "Avisos FastRun");
+                var fromAddress = new MailAddress(SMTP_USER, "FastRun");
                 var toAddress = new MailAddress(pCorreoDestino, pNombreDestinatario);
+
+                pCuerpoCorreo += string.Format("<br/><img src =\"{0}\" width='100px' height='100px' alt='logo'/>", ConfigurationManager.AppSettings["URL_LOGO"]);
 
                 var smtp = new SmtpClient
                 {
