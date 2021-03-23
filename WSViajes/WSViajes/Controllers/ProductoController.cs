@@ -11,6 +11,7 @@ using WSViajes.Exceptions;
 using WSViajes.Models;
 using WSViajes.Models.Request;
 using WSViajes.Models.Response;
+using Serilog;
 
 namespace WSViajes.Controllers
 {
@@ -19,7 +20,7 @@ namespace WSViajes.Controllers
     [RoutePrefix("api/Producto")]
     public class ProductoController : ApiController
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [HttpPost]
         [Route("")]
@@ -91,7 +92,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -168,7 +169,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -211,7 +212,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -254,7 +255,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -297,7 +298,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -349,7 +350,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -401,7 +402,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -444,7 +445,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -487,7 +488,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -541,7 +542,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -582,7 +583,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -624,7 +625,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -679,7 +680,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -738,7 +739,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";

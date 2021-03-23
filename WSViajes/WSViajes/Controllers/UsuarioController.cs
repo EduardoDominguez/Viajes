@@ -15,6 +15,8 @@ using WSViajes.Comunes;
 using WSViajes.Exceptions;
 using WSViajes.Models.Request;
 using WSViajes.Models.Response;
+using WSViajes.Models;
+using Serilog;
 
 namespace WSViajes.Controllers
 {
@@ -23,7 +25,7 @@ namespace WSViajes.Controllers
     [RoutePrefix("api/Usuario")]
     public class UsuarioController : ApiController
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 
         [HttpPost]
@@ -77,7 +79,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -143,9 +145,108 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.Exito = false;
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpPut]
+        //[AllowAnonymous]
+        [Route("Password")]
+        public HttpResponseMessage ActualizaPassword([FromBody] ActualizaPasswordRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - ActualizaPassword ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió ninguna deuda a registrar.";
+                else if (string.IsNullOrEmpty(pRequest.Password.Trim()))
+                    respuesta.Mensaje = "El elemento  <<Password>> no puede estar vacío.";
+                else if (pRequest.IdPersona <= 0)
+                    respuesta.Mensaje = "El elemento <<IdPersona>> debe especificar un usuario.";
+                else
+                {
+                    var resultado = new AccesoNegocio().ActualizaPassword(pRequest.IdPersona, pRequest.Password, pRequest.TokenPassword, pRequest.IdTipoUsuario);
+
+                    if (resultado.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                    }
+
+                    respuesta.Mensaje = resultado.RET_VALORDEVUELTO;
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpGet]
+        //[AllowAnonymous]
+        [Route("ValidaExisteTokenPassword")]
+        public async Task<HttpResponseMessage> ValidaExisteTokenPassword(int idPersona, string tokenPassword)
+        {
+            var respuesta = new ConsultaPorIdResponse<E_PERSONA> { };
+            var strMetodo = "WSViajes - ValidaExisteTokenPassword ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new PersonaNegocio().ConsultarPorToken(tokenPassword);
+
+
+                if (respuesta.Data != null)
+                {
+                    if (respuesta.Data.IdPersona != idPersona)
+                    {
+                        respuesta.CodigoError = 10001;
+                        respuesta.Mensaje = $"El token no corresponde al usuario";
+                    }
+                    else
+                    {
+                        respuesta.Exito = true;
+                        respuesta.Mensaje = $"Registros cargados con éxito";
+                    }
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"El token proporciondo no es válido, puede que ya haya sido utilizado.";
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
             }

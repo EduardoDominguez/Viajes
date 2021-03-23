@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using WSViajes.Comunes;
 using WSViajes.Models.Request;
+using Serilog;
 
 namespace WSViajes.Controllers
 {
@@ -15,6 +16,7 @@ namespace WSViajes.Controllers
         [Route("echoping")]
         public IHttpActionResult EchoPing()
         {
+            Log.Information("Hace ping");
             return Ok(true);
         }
 

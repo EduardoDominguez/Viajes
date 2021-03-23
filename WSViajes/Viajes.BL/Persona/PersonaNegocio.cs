@@ -48,6 +48,25 @@ namespace Viajes.BL.Persona
         }
 
         /// <summary>
+        /// Método para consultar personas por token acceso
+        /// <param name="pToken">Token de acceso a consultar</param>
+        /// <returns> Objeto tipo E_PERSONA con los datos solicitados </returns>  
+        /// </summary>       
+        public async Task<E_PERSONA> ConsultarPorToken(string pToken)
+        {
+            try
+            {
+                PersonaOperaciones pDatos = new PersonaOperaciones();
+                var pResultado = await pDatos.Consultar(pToken: pToken);
+                return pResultado.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Método para consultar personas
         /// <param name="SoloActivos">Consultar solo activos o no</param>
         /// <param name="idPersona">Identificador de la persona a consultar</param>

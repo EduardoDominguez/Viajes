@@ -13,6 +13,7 @@ using WSViajes.Models.Response;
 using Openpay.Entities;
 using WSViajes.Comunes;
 using System.Configuration;
+using Serilog;
 
 namespace WSViajes.Controllers
 {
@@ -21,7 +22,7 @@ namespace WSViajes.Controllers
     [RoutePrefix("api/Persona")]
     public class PersonaController : ApiController
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [HttpGet]
         [Route("Consulta")]
@@ -56,7 +57,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -98,8 +99,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
-
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
             }
@@ -141,8 +141,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
-
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
             }
@@ -223,8 +222,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
-
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
             }
@@ -273,7 +271,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -319,7 +317,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -379,7 +377,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -451,7 +449,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -505,7 +503,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
@@ -517,53 +515,6 @@ namespace WSViajes.Controllers
         [HttpDelete]
         //[AllowAnonymous]
         [Route("{IdPersona}/OpenPay/Tarjeta/{CardId}")]
-
-        [HttpPatch]
-        [Route("Password")]
-        public HttpResponseMessage ActualizaPassword([FromBody] ActualizaPasswordRequest pRequest)
-        {
-            var respuesta = new Respuesta { };
-            var strMetodo = "WSViajes - ActualizaPassword ";
-            string sid = Guid.NewGuid().ToString();
-
-            try
-            {
-                if (pRequest == null)
-                    respuesta.Mensaje = "No se recibió ninguna deuda a registrar.";
-                else if (string.IsNullOrEmpty(pRequest.Password.Trim()))
-                    respuesta.Mensaje = "El elemento  <<Password>> no puede estar vacío.";
-                else if (pRequest.IdPersona <= 0)
-                    respuesta.Mensaje = "El elemento <<IdPersona>> debe especificar un usuario.";
-                else
-                {
-                    var resultado = new AccesoNegocio().ActualizaPassword(pRequest.IdPersona, pRequest.Password, pRequest.TokenPassword, pRequest.IdTipoUsuario);
-
-                    if (resultado.RET_NUMEROERROR == 0)
-                    {
-                        respuesta.Exito = true;
-                    }
-
-                    respuesta.Mensaje = resultado.RET_VALORDEVUELTO;
-                }
-            }
-            catch (ServiceException Ex)
-            {
-                respuesta.CodigoError = Ex.Codigo;
-                respuesta.Mensaje = Ex.Message;
-            }
-            catch (Exception Ex)
-            {
-                string strErrGUI = Guid.NewGuid().ToString();
-                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
-
-                respuesta.CodigoError = 10001;
-                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
-            }
-
-            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
-        }
-
         public async Task<HttpResponseMessage> EliminarTarjetaCliente(int IdPersona, string CardId)
         //public HttpResponseMessage EliminarTarjetaCliente(string CustomerId, string CardId)
         {
@@ -597,7 +548,7 @@ namespace WSViajes.Controllers
             {
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
-                log.Error("[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje, Ex);
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
 
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";

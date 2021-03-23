@@ -120,7 +120,9 @@ namespace Viajes.DAL.Persona
                     Email = acceso.email,
                     Password = acceso.password,
                     TipoUsuario = acceso.tipo_usuario,
-                    TokenFirebase = acceso.token_firebase
+                    TokenFirebase = acceso.token_firebase,
+                    ClavePassword = acceso.clave_password,
+                    FechaClavePassword = acceso.fecha_clave_password
                     //IdPersonaAlta = producto.id_persona_alta,
                     //IdPersonaModifica = producto.id_persona_mod ?? 0
                 });

@@ -79,9 +79,10 @@ namespace Viajes.DAL.Persona
         /// <param name="pIdPersona">Id del producto a consultar</param>
         /// <param name="pSoloActivos">Indica si deben de consultarse solo personas activas</param>
         /// <param name="pIdsTipoUsuario">Identificadores de idtipopersona separados por coma</param>
+        /// <param name="pToken">Token de acceso buscado</param>
         /// <returns> Objeto tipo List<E_PERSONA> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_PERSONA>> Consultar(int? pIdPersona = null, byte? pSoloActivos = null, string pIdsTipoUsuario = null)
+        public async Task<List<E_PERSONA>> Consultar(int? pIdPersona = null, byte? pSoloActivos = null, string pIdsTipoUsuario = null, string pToken = null)
         {
             try
             {
@@ -99,7 +100,8 @@ namespace Viajes.DAL.Persona
                                            (pIdPersona == null || (pIdPersona != null && p.id_persona == pIdPersona))
                                       && (pSoloActivos == null || (pSoloActivos != null && p.estatus == pSoloActivos))
                                       && (pIdsTipoUsuario == null || (pIdsTipoUsuario != null && pIdsTipoUsuario.Contains(acceso.tipo_usuario.ToString())))
-                                     select p).ToListAsync<CTL_PERSONA>();
+                                      && (pToken == null || (pToken != null && acceso.clave_password == pToken))
+                                          select p).ToListAsync<CTL_PERSONA>();
 
                     return await procesaPersonas(personas);
                 }
