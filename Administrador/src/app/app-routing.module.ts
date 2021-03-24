@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch:'full' },
-  { path: 'cambia-password/conductor/:idPersona/:token', component: CambiaPasswordComponent },
+  { path: 'cambia-password/:idPersona/:token', component: CambiaPasswordComponent },
   { path: 'admin-dashboard', loadChildren: () => import(`./management/management.module`).then(m => m.ManagementModule) },
   // { path: '', redirectTo: '/home', pathMatch:'full' },
   // { path: 'home', component: HomeComponent, pathMatch:'full' },

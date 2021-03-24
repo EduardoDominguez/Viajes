@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Viajes.BL.Persona;
+using Viajes.BL.Login;
 using Viajes.EL.Extras;
 using WSViajes.Exceptions;
 using WSViajes.Models;
@@ -196,7 +197,7 @@ namespace WSViajes.Controllers
                             //new PersonaNegocio().AgregarClienteOpenPay(personaRecienCreada.IdPersona, creaClienteOpen.Id);
                             new Mailer().Send(pRequest.Email, 
                                 "Bienvenido a nuestra plataforma FASTRUN",
-                                    string.Format("Te damos la bienvenida a nuestra plataforma. Ingresa a la siguiente liga para crear tu contraseña y empezar a utilizar tu cuenta: <a href=\"{0}{1}{2}/{3}\">{0}{1}{2}/{3}</a> <br/> <b>¡¡Ha empezar a entregar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", ConfigurationManager.AppSettings["URL_FRONT"], ConfigurationManager.AppSettings["URL_PASSWORD_CONDUCTOR"], respuestaCreaConductor.RET_ID_PERSONA, clavePassword),
+                                    string.Format("Te damos la bienvenida a nuestra plataforma. Ingresa a la siguiente liga para crear tu contraseña y empezar a utilizar tu cuenta: <a href=\"{0}{1}{2}/{3}\">{0}{1}{2}/{3}</a> <br/> <b>¡¡Ha empezar a entregar!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", ConfigurationManager.AppSettings["URL_FRONT"], ConfigurationManager.AppSettings["URL_CAMBIO_PASSWORD"], respuestaCreaConductor.RET_ID_PERSONA, clavePassword),
                                 pRequest.Nombre);
                         }
 
@@ -557,5 +558,84 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
+        [HttpPost]
+        [Route("Registro")]
+        public HttpResponseMessage Agregarusuario(InsertaActualizaUsuarioRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - Agregarusuario ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió usuario.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
+                //else if (String.IsNullOrEmpty(pRequest.ApePaterno))
+                //    respuesta.Mensaje = "El elemento  <<ApePaterno>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Telefono))
+                    respuesta.Mensaje = "El elemento  <<Telefono>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Fotografia))
+                    respuesta.Mensaje = "El elemento  <<Fotografia>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Email))
+                    respuesta.Mensaje = "El elemento  <<Email>> no puede estar vacío.";
+                else
+                {
+                    var extension = Funciones.getExtensionImagenBasae64(pRequest.Fotografia);
+                    var rutaImagen = Funciones.uploadImagen(pRequest.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
+                                                            System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"),
+                                                            string.Empty, extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Personas"), "Assets/Img/Personas/");
+
+                    if (!string.IsNullOrEmpty(rutaImagen))
+                    {
+
+                        pRequest.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
+
+                        var clavePassword = Guid.NewGuid().ToString();
+
+                        var objAcceso = new E_ACCESO_PERSONA { Email = pRequest.Email, Password = "", TipoUsuario = pRequest.TipoUsuario, ClavePassword = clavePassword };
+                        var objPersona = new E_PERSONA { Sexo = pRequest.Sexo, Nombre = pRequest.Nombre, Telefono = pRequest.Telefono, Fotografia = pRequest.Fotografia };
+                        var respuestaCreaConductor = new LoginNegocio().CreaPersona(objPersona, objAcceso);
+                        if (respuestaCreaConductor.RET_NUMEROERROR >= 0)
+                        {
+                            //var creaClienteOpen = new OpenPayFunctions().CreateCustomer(pInsertaPersonaRequest.Nombre, "", pInsertaPersonaRequest.Email);
+                            //var personaRecienCreada = await new AccesoNegocio().ConsultaPorCorreo(pInsertaPersonaRequest.Email.Trim());
+                            //new PersonaNegocio().AgregarClienteOpenPay(personaRecienCreada.IdPersona, creaClienteOpen.Id);
+                            new Mailer().Send(pRequest.Email,
+                                "Bienvenido a nuestra plataforma FASTRUN",
+                                    string.Format("Te damos la bienvenida a nuestra plataforma. Ingresa a la siguiente liga para crear tu contraseña y empezar a utilizar tu cuenta: <a href=\"{0}{1}{2}/{3}\">{0}{1}{2}/{3}</a> <br/> <b>¡¡Bienvenid@!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", ConfigurationManager.AppSettings["URL_FRONT"], ConfigurationManager.AppSettings["URL_CAMBIO_PASSWORD"], respuestaCreaConductor.RET_ID_PERSONA, clavePassword),
+                                pRequest.Nombre);
+                        }
+
+                        respuesta.Exito = respuestaCreaConductor.RET_NUMEROERROR >= 0;
+                        respuesta.Mensaje = respuestaCreaConductor.RET_VALORDEVUELTO;
+
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = -3000;
+                        respuesta.Mensaje = "No se pudo crear la imagen, intente más tarde";
+                    }
+
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
     }
 }

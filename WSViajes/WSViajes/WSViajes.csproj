@@ -342,6 +342,7 @@
     <Compile Include="Models\Request\InsertaActualizaProducto.cs" />
     <Compile Include="Models\Request\InsertaActualizaProductoFavorito.cs" />
     <Compile Include="Models\Request\InsertaActualizaTiempoEsperaPedidoRequest.cs" />
+    <Compile Include="Models\Request\InsertaActualizaUsuarioRequest.cs" />
     <Compile Include="Models\Request\InsertaCoordenadasConductor.cs" />
     <Compile Include="Models\Request\InsertaPersonaRequest.cs" />
     <Compile Include="Models\Request\InsertaRechazoPedido.cs" />
