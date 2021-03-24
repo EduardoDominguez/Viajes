@@ -16,6 +16,8 @@ import { PedidosComponent } from './components/pedidos/pedidos.component';
 import { PedidosViewIdComponent } from './components/pedidos-view-id/pedidos-view-id.component';
 import { RepartidorMensajeEnviarComponent } from './components/repartidor-mensaje-enviar/repartidor-mensaje-enviar.component';
 import { BalanceComponent } from './components/balance/balance.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
 
 
 const routesChild: Routes = [
@@ -36,6 +38,9 @@ const routesChild: Routes = [
       { path: 'administracion/repartidor/agregar', component: RepartidorAddComponent, canActivate: [AuthGuardService] },
       { path: 'administracion/repartidor/mensaje', component: RepartidorMensajeEnviarComponent, canActivate: [AuthGuardService] },
       { path: 'administracion/repartidor/:id', component: RepartidorAddComponent, canActivate: [AuthGuardService]},
+      { path: 'administracion/usuarios', component: UsuariosComponent, canActivate: [AuthGuardService]},
+      { path: 'administracion/usuarios/agregar', component: UsuariosAddComponent, canActivate: [AuthGuardService]},
+      { path: 'administracion/usuarios/:id', component: UsuariosAddComponent, canActivate: [AuthGuardService]},
       { path: 'pedidos/consulta', component: PedidosComponent, canActivate: [AuthGuardService] },
       { path: 'pedidos/balance', component: BalanceComponent, canActivate: [AuthGuardService] },
       { path: 'pedidos/:id', component: PedidosViewIdComponent,  canActivate: [AuthGuardService] },

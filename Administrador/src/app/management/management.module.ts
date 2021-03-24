@@ -38,6 +38,8 @@ import { ProductoExtrasModalAeComponent } from './components/producto-extras-mod
 import { PedidosViewIdComponent } from './components/pedidos-view-id/pedidos-view-id.component';
 import { RepartidorMensajeEnviarComponent } from './components/repartidor-mensaje-enviar/repartidor-mensaje-enviar.component';
 import { BalanceComponent } from './components/balance/balance.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { BalanceComponent } from './components/balance/balance.component';
     ProductoExtrasModalAeComponent,
     PedidosViewIdComponent,
     RepartidorMensajeEnviarComponent,
-    BalanceComponent,],
+    BalanceComponent,
+    UsuariosComponent,
+    UsuariosAddComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,

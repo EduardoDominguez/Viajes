@@ -16,7 +16,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if(req.url.toLocaleLowerCase().indexOf("login") !== -1){
+    if(req.url.toLocaleLowerCase().indexOf("usuario/") !== -1){
       req = req.clone({
         setHeaders: {
           'Content-Type': 'application/json; charset=utf-8',

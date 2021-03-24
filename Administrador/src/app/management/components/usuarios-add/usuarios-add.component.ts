@@ -15,14 +15,16 @@ import { TipoSexo } from 'src/app/classes/TipoSexo';
 import { TipoRepartidor } from 'src/app/classes/TipoRepartidor';
 import { Repartidor } from 'src/app/classes/Repartidor';
 import { PersonaService } from 'src/app/core/services/persona.service';
+import { TipoUsuario } from 'src/app/classes/TipoUsuario';
+import { CreaActualizaUsuarioRequest } from 'src/app/classes/request/CreaActualizaUsuarioRequest';
 
 @AutoUnsubscribe()
 @Component({
-  selector: 'app-repartidor-add',
-  templateUrl: './repartidor-add.component.html',
-  styleUrls: ['./repartidor-add.component.scss']
+  selector: 'app-usuarios-add',
+  templateUrl: './usuarios-add.component.html',
+  styleUrls: ['./usuarios-add.component.scss']
 })
-export class RepartidorAddComponent implements OnInit, OnDestroy {
+export class UsuariosAddComponent implements OnInit, OnDestroy {
 
   /** Título de la operacion que esta ejecutando */
   tituloTipoOperacion: string;
@@ -38,7 +40,7 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
   idRepartidor: number;
 
   comboSexo: TipoSexo[] = new Array<TipoSexo>();
-  comboTipoRepartidor: TipoRepartidor[] = new Array<TipoRepartidor>();
+  comboTipoUsuario: TipoUsuario[] = new Array<TipoUsuario>();
 
   constructor(
     private _storageService: StorageService,
@@ -48,7 +50,7 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
     public globales: globals,
     private fb: FormBuilder,
     private _location: Location,
-    private _repartidorService: PersonaService,
+    private _personaService: PersonaService,
   ) {
     this.buildForm();
     this.procesaRutas();
@@ -58,8 +60,8 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
     this.comboSexo.push(new TipoSexo("F", "Masculino"));
     this.comboSexo.push(new TipoSexo("M", "Femenino"));
 
-    this.comboTipoRepartidor.push(new TipoRepartidor("1", "FASTER"));
-    this.comboTipoRepartidor.push(new TipoRepartidor("2", "RUNNER"));
+    this.comboTipoUsuario.push(new TipoUsuario(4, "Administrador Local"));
+    this.comboTipoUsuario.push(new TipoUsuario(3, "Administrador sistema FastRun"));
   }
 
   ngOnDestroy() {
@@ -88,47 +90,23 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
 
       ],
       frmNombre: [
-        { value: null, disabled: this.isDisabled },
+        {value: null, disabled: this.isDisabled},
         [Validators.required, Validators.maxLength(250)]
       ],
-      frmCalle: [
-        { value: null, disabled: this.isDisabled },
-        [Validators.required, Validators.maxLength(400)]
-      ],
-      frmNoExt: [
-        { value: null, disabled: this.isDisabled },
-        [Validators.required, Validators.maxLength(10)]
-      ],
-      frmNoInt: [
-        { value: null, disabled: this.isDisabled },
-        [Validators.maxLength(50), Validators.nullValidator]
-      ],
-      frmColonia: [
-        { value: null, disabled: this.isDisabled },
-        [Validators.required, Validators.maxLength(400)]
-      ],
-      cmbTipoRepartidor: [
-        { value: '', disabled: this.isDisabled },
-        [Validators.required]
-      ],
-      frmNoPlacas: [
-        { value: '', disabled: this.isDisabled },
-        [Validators.required]
-      ],
-      frmNoLicencia: [
-        { value: '', disabled: this.isDisabled },
+      cmbTipoUsuario: [
+        {value: '', disabled: this.isDisabled},
         [Validators.required]
       ],
       frmTelefono: [
-        { value: '', disabled: this.isDisabled },
+        {value: '', disabled: this.isDisabled},
         [Validators.required]
       ],
       cmbSexo: [
-        { value: '', disabled: this.isDisabled },
+        {value: '', disabled: this.isDisabled},
         [Validators.required]
       ],
       frmEmail: [
-        { value: '', disabled: this.isDisabled },
+        {value: '', disabled: this.isDisabled},
         [Validators.required, Validators.email]
       ],
     });
@@ -163,19 +141,12 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
   guardar(): void {
     try {
       if (this.validar()) {
-        let request = new Repartidor();
+        let request = new CreaActualizaUsuarioRequest();
         request.Nombre = this.form.controls['frmNombre'].value.trim();
         request.Sexo = this.form.controls['cmbSexo'].value;
+        request.TipoUsuario = this.form.controls['cmbTipoUsuario'].value;
         request.Telefono = this.form.controls['frmTelefono'].value;
-        request.Tipo = this.form.controls['cmbTipoRepartidor'].value;
-        request.TipoUsuario = 2;
-        request.Colonia = this.form.controls['frmColonia'].value;
-        request.Calle = this.form.controls['frmCalle'].value;
-        request.NoExt = this.form.controls['frmNoExt'].value;
-        request.NoInt = this.form.controls['frmNoInt'].value;
         request.Email = this.form.controls['frmEmail'].value;
-        request.NoLicencia = this.form.controls['frmNoLicencia'].value;
-        request.NoPlacas = this.form.controls['frmNoPlacas'].value;
 
         console.log(request);
         //if (request.tipo_operacion == 'n') {
@@ -184,7 +155,7 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
           request.Fotografia = (this.form.get("file").value != null) ? this.imgPreview.nativeElement.src : null;
           request.IdPersonaAlta = this._storageService.getCurrentUser().IdPersona;
 
-          this._repartidorService.agregarRepartidor(request).subscribe(
+          this._personaService.agregar(request).subscribe(
             respuesta => {
               if (respuesta.Exito) {
                 this.goBack();
@@ -205,13 +176,11 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
             request.Fotografia = this.imgPreview.nativeElement.src;
           }
 
-          this._repartidorService.editarRepartidor(request).subscribe(
+          this._personaService.editar(request).subscribe(
             respuesta => {
               if (respuesta.Exito) {
-                // this.router.navigate(['/admin-dashboard/administracion/productos']);
                 this.goBack();
                 this._alertService.showSuccess(respuesta.Mensaje);
-                //this.limpiaCamposFormulario();
 
               } else {
                 this._alertService.showWarning(respuesta.Mensaje);

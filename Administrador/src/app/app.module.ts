@@ -53,6 +53,7 @@ import { ManagementModule }  from './management/management.module';
 //Angular material
 import { AppMaterialModule } from './app-material/app-material.module';
 import { LoginComponent } from './login/login.component';
+import { CambiaPasswordComponent } from './cambia-password/cambia-password.component';
 
 // import { AuthInterceptorService } from './core/services/auth-interceptor.service';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -62,6 +63,7 @@ import { LoginComponent } from './login/login.component';
   declarations: [
     AppComponent,
     LoginComponent,
+    CambiaPasswordComponent,
   ],
   imports: [
     BrowserModule,

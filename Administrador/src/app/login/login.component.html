@@ -1,18 +1,3 @@
-<!--<div class="container h-100">
-    <div class="row h-100 justify-content-center align-items-center overflow-x-hide">
-        <div class="login">
-            <img src="https://imagenes.leon.gob.mx/logo-leon.svg">
-            <form method="post" (submit)="iniciarSesion()" class="mb-2">
-                <input type="text" [(ngModel)]="usuario" name="usuario" placeholder="Usuario" required autocomplete="off" />
-                <input type="password" [(ngModel)]="password" name="password" placeholder="Contrase&ntilde;a" required/>
-                <button type="submit" class="btn btn-primary btn-block btn-large">Entrar</button>
-            </form>
-            <a [routerLink]="['/recuperar-password']"  class="badge badge-light">Recuperar contrase&ntilde;a</a>
-        </div>
-    </div>
-    <ngx-loading [show]="loading"></ngx-loading>
-</div>
--->
 <div class="contenedor-fondo-login">
   <div class="">
     <div class="contenedor-login" [@fadeIn]>
@@ -32,7 +17,7 @@
               <span class="input-group-text" id="validationTooltipUsernamePrepend"><i class="fa fa-user"></i></span>
             </div>
 
-            <input #txtUsuario type="email" [(ngModel)]="usuario" name="usuario" placeholder="Correo" required
+            <input autocomplete="off" #txtUsuario type="email" [(ngModel)]="usuario" name="usuario" placeholder="Correo" required
               class="form-control control" autocomplete="off" />
           </div>
         </div>
@@ -41,7 +26,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="validationTooltipUsernamePrepend"><i class="fa fa-lock"></i></span>
             </div>
-            <input #txtPassword type="password" [(ngModel)]="password" name="password" class="form-control control"
+            <input autocomplete="off"  #txtPassword type="password" [(ngModel)]="password" name="password" class="form-control control"
               placeholder="Contrase&ntilde;a" required />
           </div>
         </div>
