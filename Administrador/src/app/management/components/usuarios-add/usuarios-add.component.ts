@@ -12,8 +12,6 @@ import { takeUntil, take } from 'rxjs/operators';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { Location } from '@angular/common';
 import { TipoSexo } from 'src/app/classes/TipoSexo';
-import { TipoRepartidor } from 'src/app/classes/TipoRepartidor';
-import { Repartidor } from 'src/app/classes/Repartidor';
 import { PersonaService } from 'src/app/core/services/persona.service';
 import { TipoUsuario } from 'src/app/classes/TipoUsuario';
 import { CreaActualizaUsuarioRequest } from 'src/app/classes/request/CreaActualizaUsuarioRequest';

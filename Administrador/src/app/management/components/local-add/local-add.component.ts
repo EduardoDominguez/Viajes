@@ -16,6 +16,7 @@ import { Costo } from 'src/app/classes/Costo';
 import { User } from 'src/app/classes/User';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { PersonaService } from 'src/app/core/services/persona.service';
+import { TipoUsuarioEnum } from 'src/app/classes/enums/TipoUsuarioEnum';
 
 @AutoUnsubscribe()
 @Component({
@@ -285,7 +286,7 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
         request.Latitud = this.latitude;
         request.Longitud = this.longitude;
         request.IdPersonaResponsable = this.form.controls['cmbResponsableLocal'].value;
-        
+
         //1;//this._storageService.getCurrentSession().user.idpersona;
 
 
@@ -425,7 +426,7 @@ export class LocalAddComponent implements OnInit, AfterViewInit, OnDestroy {
    * Servicio para consultar usuarios posibles para responsables de local.
    */
   private getPersonasLocal():void{
-    this._personaService.getPersonas(true, "1,4,5").subscribe(
+    this._personaService.getPersonas(true, `${TipoUsuarioEnum.LOCAL}`).subscribe(
       respuesta => {
         // console.log(respuesta);
         if (respuesta.Exito) {

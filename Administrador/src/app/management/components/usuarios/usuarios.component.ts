@@ -11,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { Repartidor } from 'src/app/classes/Repartidor';
 import { PersonaService } from 'src/app/core/services/persona.service';
+import { TipoUsuarioEnum } from 'src/app/classes/enums/TipoUsuarioEnum';
+
 
 @AutoUnsubscribe()
 @Component({
@@ -104,7 +106,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
    * Consume servicio para consultar usuarios.
    */
   public getUsuarios(): void {
-    this._repartidorService.getPersonas(null, "1,3,4").subscribe(
+    this._repartidorService.getPersonas(null, `${TipoUsuarioEnum.CLIENTE}, ${TipoUsuarioEnum.ADMINISTRADOR}, ${TipoUsuarioEnum.LOCAL}`).subscribe(
       respuesta => {
         // console.log(respuesta)
         if (respuesta.Exito) {
@@ -115,6 +117,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       }, error => {
         this.mensajes.showError(error.message);
       });
+  }
+
+  public get TipoUsuario(){
+    return TipoUsuarioEnum;
   }
 }
 
