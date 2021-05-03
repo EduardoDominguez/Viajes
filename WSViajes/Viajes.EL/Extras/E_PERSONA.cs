@@ -18,8 +18,14 @@ namespace Viajes.EL.Extras
         public string Telefono { get; set; }
         public string Fotografia { get; set; }
         public byte Estatus { get; set; }
+        public byte IdPersonaAlta { get; set; }
+        public byte? IdPersonaMod { get; set; }
+
 
         public E_ACCESO_PERSONA Acceso { get; set; }
+
+        //Solo para conductores
+        public E_CONDUCTOR Conductor { get; set; }
 
         /*public string NOMBRE_COMPLETO {
             get {

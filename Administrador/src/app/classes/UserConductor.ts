@@ -1,6 +1,7 @@
 import { AccesoUsuario } from 'src/app/classes/AccesoUsuario';
+import { Conductor } from './Conductor';
 
-export class User {
+export class UserConductor {
     public IdPersona: number;
     public Nombre: string;
     public Sexo: string;
@@ -10,6 +11,7 @@ export class User {
     public Estatus: number;
     public TipoUsuario: number;
     public Acceso: AccesoUsuario;
+    public Conductor: Conductor;
     constructor() {
 
     }

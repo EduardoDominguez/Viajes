@@ -6,15 +6,14 @@ import { StorageService } from 'src/app/core/services/storage.service';
 import { globals } from '../../../core/globals/globals';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { FileValidator } from 'ngx-material-file-input';
-import { MatSelect } from '@angular/material/select';
-import { ReplaySubject, Subject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { Location } from '@angular/common';
 import { TipoSexo } from 'src/app/classes/TipoSexo';
 import { PersonaService } from 'src/app/core/services/persona.service';
 import { TipoUsuario } from 'src/app/classes/TipoUsuario';
 import { CreaActualizaUsuarioRequest } from 'src/app/classes/request/CreaActualizaUsuarioRequest';
+import { User } from 'src/app/classes/User';
+import { TipoUsuarioEnum } from 'src/app/classes/enums/TipoUsuarioEnum';
 
 @AutoUnsubscribe()
 @Component({
@@ -35,7 +34,7 @@ export class UsuariosAddComponent implements OnInit, OnDestroy {
   maxSize: number = 10000000;
   tipoOperacion: string = "n";//n = nuevo, e= editar, c= consultar
   isDisabled: boolean = false;
-  idRepartidor: number;
+  idPersona: number;
 
   comboSexo: TipoSexo[] = new Array<TipoSexo>();
   comboTipoUsuario: TipoUsuario[] = new Array<TipoUsuario>();
@@ -50,13 +49,12 @@ export class UsuariosAddComponent implements OnInit, OnDestroy {
     private _location: Location,
     private _personaService: PersonaService,
   ) {
-    this.buildForm();
     this.procesaRutas();
   }
 
   ngOnInit() {
-    this.comboSexo.push(new TipoSexo("F", "Masculino"));
-    this.comboSexo.push(new TipoSexo("M", "Femenino"));
+    this.comboSexo.push(new TipoSexo("M", "Masculino"));
+    this.comboSexo.push(new TipoSexo("F", "Femenino"));
 
     this.comboTipoUsuario.push(new TipoUsuario(4, "Administrador Local"));
     this.comboTipoUsuario.push(new TipoUsuario(3, "Administrador sistema FastRun"));
@@ -72,10 +70,10 @@ export class UsuariosAddComponent implements OnInit, OnDestroy {
   }
 
   procesaRutas() {
-    this.idRepartidor = +this.route.snapshot.paramMap.get('id');
+    this.idPersona = +this.route.snapshot.paramMap.get('id');
     this.route.queryParamMap.subscribe(queryParams => {
       this.tipoOperacion = (queryParams.get("to") == null) ? "n" : queryParams.get("to").toLocaleLowerCase();
-      this.isDisabled = this.tipoOperacion == ('c' || 'n');
+      //this.isDisabled = this.tipoOperacion == 'c';
       this.detectaTipoOperacion(this.tipoOperacion);
     });
   }
@@ -116,15 +114,65 @@ export class UsuariosAddComponent implements OnInit, OnDestroy {
         this.tituloTipoOperacion = "Nuevo";
         break;
       case "e":
+        this.comboTipoUsuario.push(new TipoUsuario(1, "Cliente"));
         this.tituloTipoOperacion = "Editar";
+        this.getUsurarioById(this.idPersona);
         break;
       case "c":
+        this.comboTipoUsuario.push(new TipoUsuario(1, "Cliente"));
+        this.isDisabled = true;
         this.tituloTipoOperacion = "Consultar";
+        this.getUsurarioById(this.idPersona);
+        
         break;
       default:
         this.tituloTipoOperacion = "";
         break;
     }
+    this.buildForm();
+  }
+
+
+  /**
+   * Consume servicio para consultar un usuario
+   * @param pIdPersona - Identificador de la persona a consultar
+   */
+   public getUsurarioById(pIdPersona: number): void {
+    this._personaService.getPersonaById(pIdPersona).subscribe(
+      respuesta => {
+        // console.log(respuesta);
+        if (respuesta.Exito) {
+          this.setDataOnForm(respuesta.Data);
+        } else
+          this._alertService.showWarning(respuesta.Mensaje);
+      }, error => {
+        this._alertService.showError(error.message);
+      });
+  }
+
+  /**
+   * Carga los datos consultados en pantalla
+   *  @param pPersona - Objeto tipo persona con datos a cargar
+   */
+  private setDataOnForm(pPersona: User): void{
+    this.form.get('frmNombre').setValue(pPersona.Nombre);
+    this.form.get('cmbTipoUsuario').setValue(pPersona.Acceso.TipoUsuario);
+    this.form.get('frmTelefono').setValue(pPersona.Telefono);
+    this.form.get('cmbSexo').setValue(pPersona.Sexo);
+    this.form.get('frmEmail').setValue(pPersona.Acceso.Email);
+
+    if(pPersona.Acceso.TipoUsuario == TipoUsuarioEnum.CLIENTE){
+      this.form.get('cmbTipoUsuario').disable();
+    }
+
+    if (!this.isDisabled) {
+      this.form.get('file').clearValidators();
+      this.form.get('file').updateValueAndValidity();
+    }
+
+    this.form.get('frmEmail').disable();
+
+    this.imgPreview.nativeElement.src = pPersona.Fotografia;
   }
 
   validar(): boolean {
@@ -146,7 +194,7 @@ export class UsuariosAddComponent implements OnInit, OnDestroy {
         request.Telefono = this.form.controls['frmTelefono'].value;
         request.Email = this.form.controls['frmEmail'].value;
 
-        console.log(request);
+        // console.log(request);
         //if (request.tipo_operacion == 'n') {
         if (this.tipoOperacion == 'n') {
           // console.log(this.form.get("file").value);
@@ -168,7 +216,7 @@ export class UsuariosAddComponent implements OnInit, OnDestroy {
 
         } else {
           request.IdPersonaModifica = this._storageService.getCurrentUser().IdPersona;//this._storageService.getCurrentSession().user.idpersona;
-          request.IdPersona = this.idRepartidor;
+          request.IdPersona = this.idPersona;
 
           if (this.removableInput.value != null) {
             request.Fotografia = this.imgPreview.nativeElement.src;

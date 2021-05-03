@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { Repartidor } from 'src/app/classes/Repartidor';
 import { PersonaService } from 'src/app/core/services/persona.service';
+import { ActualizaEstatusGenericoRequest } from 'src/app/classes/request/ActualizaEstatusGenericoRequest';
 
 @AutoUnsubscribe()
 @Component({
@@ -82,15 +83,13 @@ export class RepartidorComponent implements OnInit, OnDestroy {
    * @param pId
    */
   onChangeEstatus(pElement: any, pId: number) {
-    //let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked, this.storageService.getCurrentSession().user.idpersona, 'nodo');
-    let request = new Repartidor();
-    request.IdPersona = pId;
-    request.Estatus = pElement.checked ? 1 : 0;
-    request.IdPersonaModifica = 1//this.storageService.getCurrentSession().user.idpersona;
-    this._repartidorService.actualizaEstatusRepartidor(request).subscribe(
+    let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked ? 1 : 0, this.storageService.getCurrentSession().Persona.IdPersona);
+    this._repartidorService.actualizaEstatus(request).subscribe(
       respuesta => {
         if (respuesta.Exito) {
           this.getRepartidores();
+          this.mensajes.showSuccess(respuesta.Mensaje);
+
         } else {
           pElement.checked = !pElement.checked;
           this.mensajes.showWarning(respuesta.Mensaje);

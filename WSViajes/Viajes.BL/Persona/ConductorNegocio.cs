@@ -128,9 +128,23 @@ namespace Viajes.BL.Persona
             }
         }
 
+
+        /// <summary>
+        /// Método para editar persona/conductor
+        /// <param name="Entidad">Datosa editar</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
         public E_MENSAJE Editar(E_PERSONA Entidad)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ConductorOperaciones pDatos = new ConductorOperaciones();
+                return pDatos.Editar(Entidad);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

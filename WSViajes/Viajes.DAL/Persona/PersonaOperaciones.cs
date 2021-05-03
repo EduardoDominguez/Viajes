@@ -54,16 +54,18 @@ namespace Viajes.DAL.Persona
             {
                 using (context = new ViajesEntities())
                 {
+                    ObjectParameter RET_ID_PERSONA = new ObjectParameter("RET_ID_PERSONA", typeof(string));
                     ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
                     ObjectParameter RET_MENSAJEERROR = new ObjectParameter("RET_MENSAJEERROR", typeof(string));
                     ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
 
 
-                    /*context.SP_PRODUCTO(pProducto.IdProducto, pProducto.Nombre, pProducto.Descripcion, pProducto.Precio,
-                                         pProducto.Fotografia, pProducto.IdLocal, pProducto.IdPersonaModifica, pProducto.Estatus, "U",
-                                         RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);*/
+                    context.SP_PERSONA(pPersona.IdPersona, pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
+                        pPersona.Acceso.Email, pPersona.Acceso.Password, pPersona.Acceso.TipoUsuario, pPersona.Acceso.TokenFirebase, pPersona.Sexo,
+                        null, null, null, null, null, null, null, pPersona.Acceso.ClavePassword, "U", pPersona.IdPersonaMod,
+                        RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
-                    E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
+                    E_MENSAJE vMensaje = new E_MENSAJE { RET_ID_PERSONA = int.Parse(RET_ID_PERSONA.Value.ToString()), RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
                     return vMensaje;
                 }
             }
@@ -188,6 +190,54 @@ namespace Viajes.DAL.Persona
                 }
             }
             catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// Actualiza estatus de persona
+        /// <param name="pIdPersona">Identidicador de la persona</param>
+        /// <param name="pIdEstatus">Estatus a actualizar</param>
+        /// <param name="pIdPersonaModifica">Persona que realiza el movimiento</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos de la operación </returns>  
+        /// </summary>        
+        public E_MENSAJE ActualizaEstatusRegistro(int pIdPersona, byte pIdEstatus, byte pIdPersonaModifica)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    E_MENSAJE vMensaje = new E_MENSAJE();
+
+                    var entity = context.CTL_PERSONA.FirstOrDefault(item => item.id_persona == pIdPersona);
+
+                    if (entity != null)
+                    {
+                        entity.estatus = pIdEstatus;
+                        entity.fecha_mod = DateTime.Now;
+                        entity.id_persona_mod = pIdPersonaModifica;
+                        var resultado = context.SaveChanges();
+
+                        if (resultado <= 0)
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo actualizar estatus.", RET_VALORDEVUELTO = "No se pudo actualizar estatus." };
+                        else
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Estatus actualizado", RET_VALORDEVUELTO = "Estatus actualizado" };
+
+
+                    }
+                    else
+                    {
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -200, RET_MENSAJEERROR = "No se pudo encontrar la persona proporcionada.", RET_VALORDEVUELTO = "No se pudo encontrar la persona proporcionada." };
+                    }
+
+
+
+                    return vMensaje;
+                }
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

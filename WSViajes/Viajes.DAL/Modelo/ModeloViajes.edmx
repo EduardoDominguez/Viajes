@@ -866,6 +866,7 @@
           <Parameter Name="RET_VALORDEVUELTO" Type="varchar" Mode="InOut" />
         </Function>
         <Function Name="SP_PERSONA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PIN_ID_PERSONA" Type="int" Mode="In" />
           <Parameter Name="PIN_NOMBRE" Type="varchar" Mode="In" />
           <Parameter Name="PIN_TELEFONO" Type="varchar" Mode="In" />
           <Parameter Name="PIN_FOTOGRAFIA" Type="varchar" Mode="In" />
@@ -882,6 +883,8 @@
           <Parameter Name="PIN_NO_PLACAS" Type="varchar" Mode="In" />
           <Parameter Name="PIN_ID_TIPO_CONDUCTOR" Type="tinyint" Mode="In" />
           <Parameter Name="PIN_CLAVE_PASSWORD" Type="nvarchar" Mode="In" />
+          <Parameter Name="PIN_TIPO_MOVIMIENTO" Type="char" Mode="In" />
+          <Parameter Name="PIN_ID_PERSONA_MOD" Type="int" Mode="In" />
           <Parameter Name="RET_ID_PERSONA" Type="int" Mode="InOut" />
           <Parameter Name="RET_NUMEROERROR" Type="int" Mode="InOut" />
           <Parameter Name="RET_MENSAJEERROR" Type="varchar" Mode="InOut" />
@@ -2067,6 +2070,7 @@
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_PERSONA">
+            <Parameter Name="PIN_ID_PERSONA" Mode="In" Type="Int32" />
             <Parameter Name="PIN_NOMBRE" Mode="In" Type="String" />
             <Parameter Name="PIN_TELEFONO" Mode="In" Type="String" />
             <Parameter Name="PIN_FOTOGRAFIA" Mode="In" Type="String" />
@@ -2083,6 +2087,8 @@
             <Parameter Name="PIN_NO_PLACAS" Mode="In" Type="String" />
             <Parameter Name="PIN_ID_TIPO_CONDUCTOR" Mode="In" Type="Byte" />
             <Parameter Name="PIN_CLAVE_PASSWORD" Mode="In" Type="String" />
+            <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
+            <Parameter Name="PIN_ID_PERSONA_MOD" Mode="In" Type="Int32" />
             <Parameter Name="RET_ID_PERSONA" Mode="InOut" Type="Int32" />
             <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
             <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />

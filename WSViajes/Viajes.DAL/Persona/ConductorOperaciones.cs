@@ -109,10 +109,10 @@ namespace Viajes.DAL.Persona
                     ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
 
 
-                    context.SP_PERSONA(pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
+                    context.SP_PERSONA(pPersona.IdPersona,pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
                         pAcceso.Email, pAcceso.Password, pAcceso.TipoUsuario, pAcceso.TokenFirebase, pPersona.Sexo,
                         pDatosExtras.Colonia, pDatosExtras.Calle, pDatosExtras.NoExt, pDatosExtras.NoInt, pDatosExtras.NoLicencia, pDatosExtras.NoPlacas, pDatosExtras.Tipo,
-                        pAcceso.ClavePassword, RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
+                        pAcceso.ClavePassword, "I", pPersona.IdPersonaMod, RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_ID_PERSONA = int.Parse(RET_ID_PERSONA.Value.ToString()), RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
                     return vMensaje;
@@ -125,32 +125,31 @@ namespace Viajes.DAL.Persona
         }
 
         /// <summary>
-        /// Método para actualizar pedido
-        /// <param name="pDireccion">Objeto de tipo E_PEDIDO con datos a actualizar</param>
+        /// Método para actualizar conductor
+        /// <param name="pPersona">Objeto de tipo E_PERSONA con datos a actualizar</param>
         /// <returns> Objeto tipo E_MENSAJE con los datos del movimiento </returns>  
         /// </summary>
-        public E_MENSAJE Editar(E_DIRECCION pDireccion)
+        public E_MENSAJE Editar(E_PERSONA pPersona)
         {
             try
             {
-                /*using (context = new ViajesEntities())
+                using (context = new ViajesEntities())
                 {
+
+                    ObjectParameter RET_ID_PERSONA = new ObjectParameter("RET_ID_PERSONA", typeof(string));
                     ObjectParameter RET_NUMEROERROR = new ObjectParameter("RET_NUMEROERROR", typeof(string));
                     ObjectParameter RET_MENSAJEERROR = new ObjectParameter("RET_MENSAJEERROR", typeof(string));
                     ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
 
 
-                    context.SP_DIRECCION(pDireccion.ID_DIRECCION, pDireccion.NOMBRE, pDireccion.CALLE,
-                                        pDireccion.COLONIA, pDireccion.DESCRIPCION, pDireccion.NO_EXT,
-                                         pDireccion.NO_INT, pDireccion.LATITUD, pDireccion.LONGITUD,
-                                         pDireccion.ID_PERSONA, pDireccion.ID_PERSONA_ALTA, pDireccion.ESTATUS, pDireccion.PREDETERMINADA, "U",
-                                        RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
+                    context.SP_PERSONA(pPersona.IdPersona, pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
+                        pPersona.Acceso.Email, pPersona.Acceso.Password, pPersona.Acceso.TipoUsuario, pPersona.Acceso.TokenFirebase, pPersona.Sexo,
+                        pPersona.Conductor.Colonia, pPersona.Conductor.Calle, pPersona.Conductor.NoExt, pPersona.Conductor.NoInt, pPersona.Conductor.NoLicencia, pPersona.Conductor.NoPlacas, pPersona.Conductor.Tipo,
+                        pPersona.Acceso.ClavePassword, "U", pPersona.IdPersonaMod, RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
-                    E_MENSAJE vMensaje = new E_MENSAJE { RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
+                    E_MENSAJE vMensaje = new E_MENSAJE { RET_ID_PERSONA = int.Parse(RET_ID_PERSONA.Value.ToString()), RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
                     return vMensaje;
-                }*/
-
-                return new E_MENSAJE();
+                }
             }
             catch (Exception ex)
             {
@@ -172,13 +171,45 @@ namespace Viajes.DAL.Persona
                 {
                     var conductores = await (from s in context.CTL_PERSONA 
                                          join ap in context.CTL_ACCESO_PERSONA on s.id_persona equals ap.id_persona
+                                         join c in context.CTL_CONDUCTOR on s.id_persona equals c.id_persona
                                    where
                                    (pIdPersona == null || (pIdPersona != null && s.id_persona == pIdPersona))
                                    && (SoloActivos == null || (SoloActivos != null && s.estatus == SoloActivos))
                                    && ap.tipo_usuario == 2
-                                   select s).ToListAsync<CTL_PERSONA>();
+                                             select new E_PERSONA
+                                             {
+                                                 IdPersona = s.id_persona,
+                                                 Edad = s.edad,
+                                                 Nombre = s.nombre,
+                                                 Fotografia = s.fotografia,
+                                                 Sexo = s.sexo,
+                                                 Telefono = s.telefono,
+                                                 Estatus = s.estatus,
+                                                 Acceso = new E_ACCESO_PERSONA { 
+                                                                IdPersona = ap.id_persona,
+                                                                Email = ap.email,
+                                                                ClavePassword = ap.clave_password,
+                                                                FechaClavePassword = ap.fecha_clave_password,
+                                                                Password = ap.password,
+                                                                TipoUsuario = ap.tipo_usuario,
+                                                                TokenFirebase = ap.token_firebase
 
-                    return ProcesaListaConductores(conductores);
+                                                                },
+                                                 Conductor = new E_CONDUCTOR { 
+                                                                   Calle = c.calle,
+                                                                   Colonia = c.colonia,
+                                                                   IdPersona = c.id_persona,
+                                                                   NoExt = c.no_ext,
+                                                                   NoInt = c.no_int,
+                                                                   NoLicencia = c.no_licencia, 
+                                                                   NoPlacas = c.no_placas,
+                                                                   Tipo = c.id_tipo ?? 0
+                                                              } 
+                                             }
+                        ).ToListAsync();
+
+                    return conductores;
+                    //return ProcesaListaConductores(conductores);
                 }
             }
             catch (Exception ex)
@@ -193,6 +224,10 @@ namespace Viajes.DAL.Persona
 
             foreach (var conductor in pPersona)
             {
+                //var accesos = await new AccesoOperaciones().Consultar(conductor.id_persona);
+                //var accesos = await new AccesoOperaciones().Consultar(conductor.id_persona);
+
+
                 listaConductores.Add(new E_PERSONA
                 {
                     IdPersona = conductor.id_persona,
@@ -201,6 +236,7 @@ namespace Viajes.DAL.Persona
                     Fotografia = conductor.fotografia,
                     Sexo = conductor.sexo,
                     Telefono = conductor.telefono
+                    
                 });
             }
 

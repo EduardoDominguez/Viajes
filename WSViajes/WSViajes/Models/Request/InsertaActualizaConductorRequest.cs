@@ -7,6 +7,7 @@ namespace WSViajes.Models.Request
 {
     public class InsertaActualizaConductorRequest
     {
+        public int IdPersona { get; set; }
         public string Nombre { get; set; }
         /*public string ApePaterno { get; set; }
         public string ApeMaterno { get; set; }*/
@@ -15,8 +16,8 @@ namespace WSViajes.Models.Request
         public string Telefono { get; set; }
         public string Fotografia { get; set; }
 
-        public string IdPersonaAlta { get; set; }
-        public string IdPersonaModifica { get; set; }
+        public byte IdPersonaAlta { get; set; }
+        public byte IdPersonaMod { get; set; }
 
         public string Email { get; set; }
         public string Password { get; set; }
@@ -29,6 +30,7 @@ namespace WSViajes.Models.Request
         public string NoLicencia { get; set; }
         public string NoPlacas { get; set; }
         public byte Tipo { get; set; }
+        
 
     }
 }

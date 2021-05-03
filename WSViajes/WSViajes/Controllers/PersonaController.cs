@@ -67,6 +67,49 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
+
+        [HttpGet]
+        [Route("Consulta/{idPersona}")]
+        public async Task<HttpResponseMessage> ConsultaPersonaById(int idPersona)
+        {
+            var respuesta = new ConsultaPorIdResponse<E_PERSONA> { };
+            var strMetodo = "WSViajes - ConsultaPersonaById ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new PersonaNegocio().ConsultarPorId(idPersona);
+
+                if (respuesta.Data != null)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen personas con los parámetros solicitados";
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
         [HttpGet]
         [Route("Conductor/Coordenadas/Pedido/{IdPedido}")]
         public async Task<HttpResponseMessage> ConsultaCoordenadasByIdPedido(Guid IdPedido)
@@ -122,6 +165,47 @@ namespace WSViajes.Controllers
                 respuesta.Data = await new ConductorNegocio().ConsultarTodo(SoloActivos: soloActivos);
 
                 if (respuesta.Data.Count > 0)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen conductores con los parámetros solicitados";
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpGet]
+        [Route("Conductor/Consulta/{idPersona}")]
+        public async Task<HttpResponseMessage> ConsultaConductorById(int idPersona)
+        {
+            var respuesta = new ConsultaPorIdResponse<E_PERSONA> { };
+            var strMetodo = "WSViajes - ConsultaConductorById ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                respuesta.Data = await new ConductorNegocio().ConsultarPorId(idPersona);
+
+                if (respuesta.Data != null)
                 {
                     respuesta.Exito = true;
                     respuesta.Mensaje = $"Registros cargados con éxito";
@@ -231,6 +315,98 @@ namespace WSViajes.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
 
+        [HttpPut]
+        [Route("Conductor/Actualiza")]
+        public async Task<HttpResponseMessage> EditaConductor(InsertaActualizaConductorRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - EditaConductor ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió usuario.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersona.ToString()) || pRequest.IdPersona == 0)
+                    respuesta.Mensaje = "El elemento  <<IdPersona>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
+                //else if (String.IsNullOrEmpty(pRequest.ApePaterno))
+                //    respuesta.Mensaje = "El elemento  <<ApePaterno>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Telefono))
+                    respuesta.Mensaje = "El elemento  <<Telefono>> no puede estar vacío.";
+                //else if (String.IsNullOrEmpty(pRequest.Fotografia))
+                //    respuesta.Mensaje = "El elemento  <<Fotografia>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Email))
+                    respuesta.Mensaje = "El elemento  <<Email>> no puede estar vacío.";
+                else
+                {
+                    var conductorActual = await new ConductorNegocio().ConsultarPorId(pRequest.IdPersona);
+
+                    if (conductorActual != null)
+                    {
+
+                        if (!String.IsNullOrEmpty(pRequest.Fotografia))
+                        {
+                            Funciones.deleteExistingFile(conductorActual.Fotografia);
+                            var extension = Funciones.getExtensionImagenBasae64(pRequest.Fotografia);
+                            var rutaImagen = Funciones.uploadImagen(pRequest.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
+                                                                    System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"),
+                                                                    string.Empty, extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Personas"), "Assets/Img/Personas/");
+                            pRequest.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
+
+                        }
+                        else
+                        {
+                            //Sino cambia la imagen desde el sistema deja la misma
+                            pRequest.Fotografia = conductorActual.Fotografia;
+                        }
+
+                        var objAcceso = new E_ACCESO_PERSONA { Email = pRequest.Email, TipoUsuario = pRequest.TipoUsuario };
+                            //var objPersona = new E_PERSONA { Sexo = pRequest.Sexo, Nombre = pRequest.Nombre, Telefono = pRequest.Telefono, Fotografia = pRequest.Fotografia };
+                            var objDatosConductor = new E_CONDUCTOR { Tipo = pRequest.Tipo, Colonia = pRequest.Colonia, Calle = pRequest.Calle, NoExt = pRequest.NoExt, NoInt = pRequest.NoInt, NoLicencia = pRequest.NoLicencia, NoPlacas = pRequest.NoPlacas };
+
+                            conductorActual.Sexo = pRequest.Sexo;
+                            conductorActual.Nombre = pRequest.Nombre;
+                            conductorActual.Telefono = pRequest.Telefono;
+                            conductorActual.Fotografia = pRequest.Fotografia;
+                            conductorActual.IdPersonaMod = pRequest.IdPersonaMod;
+                            conductorActual.Conductor = objDatosConductor;
+                            conductorActual.Acceso = objAcceso;
+
+                            var respuestaCreaConductor = new ConductorNegocio().Editar(conductorActual);
+
+
+                            respuesta.Exito = respuestaCreaConductor.RET_NUMEROERROR >= 0;
+                            respuesta.Mensaje = respuestaCreaConductor.RET_VALORDEVUELTO;
+                       
+                    }
+                    else
+                    {
+                        respuesta.Exito = false;
+                        respuesta.Mensaje = "No se ha podido encontrar el conductor solicitado";
+                    }
+
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
         [HttpPost]
         [Route("Conductor/Coordenadas")]
         public HttpResponseMessage InsertaCoordenadas(InsertaCoordenadasConductor pRequest)
@@ -292,7 +468,7 @@ namespace WSViajes.Controllers
             try
             {
                 if (pRequestToken == null)
-                    respuesta.Mensaje = "No se recibió ninguna deuda a registrar.";
+                    respuesta.Mensaje = "No se recibió ningun token a registrar.";
                 else if (string.IsNullOrEmpty(pRequestToken.TokenFirebase.Trim()))
                     respuesta.Mensaje = "El elemento  <<TokenFirebase>> no puede estar vacío.";
                 else if (pRequestToken.IdPersona <= 0)
@@ -560,10 +736,10 @@ namespace WSViajes.Controllers
 
         [HttpPost]
         [Route("Registro")]
-        public HttpResponseMessage Agregarusuario(InsertaActualizaUsuarioRequest pRequest)
+        public HttpResponseMessage AgregarUsuario(InsertaActualizaUsuarioRequest pRequest)
         {
             var respuesta = new Respuesta { };
-            var strMetodo = "WSViajes - Agregarusuario ";
+            var strMetodo = "WSViajes - AgregarUsuario ";
             string sid = Guid.NewGuid().ToString();
 
             try
@@ -631,6 +807,199 @@ namespace WSViajes.Controllers
                 string strErrGUI = Guid.NewGuid().ToString();
                 string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
                 Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+
+        [HttpPut]
+        [Route("Actualiza")]
+        public async Task<HttpResponseMessage> EditarUsuario(InsertaActualizaUsuarioRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - EditarUsuario";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió usuario.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersona.ToString()))
+                    respuesta.Mensaje = "El elemento  <<IdPersona>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Telefono))
+                    respuesta.Mensaje = "El elemento  <<Telefono>> no puede estar vacío.";
+                //else if (String.IsNullOrEmpty(pRequest.Fotografia))
+                //    respuesta.Mensaje = "El elemento  <<Fotografia>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Email))
+                    respuesta.Mensaje = "El elemento  <<Email>> no puede estar vacío.";
+                else
+                {
+                    var usuarioActual = await new PersonaNegocio().ConsultarPorId(pRequest.IdPersona);
+
+                    if (usuarioActual != null)
+                    {
+
+                        if (!String.IsNullOrEmpty(pRequest.Fotografia))
+                        {
+                            Funciones.deleteExistingFile(usuarioActual.Fotografia);
+                            var extension = Funciones.getExtensionImagenBasae64(pRequest.Fotografia);
+                            var rutaImagen = Funciones.uploadImagen(pRequest.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
+                                                                    System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"),
+                                                                    string.Empty, extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Personas"), "Assets/Img/Personas/");
+
+                            pRequest.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
+
+                        }
+                        {
+                            pRequest.Fotografia = usuarioActual.Fotografia;
+                        }
+
+
+                        var objAcceso = new E_ACCESO_PERSONA { Email = pRequest.Email, TipoUsuario = pRequest.TipoUsuario };
+
+                            usuarioActual.Sexo = pRequest.Sexo;
+                            usuarioActual.Nombre = pRequest.Nombre;
+                            usuarioActual.Telefono = pRequest.Telefono;
+                            usuarioActual.Fotografia = pRequest.Fotografia;
+                            usuarioActual.Acceso = objAcceso;
+                            usuarioActual.IdPersonaMod = pRequest.IdPersonaMod;
+                            var respuestaCreaConductor = new PersonaNegocio().Editar(usuarioActual);
+
+                            respuesta.Exito = respuestaCreaConductor.RET_NUMEROERROR >= 0;
+                            respuesta.Mensaje = respuestaCreaConductor.RET_VALORDEVUELTO;
+
+                        
+                    }
+                    else
+                    {
+                        respuesta.Exito = false;
+                        respuesta.Mensaje = "No se ha podido encontrar el usuario solicitado";
+                    }
+
+
+                }
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+
+        [HttpPost]
+        [Route("ReenviarCorreoPassword/{pIdPersona}")]
+        public async Task<HttpResponseMessage>  ReenviarCorreoPassword(int pIdPersona)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSViajes - Agregarusuario ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                
+                var clavePassword = Guid.NewGuid();
+
+                var persona = await new PersonaNegocio().ConsultarPorId(pIdPersona);
+                var accesosPersona = await new AccesoNegocio().ConsultarPorId(pIdPersona);
+
+                if (persona != null && accesosPersona != null)
+                {
+                    var respuestaActualizar = new LoginNegocio().ActualizarTokenPassword(pIdPersona, clavePassword);
+                    if(respuestaActualizar.RET_NUMEROERROR == 0)
+                    {
+                        new Mailer().Send(accesosPersona.Email,
+                        "Bienvenido a nuestra plataforma FASTRUN",
+                            string.Format("Te damos la bienvenida a nuestra plataforma. Ingresa a la siguiente liga para crear tu contraseña y empezar a utilizar tu cuenta: <a href=\"{0}{1}{2}/{3}\">{0}{1}{2}/{3}</a> <br/> <b>¡¡Bienvenid@!!</b><br/><br/><p>Saludos del equipo FastRun.</p>", ConfigurationManager.AppSettings["URL_FRONT"], ConfigurationManager.AppSettings["URL_CAMBIO_PASSWORD"], pIdPersona, clavePassword.ToString()),
+                        persona.Nombre);
+                    }
+
+
+                    respuesta.Exito = respuestaActualizar.RET_NUMEROERROR == 0;
+                    respuesta.Mensaje = respuestaActualizar.RET_MENSAJEERROR;
+
+                }
+                else
+                {
+                    respuesta.Exito = false;
+                    respuesta.Mensaje = "No se pudo enviar el correo.";
+                }
+
+                
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+        [HttpPatch]
+        [Route("ActualizaEstatus")]
+        public HttpResponseMessage ActualizaEstatusPersona([FromBody] ActualizaEstatusRegistroRequest<int> pRequestEstatus)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = "WSDeudas - ActualizaEstatusPersona";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequestEstatus == null)
+                    respuesta.Mensaje = "No se recibió ningun modelo para la petición.";
+                else if (string.IsNullOrEmpty(pRequestEstatus.IdRegistro.ToString().Trim()))
+                    respuesta.Mensaje = "El elemento  <<IdRegistro>> no puede estar vacío.";
+                else if (pRequestEstatus.IdEstatus != 0 && pRequestEstatus.IdEstatus != 1 )
+                    respuesta.Mensaje = "El elemento <<IdEstatus>> se debe tener un valor válido.";
+                else
+                {
+                    var resultado = new PersonaNegocio().ActualizaEstatusRegistro(pRequestEstatus.IdRegistro, pRequestEstatus.IdEstatus, pRequestEstatus.IdPersonaModifica);
+
+                    if (resultado.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                    }
+
+                    respuesta.Mensaje = resultado.RET_VALORDEVUELTO;
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+
                 respuesta.CodigoError = 10001;
                 respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
             }

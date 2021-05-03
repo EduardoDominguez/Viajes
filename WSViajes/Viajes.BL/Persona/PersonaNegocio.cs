@@ -87,13 +87,21 @@ namespace Viajes.BL.Persona
         }
 
         /// <summary>
-        /// Método para consultar editar persona
+        /// Método para editar persona
         /// <param name="Entidad">Datosa editar</param>
         /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
         /// </summary>       
         public E_MENSAJE Editar(E_PERSONA Entidad)
         {
-            throw new NotImplementedException();
+            try
+            {
+                PersonaOperaciones pDatos = new PersonaOperaciones();
+                return pDatos.Editar(Entidad);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -128,6 +136,27 @@ namespace Viajes.BL.Persona
                 PersonaOperaciones pDatos = new PersonaOperaciones();
                 return await pDatos.ConsultarClienteIdOpenPay(pIdPersona: pIdPersona);
                 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// Método para editar  el estatus de una persona
+        /// <param name="pIdPersona">IdPersona a editar</param>
+        /// <param name="pIdEstatus">Estatus a actualizar</param>
+        /// <param name="pIdPersonaModifica">Persona que realiza el movimiento</param>
+        /// <returns> Objeto tipo E_MENSAJE con el resultado de la operación </returns>  
+        /// </summary>       
+        public E_MENSAJE ActualizaEstatusRegistro(int pIdPersona, byte pIdEstatus, byte pIdPersonaModifica)
+        {
+            try
+            {
+                PersonaOperaciones pDatos = new PersonaOperaciones();
+                return pDatos.ActualizaEstatusRegistro(pIdPersona, pIdEstatus, pIdPersonaModifica);
             }
             catch (Exception ex)
             {

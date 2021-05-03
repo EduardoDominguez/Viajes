@@ -6,7 +6,6 @@ import { StorageService } from 'src/app/core/services/storage.service';
 import { globals } from '../../../core/globals/globals';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { FileValidator } from 'ngx-material-file-input';
-import { MatSelect } from '@angular/material/select';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
@@ -15,6 +14,9 @@ import { TipoSexo } from 'src/app/classes/TipoSexo';
 import { TipoRepartidor } from 'src/app/classes/TipoRepartidor';
 import { Repartidor } from 'src/app/classes/Repartidor';
 import { PersonaService } from 'src/app/core/services/persona.service';
+import { UserConductor } from 'src/app/classes/UserConductor';
+import { TipoUsuario } from 'src/app/classes/TipoUsuario';
+import { TipoUsuarioEnum } from 'src/app/classes/enums/TipoUsuarioEnum';
 
 @AutoUnsubscribe()
 @Component({
@@ -50,16 +52,15 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
     private _location: Location,
     private _repartidorService: PersonaService,
   ) {
-    this.buildForm();
     this.procesaRutas();
   }
 
   ngOnInit() {
-    this.comboSexo.push(new TipoSexo("F", "Masculino"));
-    this.comboSexo.push(new TipoSexo("M", "Femenino"));
+    this.comboSexo.push(new TipoSexo("M", "Masculino"));
+    this.comboSexo.push(new TipoSexo("F", "Femenino"));
 
-    this.comboTipoRepartidor.push(new TipoRepartidor("1", "FASTER"));
-    this.comboTipoRepartidor.push(new TipoRepartidor("2", "RUNNER"));
+    this.comboTipoRepartidor.push(new TipoRepartidor(1, "FASTER"));
+    this.comboTipoRepartidor.push(new TipoRepartidor(2, "RUNNER"));
   }
 
   ngOnDestroy() {
@@ -75,7 +76,7 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
     this.idRepartidor = +this.route.snapshot.paramMap.get('id');
     this.route.queryParamMap.subscribe(queryParams => {
       this.tipoOperacion = (queryParams.get("to") == null) ? "n" : queryParams.get("to").toLocaleLowerCase();
-      this.isDisabled = this.tipoOperacion == ('c' || 'n');
+      // this.isDisabled = this.tipoOperacion == ('c' || 'n');
       this.detectaTipoOperacion(this.tipoOperacion);
     });
   }
@@ -141,15 +142,70 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
         break;
       case "e":
         this.tituloTipoOperacion = "Editar";
+        this.getUsurarioById(this.idRepartidor);
         break;
       case "c":
+        this.isDisabled = true;
         this.tituloTipoOperacion = "Consultar";
+        this.getUsurarioById(this.idRepartidor);
         break;
       default:
         this.tituloTipoOperacion = "";
         break;
     }
+    this.buildForm();
   }
+
+  /**
+  * Consume servicio para consultar un usuario
+  * @param pIdPersona - Identificador de la persona a consultar
+  */
+  public getUsurarioById(pIdPersona: number): void {
+    this._repartidorService.getRepartidorById(pIdPersona).subscribe(
+      respuesta => {
+        // console.log(respuesta);
+        if (respuesta.Exito) {
+          this.setDataOnForm(respuesta.Data);
+        } else
+          this._alertService.showWarning(respuesta.Mensaje);
+      }, error => {
+        this._alertService.showError(error.message);
+      });
+  }
+
+  /**
+ * Carga los datos consultados en pantalla
+ *  @param pPersona - Objeto tipo persona con datos a cargar
+ */
+  private setDataOnForm(pPersona: UserConductor): void {
+    this.form.get('frmNombre').setValue(pPersona.Nombre);
+    // this.form.get('cmbTipoUsuario').setValue(pPersona.Acceso.TipoUsuario);
+    this.form.get('frmTelefono').setValue(pPersona.Telefono);
+    this.form.get('cmbSexo').setValue(pPersona.Sexo);
+    this.form.get('frmEmail').setValue(pPersona.Acceso.Email);
+    
+    this.form.get('frmCalle').setValue(pPersona.Conductor.Calle);
+    this.form.get('frmNoExt').setValue(pPersona.Conductor.NoExt);
+    this.form.get('frmNoInt').setValue(pPersona.Conductor.NoInt);
+    this.form.get('frmColonia').setValue(pPersona.Conductor.Colonia);
+    this.form.get('cmbTipoRepartidor').setValue(pPersona.Conductor.Tipo);
+    this.form.get('frmNoPlacas').setValue(pPersona.Conductor.NoPlacas);
+    this.form.get('frmNoLicencia').setValue(pPersona.Conductor.NoLicencia);
+
+    // if(pPersona.Acceso.TipoUsuario == TipoUsuarioEnum.CLIENTE){
+    //   this.form.get('cmbTipoUsuario').disable();
+    // }
+
+    this.form.get('frmEmail').disable();
+
+    this.imgPreview.nativeElement.src = pPersona.Fotografia;
+
+    if (!this.isDisabled) {
+      this.form.get('file').clearValidators();
+      this.form.get('file').updateValueAndValidity();
+    }
+  }
+
 
   validar(): boolean {
     if (this.form.invalid) {
@@ -168,7 +224,7 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
         request.Sexo = this.form.controls['cmbSexo'].value;
         request.Telefono = this.form.controls['frmTelefono'].value;
         request.Tipo = this.form.controls['cmbTipoRepartidor'].value;
-        request.TipoUsuario = 2;
+        request.TipoUsuario = TipoUsuarioEnum.CONDUCTOR;
         request.Colonia = this.form.controls['frmColonia'].value;
         request.Calle = this.form.controls['frmCalle'].value;
         request.NoExt = this.form.controls['frmNoExt'].value;
@@ -177,7 +233,7 @@ export class RepartidorAddComponent implements OnInit, OnDestroy {
         request.NoLicencia = this.form.controls['frmNoLicencia'].value;
         request.NoPlacas = this.form.controls['frmNoPlacas'].value;
 
-        console.log(request);
+        // console.log(request);
         //if (request.tipo_operacion == 'n') {
         if (this.tipoOperacion == 'n') {
           // console.log(this.form.get("file").value);

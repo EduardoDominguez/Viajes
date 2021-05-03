@@ -1,13 +1,13 @@
 export class ActualizaEstatusGenericoRequest{
-    public id :number;
-    public estatus :boolean;
-    public idpersona_modifica:number;
-    public modulo : string;
+    public IdRegistro :number;
+    public IdEstatus :number;
+    public IdPersonaModifica:number;
+    // public modulo : string;
     
-    constructor(pId:number, pEstatus:boolean, pIdPersona:number, pModulo:string){
-        this.id = pId;
-        this.estatus = pEstatus;
-        this.idpersona_modifica = pIdPersona;
-        this.modulo = pModulo;
+    constructor(pId:number, pEstatus:number, pIdPersona:number){
+        this.IdRegistro = pId;
+        this.IdEstatus = pEstatus;
+        this.IdPersonaModifica = pIdPersona;
+        // this.modulo = pModulo;
     }
 }

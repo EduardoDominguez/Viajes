@@ -83,9 +83,9 @@ namespace Viajes.DAL.Login
                     ObjectParameter RET_VALORDEVUELTO = new ObjectParameter("RET_VALORDEVUELTO", typeof(string));
 
 
-                    context.SP_PERSONA(pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
+                    context.SP_PERSONA(pPersona.IdPersona, pPersona.Nombre, pPersona.Telefono, pPersona.Fotografia,
                         pAcceso.Email, pAcceso.Password, pAcceso.TipoUsuario, pAcceso.TokenFirebase, "U",
-                        null, null, null, null, null, null, null, pAcceso.ClavePassword,
+                        null, null, null, null, null, null, null, pAcceso.ClavePassword, "I", pPersona.IdPersonaMod,
                         RET_ID_PERSONA, RET_NUMEROERROR, RET_MENSAJEERROR, RET_VALORDEVUELTO);
 
                     E_MENSAJE vMensaje = new E_MENSAJE { RET_ID_PERSONA = int.Parse(RET_ID_PERSONA.Value.ToString()), RET_NUMEROERROR = int.Parse(RET_NUMEROERROR.Value.ToString()), RET_MENSAJEERROR = RET_MENSAJEERROR.Value.ToString(), RET_VALORDEVUELTO = RET_VALORDEVUELTO.Value.ToString() };
@@ -93,6 +93,51 @@ namespace Viajes.DAL.Login
                 }
             }
             catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Actualiza token para resetear contraseña
+        /// <param name="pIdPersona">Identidicador de la persona</param>
+        /// <param name="pTokenPassword">Clave  para generar password</param>
+        /// <returns> Objeto tipo E_MENSAJE con los datos de la operación </returns>  
+        /// </summary>        
+        public E_MENSAJE ActializarTokenPassword(int pIdPersona, Guid pTokenPassword)
+        {
+            try
+            {
+                using (context = new ViajesEntities())
+                {
+                    E_MENSAJE vMensaje = new E_MENSAJE();
+
+                    var entity = context.CTL_ACCESO_PERSONA.FirstOrDefault(item => item.id_persona == pIdPersona);
+
+                    if(entity != null)
+                    {
+                        entity.clave_password = pTokenPassword.ToString();
+                        entity.fecha_clave_password = DateTime.Now;
+                        var resultado = context.SaveChanges();
+
+                        if (resultado <= 0)
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo actualizar token.", RET_VALORDEVUELTO = "No se pudo actualizar token." };
+                        else
+                            vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Token actualizado", RET_VALORDEVUELTO = "Token actualizado" };
+
+
+                    }
+                    else
+                    {
+                        vMensaje = new E_MENSAJE { RET_NUMEROERROR = -200, RET_MENSAJEERROR = "No se pudo encontrar la persona proporcionada.", RET_VALORDEVUELTO = "No se pudo encontrar la persona proporcionada." };
+                    }
+
+
+
+                    return vMensaje;
+                }
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

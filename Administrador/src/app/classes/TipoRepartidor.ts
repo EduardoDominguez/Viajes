@@ -1,8 +1,8 @@
 export class TipoRepartidor {
   public Nombre : string;
-  public Clave : string;
+  public Clave : number;
 
-  constructor(pClave: string, pNombre: string){
+  constructor(pClave: number, pNombre: string){
     this.Clave = pClave;
     this.Nombre = pNombre;
   }
