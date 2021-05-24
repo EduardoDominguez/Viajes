@@ -29,7 +29,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
   constructor(
     private _productoService: ProductoService,
     private mensajes: AlertService,
-    private storageService: StorageService,
+    private _storageService: StorageService,
     public globales: globals,
     private router: Router,
     private route: ActivatedRoute,
@@ -91,7 +91,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
     let request = new Producto();
     request.IdProducto = pId;
     request.Estatus = pElement.checked ? 1 : 0;
-    request.IdPersonaModifica = 1//this.storageService.getCurrentSession().user.idpersona;
+    request.IdPersonaModifica = this._storageService.getCurrentUser().IdPersona;
     this._productoService.actualizaEstatus(request).subscribe(
       respuesta => {
         if (respuesta.Exito) {

@@ -98,12 +98,21 @@
                 <table>
                   <thead>
                     <tr>
+                      <th>Acciones</th>
                       <th>Nombre</th>
                       <th>Precio</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let extra of listaExtras">
+                      <td>
+                        <a *ngIf="extra.Estatus == 1"(click)="openEditarExtra(extra)" >
+                        <mat-icon aria-hidden="false" aria-label="Editar" matTooltip="Editar">edit</mat-icon>
+                      </a>
+                      <mat-slide-toggle [checked]="extra.Estatus == 1" color="primary"
+                        matTooltip="Activar/desactivar registro" (change)="onChangeEstatusExtra($event, extra)">
+                        </mat-slide-toggle>
+                    </td>
                       <td>{{extra.Nombre}}</td>
                       <td>${{extra.Precio | thousandsPipe}}</td>
                     </tr>

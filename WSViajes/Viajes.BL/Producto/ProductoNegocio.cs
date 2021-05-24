@@ -209,16 +209,17 @@ namespace Viajes.BL.Producto
 
         /// <summary>
         /// Método para consultar  extras de productos        
-        /// <param name="pIdProducto">Id producto a consultar</param>        
+        /// <param name="pIdProducto">Id producto a consultar</param>    
+        /// <param name="pSoloActivos">Identifica si solo consultar activos o inactivos. 1 activos 0 inactivos, null todos.</param>
         /// <returns> Objeto tipo List<E_EXTRAS_PRODUCTO> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_EXTRAS_PRODUCTO>> ConsultarExtrasByProducto(int pIdProducto)
+        public async Task<List<E_EXTRAS_PRODUCTO>> ConsultarExtrasByProducto(int pIdProducto, byte? pSoloActivos = null)
         {
 
             try
             {
                 ProductoOperaciones pDatos = new ProductoOperaciones();
-                var pResultado = await pDatos.ConsultaExtrasByProducto(pIdProducto);
+                var pResultado = await pDatos.ConsultaExtrasByProducto(pIdProducto, pSoloActivos);
                 return pResultado;
             }
             catch (Exception ex)

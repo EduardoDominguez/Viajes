@@ -201,8 +201,8 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   cargaDatosProducto(pProducto: Producto) {
-    console.log(pProducto);
-    console.log(this.imgPreview.nativeElement);
+    // console.log(pProducto);
+    // console.log(this.imgPreview.nativeElement);
     this.form.controls['frmNombre'].setValue(pProducto.Nombre);
     this.form.controls['frmDescripcion'].setValue(pProducto.Descripcion);
     this.form.controls['frmPrecio'].setValue(pProducto.Precio);
@@ -402,7 +402,7 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Abre el panel para agregar una adscripción
+   * Abre el panel para agregar un extra
    */
   openAgregarExtra(): void {
     let datos = new ExtraProductoRequest();
@@ -420,4 +420,59 @@ export class ProductoAddComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
+
+  /**
+   * Abre el panel para editar un extra
+   * @param pItem - Datos del elemento a editar
+   */
+   openEditarExtra(pItem: ExtrasProducto): void {
+    let datos = new ExtraProductoRequest();
+    datos.IdProducto = this.idProducto;
+    datos.Nombre = pItem.Nombre;
+    datos.Precio = pItem.Precio;
+    datos.IdExtra = pItem.IdExtra;
+    datos.TipoOperacion = "u";
+    const dialogRef = this._dialogService.open(ProductoExtrasModalAeComponent, {
+      // width: '600px',
+      // height: 'calc(100% - 100px)',
+      panelClass: 'custom-dialog-container',
+      data: datos,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getExtrasByIdProducto(this.idProducto);
+      }
+    });
+  }
+
+  /**
+   * Cambia el estatus de un registro
+   * @param pElement
+   * @param pId
+   */
+   onChangeEstatusExtra(pElement: any, pItem: ExtrasProducto) {
+    //let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked, this.storageService.getCurrentSession().user.idpersona, 'nodo');
+    let datos = new ExtraProductoRequest();
+    datos.IdProducto = this.idProducto;
+    datos.Nombre = pItem.Nombre;
+    datos.Precio = pItem.Precio;
+    datos.IdExtra = pItem.IdExtra;
+    datos.Estatus = pElement.checked ? 1 : 0;
+    datos.IdPersona = this._storageService.getCurrentUser().IdPersona;
+    this._productoService.editarExtras(datos).subscribe(
+      respuesta => {
+        if (respuesta.Exito) {
+          this.getExtrasByIdProducto(this.idProducto);
+        } else {
+          pElement.checked = !pElement.checked;
+          this._alertService.showWarning(respuesta.Mensaje);
+        }
+      }, error => {
+        this._alertService.showError(error.message);
+      })
+  }
+
+  
 }

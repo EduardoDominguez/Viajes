@@ -451,7 +451,7 @@ namespace Viajes.DAL.Producto
                             if (resultado <= 0)
                                 vMensaje = new E_MENSAJE { RET_NUMEROERROR = -100, RET_MENSAJEERROR = "No se pudo actualizar, intente más tarde", RET_VALORDEVUELTO = "No se pudo actualizar, intente más tarde" };
                             else
-                                vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Actrualizado", RET_VALORDEVUELTO = "Actrualizado" };
+                                vMensaje = new E_MENSAJE { RET_NUMEROERROR = 0, RET_MENSAJEERROR = "Actualizado", RET_VALORDEVUELTO = "Actrualizado" };
                         }
                         else
                         {
@@ -471,9 +471,10 @@ namespace Viajes.DAL.Producto
         /// <summary>
         /// Método para consultar  extras de productos 
         /// <param name="pIdProducto">Id del producto</param>
+        /// <param name="pSoloActivos">Identifica si solo consultar activos o inactivos. 1 activos 0 inactivos, null todos.</param>
         /// <returns> Objeto tipo List<E_EXTRAS_PRODUCTO> con los datos solicitados </returns>  
         /// </summary>
-        public async Task<List<E_EXTRAS_PRODUCTO>> ConsultaExtrasByProducto(int pIdProducto)
+        public async Task<List<E_EXTRAS_PRODUCTO>> ConsultaExtrasByProducto(int pIdProducto, byte? pSoloActivos = null)
         {
             try
             {
@@ -482,6 +483,7 @@ namespace Viajes.DAL.Producto
                     var extras = await (from s in context.CTL_EXTRAS_PRODUCTO
                                            where
                                            s.id_producto == pIdProducto
+                                            && ((pSoloActivos == null || pSoloActivos == 3) || ( (pSoloActivos != null && pSoloActivos == 3) && s.estatus == pSoloActivos))
                                            orderby s.nombre
                                            select s).ToListAsync<CTL_EXTRAS_PRODUCTO>();
 

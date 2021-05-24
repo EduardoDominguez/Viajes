@@ -553,7 +553,7 @@ namespace WSViajes.Controllers
 
         [HttpGet]
         [Route("{idProducto}/extras")]
-        public async Task<HttpResponseMessage> GetExtrasByProducto(int idProducto)
+        public async Task<HttpResponseMessage> GetExtrasByProducto(int idProducto, byte? soloActivos = 1)
         {
             var respuesta = new ConsultarTodoResponse<E_EXTRAS_PRODUCTO> { };
             var strMetodo = "WSViajes - GetExtrasByProducto ";
@@ -561,7 +561,7 @@ namespace WSViajes.Controllers
 
             try
             {
-                respuesta.Data = await new ProductoNegocio().ConsultarExtrasByProducto(idProducto);
+                respuesta.Data = await new ProductoNegocio().ConsultarExtrasByProducto(idProducto, soloActivos);
 
                 if (respuesta.Data != null)
                 {
@@ -709,8 +709,8 @@ namespace WSViajes.Controllers
                     respuesta.Mensaje = "El elemento <<Precio>> no puede estar vacío ni igual a cero.";
                 else if (String.IsNullOrEmpty(pRequest.IdPersona.ToString()) || pRequest.IdPersona == 0)
                     respuesta.Mensaje = "El elemento <<IdPersona>> no puede estar vacío ni igual a cero.";
-                else if (String.IsNullOrEmpty(pRequest.Estatus.ToString()) || pRequest.Estatus == 0)
-                    respuesta.Mensaje = "El elemento <<Estatus>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Estatus.ToString()))
+                    respuesta.Mensaje = "El elemento <<Estatus>> no puede estar vacío ";
                 else if (String.IsNullOrEmpty(pRequest.IdExtra.ToString()))
                     respuesta.Mensaje = "El elemento <<IdExtra>> no puede estar vacío.";
                 else

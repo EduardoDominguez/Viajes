@@ -121,7 +121,7 @@ export class ProductoService {
   * @param pExtra - Objeto de tipo  ExtraProductoRequest con datos a insertar.
   * @returns Observable de tipo Respuesta
   */
-  aditarExtras(pExtra: ExtraProductoRequest): Observable<Respuesta> {
+  editarExtras(pExtra: ExtraProductoRequest): Observable<Respuesta> {
     return this.http.put<Respuesta>(`${this.basePath}Extras`, pExtra, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );
@@ -133,6 +133,10 @@ export class ProductoService {
  * @returns Observable de tipo Respuesta
  */
   getExtrasByIdProducto(pIdProducto: number): Observable<Respuesta> {
+    let params = new HttpParams();
+    params = params.append('soloActivos','3');
+    this.globales.HTTP_OPTIONS.params = params;
+
     return this.http.get<Respuesta>(`${this.basePath}${pIdProducto}/extras`, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );

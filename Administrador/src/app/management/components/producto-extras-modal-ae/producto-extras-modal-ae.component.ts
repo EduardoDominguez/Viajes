@@ -48,11 +48,11 @@ export class ProductoExtrasModalAeComponent implements OnInit, OnDestroy {
     //Init form angular
     this.form = this.fb.group({
       frmNombre: [
-        '',
+        { value: this.data.Nombre, disabled: false },
         [Validators.required, Validators.maxLength(100)]
       ],
       frmPrecio: [
-        '0.00',
+        { value: this.data.Precio, disabled: false },
         [Validators.required]
       ]
     });
@@ -88,21 +88,40 @@ export class ProductoExtrasModalAeComponent implements OnInit, OnDestroy {
 
       let request = new ExtraProductoRequest()
       request.Nombre = this.form.controls['frmNombre'].value.trim();
-      request.IdProducto =  this.data.IdProducto;
-      request.Precio =  this.form.controls['frmPrecio'].value;
-      request.IdPersona =  this._storageService.getCurrentUser().IdPersona;
-      this.subscription = this._productoService.agregarExtras(request).subscribe(
-        respuesta => {
-          if (respuesta.Exito) {
-            this._mensajesService.showSuccess('Se insertó elemento');
-            this.dialogRef.close(true);
-          } else {
-            this._mensajesService.showWarning(respuesta.Mensaje);
+      request.IdProducto = this.data.IdProducto;
+      request.Precio = this.form.controls['frmPrecio'].value;
+      request.Estatus = 1;
+      request.IdExtra = this.data.IdExtra;
+
+      request.IdPersona = this._storageService.getCurrentUser().IdPersona;
+      if (this.data.TipoOperacion != "u") {
+        this.subscription = this._productoService.agregarExtras(request).subscribe(
+          respuesta => {
+            if (respuesta.Exito) {
+              this._mensajesService.showSuccess('Se insertó elemento');
+              this.dialogRef.close(true);
+            } else {
+              this._mensajesService.showWarning(respuesta.Mensaje);
+            }
+          }, error => {
+            this._mensajesService.showWarning(error);
           }
-        }, error => {
-          this._mensajesService.showWarning(error);
-        }
-      );
+        );
+      } else {
+        this.subscription = this._productoService.editarExtras(request).subscribe(
+          respuesta => {
+            if (respuesta.Exito) {
+              this._mensajesService.showSuccess('Se actualizó elemento');
+              this.dialogRef.close(true);
+            } else {
+              this._mensajesService.showWarning(respuesta.Mensaje);
+            }
+          }, error => {
+            this._mensajesService.showWarning(error);
+          }
+        );
+      }
+
     } catch (ex) {
       console.log("guardarExtra --> ", ex);
       this._mensajesService.showError(ex.message);
