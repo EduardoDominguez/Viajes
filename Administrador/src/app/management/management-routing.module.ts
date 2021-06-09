@@ -18,6 +18,7 @@ import { RepartidorMensajeEnviarComponent } from './components/repartidor-mensaj
 import { BalanceComponent } from './components/balance/balance.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
+import { BannersComponent } from './components/banners/banners.component';
 
 
 const routesChild: Routes = [
@@ -41,6 +42,11 @@ const routesChild: Routes = [
       { path: 'administracion/usuarios', component: UsuariosComponent, canActivate: [AuthGuardService]},
       { path: 'administracion/usuarios/agregar', component: UsuariosAddComponent, canActivate: [AuthGuardService]},
       { path: 'administracion/usuarios/:id', component: UsuariosAddComponent, canActivate: [AuthGuardService]},
+
+      { path: 'administracion/banners', component: BannersComponent, canActivate: [AuthGuardService]},
+      { path: 'administracion/banners/agregar', component: BannersComponent, canActivate: [AuthGuardService]},
+      { path: 'administracion/banners/:id', component: BannersComponent, canActivate: [AuthGuardService]},
+
       { path: 'pedidos/consulta', component: PedidosComponent, canActivate: [AuthGuardService] },
       { path: 'pedidos/balance', component: BalanceComponent, canActivate: [AuthGuardService] },
       { path: 'pedidos/:id', component: PedidosViewIdComponent,  canActivate: [AuthGuardService] },

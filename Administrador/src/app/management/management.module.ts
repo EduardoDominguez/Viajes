@@ -40,6 +40,7 @@ import { RepartidorMensajeEnviarComponent } from './components/repartidor-mensaj
 import { BalanceComponent } from './components/balance/balance.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
+import { BannersComponent } from './components/banners/banners.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.com
     RepartidorMensajeEnviarComponent,
     BalanceComponent,
     UsuariosComponent,
-    UsuariosAddComponent,],
+    UsuariosAddComponent,
+    BannersComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,
