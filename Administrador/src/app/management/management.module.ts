@@ -41,6 +41,7 @@ import { BalanceComponent } from './components/balance/balance.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
 import { BannersComponent } from './components/banners/banners.component';
+import { TipoLocalComponent } from './components/tipo-local/tipo-local.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { BannersComponent } from './components/banners/banners.component';
     BalanceComponent,
     UsuariosComponent,
     UsuariosAddComponent,
-    BannersComponent,],
+    BannersComponent,
+    TipoLocalComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,

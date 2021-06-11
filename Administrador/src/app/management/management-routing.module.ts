@@ -19,6 +19,7 @@ import { BalanceComponent } from './components/balance/balance.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
 import { BannersComponent } from './components/banners/banners.component';
+import { TipoLocalComponent } from './components/tipo-local/tipo-local.component';
 
 
 const routesChild: Routes = [
@@ -46,6 +47,10 @@ const routesChild: Routes = [
       { path: 'administracion/banners', component: BannersComponent, canActivate: [AuthGuardService]},
       { path: 'administracion/banners/agregar', component: BannersComponent, canActivate: [AuthGuardService]},
       { path: 'administracion/banners/:id', component: BannersComponent, canActivate: [AuthGuardService]},
+
+      { path: 'administracion/tipo-local', component: TipoLocalComponent, canActivate: [AuthGuardService]},
+      { path: 'administracion/tipo-local/agregar', component: TipoLocalComponent, canActivate: [AuthGuardService]},
+      { path: 'administracion/tipo-local/:id', component: TipoLocalComponent, canActivate: [AuthGuardService]},
 
       { path: 'pedidos/consulta', component: PedidosComponent, canActivate: [AuthGuardService] },
       { path: 'pedidos/balance', component: BalanceComponent, canActivate: [AuthGuardService] },

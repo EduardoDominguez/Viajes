@@ -116,7 +116,7 @@ export class LocalService {
 
   /**
   * Comsume Web service para consultar costos de local por id
-  * @param pIdCosto - Id del tipo local a consultar
+  * @param pIdCosto - Id del costo a consultar
   * @returns Observable de tipo Respuesta
   */
   getCostosByID(pIdCosto: number): Observable<Respuesta> {
@@ -149,6 +149,25 @@ export class LocalService {
     this.objPeticion.Local = pLocal;
     return this.http.put<Respuesta>(`${this.basePath}`, this.objPeticion, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
+    );
+  }
+
+
+    /**
+   * Comsume Web service para consultar tipos de locales
+   * @param pSoloActivos - Indica si consultar solo activos o no
+   * @returns Observable de tipo Respuesta
+   */
+    getTipoLocal(pSoloActivos?: boolean): Observable<Respuesta> {
+    let params = new HttpParams();
+    if (pSoloActivos != undefined)
+      params = params.append('soloActivos', ((pSoloActivos == true) ? 1 : 0).toString());
+    this.globales.HTTP_OPTIONS.params = params;
+
+    return this.http.get<Respuesta>(`${this.basePath}TipoLocal`, this.globales.HTTP_OPTIONS).pipe(
+      //tap(() => console.log("Petición HTTP para consultar nodos ejecutada")),
+      map(res => res as Respuesta),
+      //catchError(this.handleError<Sesion>('login', new Sesion()))
     );
   }
 }
