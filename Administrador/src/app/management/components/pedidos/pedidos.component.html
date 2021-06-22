@@ -98,6 +98,13 @@
                 [queryParams]="{ to: 'c'}">
                 <mat-icon aria-hidden="false" aria-label="Consultar" matTooltip="Consultar">search</mat-icon>
               </a>
+
+              <button  color="warn"
+              *ngIf="element.Estatus?.IdEstatus != 7 && element.Estatus?.IdEstatus != 5"
+               mat-icon-button aria-label="Cancelar" matTooltip="Cancelar" (click)="cancelarPedido(element.IdPedido)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+
               <!-- <a *ngIf="element.Estatus" routerLink="/admin-dashboard/administracion/productos/{{element.IdProducto}}" [queryParams]="{ to: 'e'}">
                 <mat-icon aria-hidden="false" aria-label="Editar" matTooltip="Editar">edit</mat-icon>
               </a> -->

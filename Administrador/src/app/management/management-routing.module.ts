@@ -20,6 +20,7 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
 import { BannersComponent } from './components/banners/banners.component';
 import { TipoLocalComponent } from './components/tipo-local/tipo-local.component';
+import { ReporteGananciasComponent } from './components/reportes/reporte-ganancias/reporte-ganancias.component';
 
 
 const routesChild: Routes = [
@@ -53,7 +54,8 @@ const routesChild: Routes = [
       { path: 'administracion/tipo-local/:id', component: TipoLocalComponent, canActivate: [AuthGuardService]},
 
       { path: 'pedidos/consulta', component: PedidosComponent, canActivate: [AuthGuardService] },
-      { path: 'pedidos/balance', component: BalanceComponent, canActivate: [AuthGuardService] },
+      { path: 'reportes/balance', component: ReporteGananciasComponent, canActivate: [AuthGuardService] },
+      // { path: 'reportes/ganancias', component: RptGananciaDataSource, canActivate: [AuthGuardService] },
       { path: 'pedidos/:id', component: PedidosViewIdComponent,  canActivate: [AuthGuardService] },
 
       { path: 'no-encontrado', component: NotfoundComponent },

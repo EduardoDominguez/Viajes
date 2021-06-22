@@ -1,0 +1,116 @@
+<div class="container-fluid">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>Reporte de ganancias</span>
+      <span class="spacer-toolbar"></span>
+      <button mat-icon-button aria-label="Limpia filtros grid" (click)="clearFilter()"
+        matTooltip="Limpiar los filtros de busqueda">
+        <!-- <mat-icon>close</mat-icon> -->
+        <span class="custom-size-icon-toolbar"><i class="fas fa-brush"></i></span>
+      </button>
+      <button mat-icon-button aria-label="Actualiza grid" (click)="reLoadGridPage()" matTooltip="Actualiza datos">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <!-- <button mat-icon-button aria-label="Exportar excel" (click)="exportDataExcel()" matTooltip="Exportar a excel">
+            <span class="custom-size-icon-toolbar"><i class="far fa-file-excel"></i></span>
+        </button> -->
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="row pb-5">
+    <mat-accordion class="col-12">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>search</mat-icon>
+          </mat-panel-title>
+          <mat-panel-description>
+            Filtros avanzados
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+
+
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="col-12">
+      <div class="mat-elevation-z6 overflow-auto">
+        <mat-form-field>
+          <input matInput autocomplete="off" [formControl]="termino_busqueda" placeholder="Buscar por palabra clave"
+            matTooltip="Click para buscar" #tooltip="matTooltip" class="pl-1"
+            [matTooltipPosition]='_globalesService.POSITION_OPTIONS[2]'>
+        </mat-form-field>
+
+        <mat-progress-bar mode="indeterminate" class="mx-auto" *ngIf="dataSource.loading$ | async">
+        </mat-progress-bar>
+
+        <table mat-table matSort [dataSource]="dataSource">
+
+          <ng-container matColumnDef="folio">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Folio viaje </th>
+            <td mat-cell *matCellDef="let element"> {{element.Folio }} </td>
+          </ng-container>
+          <ng-container matColumnDef="fechaPedido">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha pedido </th>
+            <td mat-cell *matCellDef="let element"> {{element.FechaPedido }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="nombreLocal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Comercio </th>
+            <td mat-cell *matCellDef="let element"> {{element.NombreLocal }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="nombreRepartidor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Repartidor </th>
+            <td mat-cell *matCellDef="let element"> {{element.NombreRepartidor }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="costoTotal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo total </th>
+            <td mat-cell *matCellDef="let element"> {{element.CostoTotal }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="totalLocal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Pago comercio </th>
+            <td mat-cell *matCellDef="let element"> {{element.TotalLocal }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="costoViaje">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo servicio </th>
+            <td mat-cell *matCellDef="let element"> {{element.CostoViaje }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="totalRepartidor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> % Repartidor </th>
+            <td mat-cell *matCellDef="let element"> {{element.TotalRepartidor }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="totalEmpresa">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> % Fastrun </th>
+            <td mat-cell *matCellDef="let element"> {{element.TotalEmpresa }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="loading">
+            <td mat-footer-cell *matFooterCellDef colspan="7">
+              Cargando ...
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="noData">
+            <td mat-footer-cell *matFooterCellDef colspan="7">
+              No se encontraron registros que cumplan los criterios de filtrado actuales.
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide': dataSource.totalRows$ | async}">
+          </tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="dataSource.totalRows$ | async" [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 30, 40, 50, 100]"></mat-paginator>
+      </div>
+
+    </div>
+  </div>
+  <!--Fin panel card-body-->
+</div>

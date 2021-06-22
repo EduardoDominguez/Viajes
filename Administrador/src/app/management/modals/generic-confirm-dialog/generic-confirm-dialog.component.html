@@ -1,0 +1,24 @@
+<div class="card-header primary-color text-white d-flex ">
+  <mat-icon aria-hidden="false" aria-label="icono persona" class="mr-3">warning_amber</mat-icon> Atenci&oacute;n
+</div>
+<div class="card-body">
+  <div class="row">
+
+    <div class="col-12">
+      <h6>{{mensajeModal}}</h6>
+    </div>
+
+    <mat-divider></mat-divider>
+
+
+
+    <div class="panel-footer-modal col-sm-12 col-md-6 offset-md-6 d-flex justify-content-around align-items-end ">
+      <button mat-flat-button class="btn-block primary-color" type="button" color="primary" (click)="aceptar()"
+        >Aceptar</button>
+
+      <button mat-flat-button class="btn-block primary-color" type="button" (click)="cancelar()"
+        color="warn">Cancelar</button>
+    </div>
+  </div>
+
+</div>

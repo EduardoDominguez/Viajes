@@ -1,0 +1,153 @@
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+
+import { AlertService } from 'src/app/core/services/alert.service';
+
+import { merge, Subscription } from 'rxjs';
+import { tap, debounceTime } from 'rxjs/operators';
+import { globals } from 'src/app/core/globals/globals';
+import { FormControl } from '@angular/forms';
+
+// import { CentroCostoAddDialogComponent } from '../centro-costo-add-dialog/centro-costo-add-dialog.component';
+// import { CentroCostoEditDialogComponent } from '../centro-costo-edit-dialog/centro-costo-edit-dialog.component';
+// import { CentroCostoConsultaDialogComponent } from '../centro-costo-consulta-dialog/centro-costo-consulta-dialog.component';
+// import { CentroCostoActualizarRequest } from 'src/app/classes/request/plazas/unidades-organizacionales/CentroCostoActualizarRequest';
+// import { AuthService } from 'src/app/core/services/auth.service';
+import { RptGananciaDataSource } from 'src/app/core/datasources/rpt-ganancia-datasource';
+import { ReportesService } from 'src/app/core/services/reportes.service';
+import { RptGanancia } from 'src/app/classes/RptGanancia';
+// import { TipoDependencia } from 'src/app/classes/plazas/unidades-organizacionales/TipoDependencia';
+// import { UnidadAdministrativa } from 'src/app/classes/plazas/unidades-organizacionales/UnidadAdministrativa';
+// import { UnidadAdministrativaService } from 'src/app/core/services/plazas/unidades-organizacionales/unidad-administrativa.service';
+// import { TipoDependenciaService } from 'src/app/core/services/plazas/unidades-organizacionales/tipo-dependencia.service';
+// import { EstatusRegistro } from 'src/app/classes/enum/EstatusRegistro';
+// import { Grid } from 'src/app/classes/abstract/Grid';
+// import { NivelJerarquicoEnum } from 'src/app/classes/enum/NivelJerarquicoEnum';
+
+@Component({
+  selector: 'app-reporte-ganancias',
+  templateUrl: './reporte-ganancias.component.html',
+  styleUrls: ['./reporte-ganancias.component.scss']
+})
+export class ReporteGananciasComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  //Seccion variables
+  displayedColumns: string[] = ['folio', 'fechaPedido', 'nombreLocal', 'nombreRepartidor', 'costoTotal', 'totalLocal', 'costoViaje', 'totalRepartidor', 'totalEmpresa'];
+  dataSource: RptGananciaDataSource;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  termino_busqueda: FormControl = new FormControl("");
+
+
+  //Subscribers
+  private subscriptionConsultaTipoDependencia: Subscription;
+  private obsDatasource: Subscription;
+  private subscriptionConsultaUA: Subscription;
+
+  //Listas filtros
+  // public listTipoDependencia: TipoDependencia[];
+  // public listUnidadAdministrativa: UnidadAdministrativa[];
+
+
+  //Valores seleccionados combo
+  public cmbTipoDependnecia = new FormControl(null);
+  public cmbUnidadAdministrativa =  new FormControl(null);
+
+
+  constructor(
+    private _mensajesService: AlertService,
+    private _reportesSerice: ReportesService,
+    public _globalesService: globals,
+    public _dialogService: MatDialog,
+  ) {
+    // super();
+  }
+
+  ngOnInit() {
+    this.dataSource = new RptGananciaDataSource(this._reportesSerice);
+
+    setTimeout(() => {
+      this.dataSource.loadRptGanancia(0, 10, 'fechaPedido', 'asc', this.termino_busqueda.value);
+      // this.getListaTipoDependencia();
+    });
+
+    this.termino_busqueda.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe(value => {
+      this.paginator.pageIndex = 0;
+      this.paginator.pageSize = 10;
+      this.reLoadGridPage()
+    });
+  }
+
+  ngAfterViewInit() {
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+    });
+
+    this.obsDatasource = merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        tap(() => this.reLoadGridPage())
+      )
+      .subscribe();
+  }
+
+
+  ngOnDestroy() {
+    if (this.obsDatasource)
+      this.obsDatasource.unsubscribe();
+  }
+
+  /**
+   * Limpia los filtros de la pantalla y refresca los datos
+   */
+  clearFilter(): void {
+    this.termino_busqueda.setValue("");
+    this.cmbTipoDependnecia.setValue(null);
+    this.cmbUnidadAdministrativa.setValue(null);
+    // this.listUnidadAdministrativa = new Array();
+    // this.reLoadGridPage();
+  }
+
+  /**
+   * Exporta grid a excle
+   */
+  exportDataExcel(): void {
+    // this._reportesSerice.getExcel(
+    //   0,//Para que no pagine
+    //   0,
+    //   (!this.sort.active) ? 'dependencia' : this.sort.active,
+    //   (!this.sort.direction) ? 'asc' : this.sort.direction,
+    //   this.termino_busqueda.value,
+    //   (this.cmbTipoDependnecia.value == null) ? null : this.cmbTipoDependnecia.value.id,
+    //   (this.cmbUnidadAdministrativa.value == null) ? null : this.cmbUnidadAdministrativa.value.id).subscribe(
+    //   (respuesta: any) => {
+    //     if (respuesta.size && respuesta.size > 0)
+    //       this._globalesService.downloadFile(respuesta, "Centros de costo.xlsx", respuesta.type);
+    //     else
+    //       this._mensajesService.showWarning("No se pudo generar el archivo excel, intente más tarde.")
+    //   },
+    //   error => {
+    //   }
+    // );
+  }
+
+  /**
+   * Refresca el grid de datos
+   */
+  reLoadGridPage(): void {
+    this.dataSource.loadRptGanancia(
+      this.paginator.pageIndex,
+      this.paginator.pageSize,
+      (!this.sort.active) ? 'fechaPedido' : this.sort.active,
+      (!this.sort.direction) ? 'asc' : this.sort.direction,
+      this.termino_busqueda.value,
+      (this.cmbTipoDependnecia.value == null) ? null : this.cmbTipoDependnecia.value.id,
+      (this.cmbUnidadAdministrativa.value == null) ? null : this.cmbUnidadAdministrativa.value.id
+    );
+  }
+
+}
+

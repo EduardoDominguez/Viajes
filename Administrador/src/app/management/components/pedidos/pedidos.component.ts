@@ -9,6 +9,9 @@ import { globals } from '../../../core/globals/globals';
 import { PedidoService } from 'src/app/core/services/pedido.service';
 import { Pedido } from 'src/app/classes/Pedido';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+import { GenericConfirmDialogComponent } from 'src/app/management/modals/generic-confirm-dialog/generic-confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CancelaPedidoRequest } from 'src/app/classes/request/CancelaPedidoRequest';
 
 @AutoUnsubscribe()
 @Component({
@@ -28,6 +31,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
     private mensajes: AlertService,
     // private storageService: StorageService,
     public globales: globals,
+    public _dialogService: MatDialog
   ) { }
 
   ngOnInit() {
@@ -71,6 +75,36 @@ export class PedidosComponent implements OnInit, OnDestroy {
       }, error => {
         this.mensajes.showError(error.message);
       });
+  }
+
+  /**
+   * Abre el panel para confirmar movimiento de cancelar pedido
+   */
+   public cancelarPedido(pIdPedido: string): void {
+    const dialogRef = this._dialogService.open(GenericConfirmDialogComponent, {
+      // width: '600px',
+      panelClass: 'custom-dialog-container',
+      data: "¿Seguro que quieres cancelar este pedido?",
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+       //Si se pulso en aceptar
+          let request = new CancelaPedidoRequest();
+          request.IdPedido = pIdPedido;
+          this._pedidoService.cancelar(request).subscribe(
+            respuesta => {
+              if (respuesta.Exito) {
+                this.mensajes.showSuccess(respuesta.Mensaje);
+                this.getPedidos();
+              } else
+                this.mensajes.showWarning(respuesta.Mensaje);
+            }, error => {
+              this.mensajes.showError(error.message);
+          });
+      }
+    });
+
   }
 }
 

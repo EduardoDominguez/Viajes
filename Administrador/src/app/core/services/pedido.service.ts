@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { globals } from '../globals/globals';
 import { environment } from '../../../environments/environment';
 import { Respuesta } from '../../classes/Respuesta';
-import { Local } from '../../classes/Local';
+import { CancelaPedidoRequest } from 'src/app/classes/request/CancelaPedidoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -51,17 +51,17 @@ getPedidoByID(pIdPedido: string): Observable<Respuesta> {
     );
   }
 
-//   /**
-//   * Comsume Web service para actualizar estatus del local
-//   * @param pEstatus - Objeto de tipo  Producto con datos a actualizar.
-//   * @returns Observable de tipo Respuesta
-//   */
-//   actualizaEstatus(pEstatus: Local): Observable<Respuesta> {
-//     this.objPeticion.Local = pEstatus;
-//     return this.http.put<Respuesta>(`${this.basePath}CambiaEstatus`, this.objPeticion, this.globales.HTTP_OPTIONS).pipe(
-//       map(res => res as Respuesta),
-//     );
-//   }
+  /**
+  * Comsume Web service para cancelar un pedido
+  * @param pPeticion - Objeto de tipo  CancelaPedidoRequest con datos a actualizar.
+  * @returns Observable de tipo Respuesta
+  */
+  cancelar(pPeticion: CancelaPedidoRequest): Observable<Respuesta> {
+    this.objPeticion.Pedido = pPeticion;
+    return this.http.put<Respuesta>(`${this.basePath}Cancelar`, this.objPeticion, this.globales.HTTP_OPTIONS).pipe(
+      map(res => res as Respuesta),
+    );
+  }
 
 //   /**
 // * Comsume Web service para consultar tipos de locales

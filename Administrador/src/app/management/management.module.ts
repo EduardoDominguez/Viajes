@@ -42,6 +42,8 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.component';
 import { BannersComponent } from './components/banners/banners.component';
 import { TipoLocalComponent } from './components/tipo-local/tipo-local.component';
+import { GenericConfirmDialogComponent } from './modals/generic-confirm-dialog/generic-confirm-dialog.component';
+import { ReporteGananciasComponent } from './components/reportes/reporte-ganancias/reporte-ganancias.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,9 @@ import { TipoLocalComponent } from './components/tipo-local/tipo-local.component
     UsuariosComponent,
     UsuariosAddComponent,
     BannersComponent,
-    TipoLocalComponent,],
+    TipoLocalComponent,
+    GenericConfirmDialogComponent,
+    ReporteGananciasComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,
@@ -102,6 +106,7 @@ import { TipoLocalComponent } from './components/tipo-local/tipo-local.component
     MaterialFileInputModule,
   ],entryComponents : [
     ProductoExtrasModalAeComponent
+    ,GenericConfirmDialogComponent
   ]
 })
 export class ManagementModule { }
