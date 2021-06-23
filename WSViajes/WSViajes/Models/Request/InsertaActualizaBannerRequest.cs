@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Viajes.EL.Extras
+namespace WSViajes.Models.Request
 {
-    public class E_BANNER
+    public class InsertaActualizaBannerRequest
     {
         public Guid IdBanner { get; set; }
         public string Nombre { get; set; }
         public string Fotografia { get; set; }
         public int IdProducto { get; set; }
+        public int IdPersonaMovimiento { get; set; }
         public byte Estatus { get; set; }
-        public int IdPersonaAlta { get; set; }
-        public int IdPersonaModifica { get; set; }
+
     }
 }
-

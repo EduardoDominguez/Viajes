@@ -515,5 +515,38 @@ namespace Viajes.DAL.Modelo
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ACTUALIZA_PASSWORD", pIN_ID_PERSONAParameter, pIN_PASSWORDParameter, pIN_TIPO_USUARIOParameter, pIN_TOKEN_PASSWORDParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
         }
+    
+        public virtual int SP_BANNER(Nullable<System.Guid> pIN_ID_BANNER, string pIN_NOMBRE, Nullable<int> pIN_ID_PRODUCTO, string pIN_FOTOGRAFIA, Nullable<int> pIN_ID_PERSONA_MOVIMIENTO, Nullable<byte> pIN_ESTATUS, string pIN_TIPO_MOVIMIENTO, ObjectParameter rET_NUMEROERROR, ObjectParameter rET_MENSAJEERROR, ObjectParameter rET_VALORDEVUELTO)
+        {
+            var pIN_ID_BANNERParameter = pIN_ID_BANNER.HasValue ?
+                new ObjectParameter("PIN_ID_BANNER", pIN_ID_BANNER) :
+                new ObjectParameter("PIN_ID_BANNER", typeof(System.Guid));
+    
+            var pIN_NOMBREParameter = pIN_NOMBRE != null ?
+                new ObjectParameter("PIN_NOMBRE", pIN_NOMBRE) :
+                new ObjectParameter("PIN_NOMBRE", typeof(string));
+    
+            var pIN_ID_PRODUCTOParameter = pIN_ID_PRODUCTO.HasValue ?
+                new ObjectParameter("PIN_ID_PRODUCTO", pIN_ID_PRODUCTO) :
+                new ObjectParameter("PIN_ID_PRODUCTO", typeof(int));
+    
+            var pIN_FOTOGRAFIAParameter = pIN_FOTOGRAFIA != null ?
+                new ObjectParameter("PIN_FOTOGRAFIA", pIN_FOTOGRAFIA) :
+                new ObjectParameter("PIN_FOTOGRAFIA", typeof(string));
+    
+            var pIN_ID_PERSONA_MOVIMIENTOParameter = pIN_ID_PERSONA_MOVIMIENTO.HasValue ?
+                new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", pIN_ID_PERSONA_MOVIMIENTO) :
+                new ObjectParameter("PIN_ID_PERSONA_MOVIMIENTO", typeof(int));
+    
+            var pIN_ESTATUSParameter = pIN_ESTATUS.HasValue ?
+                new ObjectParameter("PIN_ESTATUS", pIN_ESTATUS) :
+                new ObjectParameter("PIN_ESTATUS", typeof(byte));
+    
+            var pIN_TIPO_MOVIMIENTOParameter = pIN_TIPO_MOVIMIENTO != null ?
+                new ObjectParameter("PIN_TIPO_MOVIMIENTO", pIN_TIPO_MOVIMIENTO) :
+                new ObjectParameter("PIN_TIPO_MOVIMIENTO", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_BANNER", pIN_ID_BANNERParameter, pIN_NOMBREParameter, pIN_ID_PRODUCTOParameter, pIN_FOTOGRAFIAParameter, pIN_ID_PERSONA_MOVIMIENTOParameter, pIN_ESTATUSParameter, pIN_TIPO_MOVIMIENTOParameter, rET_NUMEROERROR, rET_MENSAJEERROR, rET_VALORDEVUELTO);
+        }
     }
 }

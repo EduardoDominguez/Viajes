@@ -21,7 +21,8 @@ namespace Viajes.DAL.Modelo
         public int id_persona_alta { get; set; }
         public System.DateTime fecha_alta { get; set; }
         public Nullable<int> id_persona_mod { get; set; }
-        public string fech_mod { get; set; }
+        public Nullable<System.DateTime> fecha_mod { get; set; }
+        public byte estatus { get; set; }
     
         public virtual CTL_PERSONA CTL_PERSONA { get; set; }
         public virtual CTL_PERSONA CTL_PERSONA1 { get; set; }

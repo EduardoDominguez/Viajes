@@ -9,7 +9,7 @@ using Viajes.DAL.Banner;
 
 namespace Viajes.BL.Banner
 {
-    public class BannerNegocio : ICRUD<E_BANNER>
+    public class BannerNegocio
     {
         /// <summary>
         /// Método para crear locales
@@ -34,12 +34,12 @@ namespace Viajes.BL.Banner
         /// <param name="pIdLocal">Id de del local a consultar</param>
         /// <returns> Objeto tipo E_LOCAL con los datos solicitados </returns>  
         /// </summary>       
-        public async Task<E_BANNER> ConsultarPorId(int pIdlocal)
+        public async Task<E_BANNER> ConsultarPorId(Guid pIdBanner)
         {
             try
             {
                 BannerOperaciones pDatos = new BannerOperaciones();
-                var pResultado = await pDatos.ConsultaBanners();
+                var pResultado = await pDatos.ConsultaBanners(pIdBanner: pIdBanner);
                 return pResultado.FirstOrDefault();
             }
             catch (Exception ex)

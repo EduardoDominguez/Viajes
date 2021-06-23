@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Viajes.EL.Extras;
 using System.Threading.Tasks;
+using System;
 
 namespace Viajes.EL.Interfaz
 {
@@ -10,6 +11,7 @@ namespace Viajes.EL.Interfaz
         E_MENSAJE Editar(T pEntidad);
         Task<List<T>> ConsultarTodo(byte? pSoloActivos, int? pIdGenerico);
         Task<T> ConsultarPorId(int pId);
+        //Task<T> ConsultarPorId(Guid pId);
 
     }
 }

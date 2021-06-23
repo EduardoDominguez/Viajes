@@ -102,6 +102,7 @@ namespace Viajes.BL.Local
                 throw ex;
             }
         }
+
         /// <summary>
         /// <summary>
         /// Método para cambiar el estatus de locales

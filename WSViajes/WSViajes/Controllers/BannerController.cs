@@ -67,5 +67,212 @@ namespace WSViajes.Controllers
         }
 
 
+        [HttpPost]
+        [Route("")]
+        public HttpResponseMessage Creabanner([FromBody] InsertaActualizaBannerRequest pRequest)
+        {
+            var respuesta = new InsertaDireccionResponse { };
+            var strMetodo = "WSViajes - Creabanner ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Fotografia))
+                    respuesta.Mensaje = "El elemento <<Fotografia>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.IdProducto.ToString()) || pRequest.IdProducto == 0)
+                    respuesta.Mensaje = "El elemento <<IdProducto>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersonaMovimiento.ToString()) || pRequest.IdPersonaMovimiento <= 0)
+                    respuesta.Mensaje = "El elemento <<IdPersonaMovimiento>> no puede estar vacío ni igual o menor a cero.";
+                else
+                {
+
+
+                    var extension = Funciones.getExtensionImagenBasae64(pRequest.Fotografia);
+                    var rutaImagen = Funciones.uploadImagen(pRequest.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
+                                                            System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"),
+                                                            string.Empty, extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Banners"), "Assets/Img/Banners/");
+
+                    if (!string.IsNullOrEmpty(rutaImagen))
+                    {
+
+                        pRequest.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
+
+
+                        var banner = new E_BANNER()
+                        {
+                            Fotografia = pRequest.Fotografia,
+                            IdProducto = pRequest.IdProducto,
+                            Nombre = pRequest.Nombre,
+                            IdPersonaAlta = pRequest.IdPersonaMovimiento
+                        };
+
+                        var respuestaOperacion = new BannerNegocio().Agregar(banner);
+
+                        if (respuestaOperacion.RET_NUMEROERROR == 0)
+                        {
+                            respuesta.Exito = true;
+                            respuesta.Mensaje = respuestaOperacion.RET_VALORDEVUELTO;
+                        }
+                        else
+                        {
+                            respuesta.CodigoError = respuestaOperacion.RET_NUMEROERROR;
+                            respuesta.Mensaje = respuestaOperacion.RET_MENSAJEERROR;
+                        }
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = -3000;
+                        respuesta.Mensaje = "No se pudo crear la imagen, intente más tarde";
+                    }
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+
+        [HttpPut]
+        [Route("")]
+        public async Task<HttpResponseMessage> ActualizaBanner([FromBody] InsertaActualizaBannerRequest pRequest)
+        {
+            var respuesta = new Respuesta { };
+            var strMetodo = " WSViajes - ActualizaBanner ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (String.IsNullOrEmpty(pRequest.IdBanner.ToString()))
+                    respuesta.Mensaje = "El elemento <<IdBanner>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.Nombre))
+                    respuesta.Mensaje = "El elemento  <<Nombre>> no puede estar vacío.";
+                else if (String.IsNullOrEmpty(pRequest.IdProducto.ToString()) || pRequest.IdProducto == 0)
+                    respuesta.Mensaje = "El elemento <<IdProducto>> no puede estar vacío ni igual a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersonaMovimiento.ToString()) || pRequest.IdPersonaMovimiento <= 0)
+                    respuesta.Mensaje = "El elemento <<IdPersonaMovimiento>> no puede estar vacío ni igual o menor a cero.";
+                else
+                {
+
+                    if (!string.IsNullOrEmpty(pRequest.Fotografia))
+                    {
+                        var extension = Funciones.getExtensionImagenBasae64(pRequest.Fotografia);
+                        //Contemplar eliminar foto anterior
+                        var rutaImagen = Funciones.uploadImagen(pRequest.Fotografia, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets"),
+                                                                System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img"), string.Empty,
+                                                                extension, System.Web.Hosting.HostingEnvironment.MapPath($"~/Assets/Img/Banners"), "Assets/Img/Banners/");
+
+                        if (!string.IsNullOrEmpty(rutaImagen))
+                        {
+                            pRequest.Fotografia = $"{Url.Content("~/")}{rutaImagen}";
+                            //Eliminar foto actual
+                            var banner = await new BannerNegocio().ConsultarPorId(pRequest.IdBanner);
+                            Funciones.deleteExistingFile(banner.Fotografia);
+                        }
+                    }
+                    var respuestaDireccion = new BannerNegocio().Editar(new E_BANNER() { IdBanner = pRequest.IdBanner, Fotografia = pRequest.Fotografia, IdPersonaModifica = pRequest.IdPersonaMovimiento, IdProducto = pRequest.IdProducto});
+                    if (respuestaDireccion.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                        respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                        respuesta.Mensaje = respuestaDireccion.RET_MENSAJEERROR;
+                    }
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
+
+
+        [HttpPatch]
+        [Route("CambiaEstatus")]
+        public HttpResponseMessage ActualizaEstatus([FromBody] InsertaActualizaBannerRequest pRequest)
+        {
+            var respuesta = new InsertaDireccionResponse { };
+            var strMetodo = " WSViajes - ActualizaEstatus ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                if (pRequest == null)
+                    respuesta.Mensaje = "No se recibió datos de petición.";
+                else if (String.IsNullOrEmpty(pRequest.IdBanner.ToString()))
+                    respuesta.Mensaje = "El elemento <<IdBanner>> no puede estar vacío ni igual o menor a cero.";
+                else if (String.IsNullOrEmpty(pRequest.IdPersonaMovimiento.ToString()) || pRequest.IdPersonaMovimiento <= 0)
+                    respuesta.Mensaje = "El elemento <<IdPersonaModifica>> no puede estar vacío ni igual o menor a cero.";
+                else if (String.IsNullOrEmpty(pRequest.Estatus.ToString()) || (pRequest.Estatus < 0 || pRequest.Estatus > 1))
+                    respuesta.Mensaje = "El elemento <<Estatus>> no puede estar vacío ni igual o menor a cero.";
+                else
+                {
+                    var respuestaDireccion = new BannerNegocio().CambiaEstatus(new E_BANNER() { IdBanner = pRequest
+                    .IdBanner,
+                    Estatus = pRequest.Estatus,
+                    IdPersonaModifica = pRequest.IdPersonaMovimiento});
+
+                    if (respuestaDireccion.RET_NUMEROERROR == 0)
+                    {
+                        respuesta.Exito = true;
+                        respuesta.Mensaje = respuestaDireccion.RET_VALORDEVUELTO;
+                    }
+                    else
+                    {
+                        respuesta.CodigoError = respuestaDireccion.RET_NUMEROERROR;
+                        respuesta.Mensaje = respuestaDireccion.RET_MENSAJEERROR;
+                    }
+                }
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
     }
 }

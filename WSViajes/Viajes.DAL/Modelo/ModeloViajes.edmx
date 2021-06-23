@@ -306,7 +306,8 @@
           <Property Name="id_persona_alta" Type="int" Nullable="false" />
           <Property Name="fecha_alta" Type="datetime" Nullable="false" />
           <Property Name="id_persona_mod" Type="int" />
-          <Property Name="fech_mod" Type="varchar" MaxLength="1" />
+          <Property Name="fecha_mod" Type="datetime" />
+          <Property Name="estatus" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="TBL_COORDENADAS_CONDUCTOR">
           <Key>
@@ -776,6 +777,18 @@
           <Parameter Name="owner_id" Type="int" Mode="In" />
           <Parameter Name="version" Type="int" Mode="In" />
           <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="SP_BANNER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PIN_ID_BANNER" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="PIN_NOMBRE" Type="nvarchar" Mode="In" />
+          <Parameter Name="PIN_ID_PRODUCTO" Type="int" Mode="In" />
+          <Parameter Name="PIN_FOTOGRAFIA" Type="nvarchar" Mode="In" />
+          <Parameter Name="PIN_ID_PERSONA_MOVIMIENTO" Type="int" Mode="In" />
+          <Parameter Name="PIN_ESTATUS" Type="tinyint" Mode="In" />
+          <Parameter Name="PIN_TIPO_MOVIMIENTO" Type="char" Mode="In" />
+          <Parameter Name="RET_NUMEROERROR" Type="int" Mode="InOut" />
+          <Parameter Name="RET_MENSAJEERROR" Type="varchar" Mode="InOut" />
+          <Parameter Name="RET_VALORDEVUELTO" Type="varchar" Mode="InOut" />
         </Function>
         <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -1431,10 +1444,11 @@
           <Property Name="id_persona_alta" Type="Int32" Nullable="false" />
           <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_persona_mod" Type="Int32" />
-          <Property Name="fech_mod" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CTL_PERSONA" Relationship="Self.FK_BANNER_USUARIO_ALTA" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
           <NavigationProperty Name="CTL_PERSONA1" Relationship="Self.FK_BANNER_USUARIO_MOD" FromRole="TBL_BANNERS" ToRole="CTL_PERSONA" />
           <NavigationProperty Name="CTL_PRODUCTO" Relationship="Self.FK_BANNER_PRODUCTO" FromRole="TBL_BANNERS" ToRole="CTL_PRODUCTO" />
+          <Property Name="fecha_mod" Type="DateTime" Precision="3" />
+          <Property Name="estatus" Type="Byte" Nullable="false" />
         </EntityType>
         <EntityType Name="TBL_COORDENADAS_CONDUCTOR">
           <Key>
@@ -2141,6 +2155,18 @@
             <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="SP_BANNER">
+            <Parameter Name="PIN_ID_BANNER" Mode="In" Type="Guid" />
+            <Parameter Name="PIN_NOMBRE" Mode="In" Type="String" />
+            <Parameter Name="PIN_ID_PRODUCTO" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_FOTOGRAFIA" Mode="In" Type="String" />
+            <Parameter Name="PIN_ID_PERSONA_MOVIMIENTO" Mode="In" Type="Int32" />
+            <Parameter Name="PIN_ESTATUS" Mode="In" Type="Byte" />
+            <Parameter Name="PIN_TIPO_MOVIMIENTO" Mode="In" Type="String" />
+            <Parameter Name="RET_NUMEROERROR" Mode="InOut" Type="Int32" />
+            <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
+            <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2528,6 +2554,8 @@
           <EntitySetMapping Name="TBL_BANNERS">
             <EntityTypeMapping TypeName="ViajesModel.TBL_BANNERS">
               <MappingFragment StoreEntitySet="TBL_BANNERS">
+                <ScalarProperty Name="estatus" ColumnName="estatus" />
+                <ScalarProperty Name="fecha_mod" ColumnName="fecha_mod" />
                 <ScalarProperty Name="id_banner" ColumnName="id_banner" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="fotografia" ColumnName="fotografia" />
@@ -2535,7 +2563,6 @@
                 <ScalarProperty Name="id_persona_alta" ColumnName="id_persona_alta" />
                 <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
                 <ScalarProperty Name="id_persona_mod" ColumnName="id_persona_mod" />
-                <ScalarProperty Name="fech_mod" ColumnName="fech_mod" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2624,6 +2651,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SP_ACTUALIZA_PASSWORD" FunctionName="ViajesModel.Store.SP_ACTUALIZA_PASSWORD" />
+          <FunctionImportMapping FunctionImportName="SP_BANNER" FunctionName="ViajesModel.Store.SP_BANNER" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
