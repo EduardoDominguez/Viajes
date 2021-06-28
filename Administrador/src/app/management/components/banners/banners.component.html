@@ -51,13 +51,19 @@
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef width="10%" class="text-center"> Acciones </th>
             <td mat-cell *matCellDef="let element" class="text-center">
-              <a routerLink="/admin-dashboard/administracion/usuarios/{{element.IdPersona}}" [queryParams]="{ to: 'c'}">
+              <!-- <a routerLink="/admin-dashboard/administracion/usuarios/{{element.IdPersona}}" [queryParams]="{ to: 'c'}">
                 <mat-icon aria-hidden="false" aria-label="Consultar" matTooltip="Consultar">search</mat-icon>
-              </a>
-              <a *ngIf="element.Estatus"
+              </a> -->
+              <button mat-icon-button (click)="consultar(element.IdBanner)" color="primary" matTooltip="Consultar" aria-label="Consultar">
+                <mat-icon>search</mat-icon>
+              </button>
+              <button *ngIf="element.Estatus" mat-icon-button (click)="editar(element.IdBanner)" color="primary" matTooltip="Editar" aria-label="Consultar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <!-- <a *ngIf="element.Estatus"
                 routerLink="/admin-dashboard/administracion/usuarios/{{element.IdPersona}}" [queryParams]="{ to: 'e'}">
                 <mat-icon aria-hidden="false" aria-label="Editar" matTooltip="Editar">edit</mat-icon>
-              </a>
+              </a> -->
             </td>
           </ng-container>
 

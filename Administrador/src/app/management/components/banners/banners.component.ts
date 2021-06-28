@@ -36,8 +36,8 @@ export class BannersComponent implements OnInit, OnDestroy {
     private mensajes: AlertService,
     private storageService: StorageService,
     public globales: globals,
-    private router: Router,
-    private route: ActivatedRoute,
+    private _router: Router,
+    private _route: ActivatedRoute,
     private _location: Location,
     public _dialogService: MatDialog
 
@@ -58,8 +58,8 @@ export class BannersComponent implements OnInit, OnDestroy {
    * Detecta los parametros de la ruta
    */
   procesaRutas() {
-    this.idLocal = +this.route.snapshot.paramMap.get('idLocal');
-    this.route.queryParamMap.subscribe(queryParams => {
+    this.idLocal = +this._route.snapshot.paramMap.get('idLocal');
+    this._route.queryParamMap.subscribe(queryParams => {
       this.nombreLocal = (queryParams.get("name") == null) ? "" : queryParams.get("name");
     });
   }
@@ -139,6 +139,68 @@ export class BannersComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
+  /**
+   * Abre el panel para consultar un banner
+   */
+   public consultar(pIdBanner: string): void {
+    const dialogRef = this._dialogService.open(FormBannerComponent, {
+      // width: '600px',
+      panelClass: 'custom-dialog-container',
+      // data: "¿Seguro que quieres cancelar este pedido?",
+    });
+
+    this._router.navigate([], {
+      relativeTo: this._route,
+      queryParams: {
+        id: pIdBanner,
+        to: 'c'
+      },
+      queryParamsHandling: 'merge',
+      // preserve the existing query params in the route
+      skipLocationChange: true
+      // do not trigger navigation
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.getBanners();
+    //   }
+    // });
+  }
+
+
+  /**
+   * Abre el panel para editar un banner
+   */
+   public editar(pIdBanner: string): void {
+    const dialogRef = this._dialogService.open(FormBannerComponent, {
+      // width: '600px',
+      panelClass: 'custom-dialog-container',
+      // data: "¿Seguro que quieres cancelar este pedido?",
+    });
+
+    this._router.navigate([], {
+      relativeTo: this._route,
+      queryParams: {
+        id: pIdBanner,
+        to: 'e'
+      },
+      queryParamsHandling: 'merge',
+      // preserve the existing query params in the route
+      skipLocationChange: true
+      // do not trigger navigation
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getBanners();
+      }
+    });
+  }
+
+
 
 }
 

@@ -85,12 +85,12 @@ export class BannerService {
 
 
   /**
- * Comsume Web service para consultar una persona por id
- * @param pIdPErsona - Indentificador de la persona a consultar
+ * Comsume Web service para consultar un banner por id
+ * @param pIdBanner - Indentificador del banner a consultar
  * @returns Observable de tipo Respuesta
  */
-  getPersonaById(pIdPErsona: number): Observable<Respuesta> {
-    return this.http.get<Respuesta>(`${this.basePath}Consulta/${pIdPErsona}`, this.globales.HTTP_OPTIONS).pipe(
+   getBannersById(pIdBanner: string): Observable<Respuesta> {
+    return this.http.get<Respuesta>(`${this.basePath}/${pIdBanner}`, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );
   }

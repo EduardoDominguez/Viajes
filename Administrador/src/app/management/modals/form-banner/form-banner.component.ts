@@ -31,7 +31,7 @@ export class FormBannerComponent implements OnInit, OnDestroy {
   maxSize: number = 10000000;
   tipoOperacion: string = "n";//n = nuevo, e= editar, c= consultar
   isDisabled: boolean = false;
-  idPersona: number;
+  idBanner: string;
 
   comboProductos: Producto[];
 
@@ -65,10 +65,11 @@ export class FormBannerComponent implements OnInit, OnDestroy {
   }
 
   procesaRutas() {
-    this.idPersona = +this.route.snapshot.paramMap.get('id');
+    // this.idBanner = this.route.snapshot.paramMap.get('id');
     this.route.queryParamMap.subscribe(queryParams => {
       this.tipoOperacion = (queryParams.get("to") == null) ? "n" : queryParams.get("to").toLocaleLowerCase();
       //this.isDisabled = this.tipoOperacion == 'c';
+      this.idBanner = queryParams.get("id");
       this.detectaTipoOperacion(this.tipoOperacion);
     });
   }
@@ -80,11 +81,11 @@ export class FormBannerComponent implements OnInit, OnDestroy {
         [Validators.required, FileValidator.maxContentSize(this.maxSize),],
       ],
       frmNombre: [
-        {value: null, disabled: this.isDisabled},
+        { value: null, disabled: this.isDisabled },
         [Validators.required, Validators.maxLength(250)]
       ],
       cmbProductos: [
-        {value: '', disabled: this.isDisabled},
+        { value: '', disabled: this.isDisabled },
         [Validators.required]
       ]
     });
@@ -102,13 +103,13 @@ export class FormBannerComponent implements OnInit, OnDestroy {
       case "e":
         // this.comboTipoUsuario.push(new TipoUsuario(1, "Cliente"));
         this.tituloTipoOperacion = "Editar";
-        // this.getUsurarioById(this.idPersona);
+        this.getBannerById(this.idBanner);
         break;
       case "c":
         // this.comboTipoUsuario.push(new TipoUsuario(1, "Cliente"));
         this.isDisabled = true;
         this.tituloTipoOperacion = "Consultar";
-        // this.getUsurarioById(this.idPersona);
+        this.getBannerById(this.idBanner);
 
         break;
       default:
@@ -129,16 +130,10 @@ export class FormBannerComponent implements OnInit, OnDestroy {
    * Carga los datos consultados en pantalla
    *  @param pPersona - Objeto tipo persona con datos a cargar
    */
-   private setDataOnForm(pBanner: Banner): void{
+  private setDataOnForm(pBanner: Banner): void {
     this.form.get('frmNombre').setValue(pBanner.Nombre);
     this.form.get('cmbProductos').setValue(pBanner.IdProducto);
     // this.form.get('frmTelefono').setValue(pPersona.Telefono);
-    // this.form.get('cmbSexo').setValue(pPersona.Sexo);
-    // this.form.get('frmEmail').setValue(pPersona.Acceso.Email);
-
-    // if(pPersona.Acceso.TipoUsuario == TipoUsuarioEnum.CLIENTE){
-    //   this.form.get('cmbTipoUsuario').disable();
-    // }
 
     if (!this.isDisabled) {
       this.form.get('file').clearValidators();
@@ -151,7 +146,7 @@ export class FormBannerComponent implements OnInit, OnDestroy {
   /**
    * Servicio para consultar productosl.
    */
-   private getProductos():void{
+  private getProductos(): void {
     this._productoService.getProductos(true).subscribe(
       respuesta => {
         // console.log(respuesta);
@@ -202,7 +197,7 @@ export class FormBannerComponent implements OnInit, OnDestroy {
 
         } else {
           request.IdPersonaMovimiento = this._storageService.getCurrentUser().IdPersona;//this._storageService.getCurrentSession().user.idpersona;
-          request.IdBanner = this.idPersona;
+          request.IdBanner = this.idBanner;
 
           if (this.removableInput.value != null) {
             request.Fotografia = this.imgPreview.nativeElement.src;
@@ -263,6 +258,20 @@ export class FormBannerComponent implements OnInit, OnDestroy {
     this._location.back();
   }
 
+  getBannerById(pIdBanner: string): void {
+    this._bannerService.getBannersById(pIdBanner).subscribe(
+      respuesta => {
+        if (respuesta.Exito) {
+          // this.dialogRef.close(true);
+          this.setDataOnForm(respuesta.Data);
+        } else {
+          this._alertService.showWarning(respuesta.Mensaje);
+        }
+
+      }, error => {
+        this._alertService.showError(error.message);
+      });
+  }
 }
 
 

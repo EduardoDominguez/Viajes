@@ -1,5 +1,5 @@
 export class CreaActualizaBannerRequest {
-  public IdBanner: number;
+  public IdBanner: string;
   public Nombre: string;
   public Fotografia: string;
   public IdProducto: number;
