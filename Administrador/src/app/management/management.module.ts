@@ -44,6 +44,7 @@ import { BannersComponent } from './components/banners/banners.component';
 import { TipoLocalComponent } from './components/tipo-local/tipo-local.component';
 import { GenericConfirmDialogComponent } from './modals/generic-confirm-dialog/generic-confirm-dialog.component';
 import { ReporteGananciasComponent } from './components/reportes/reporte-ganancias/reporte-ganancias.component';
+import { FormBannerComponent } from './modals/form-banner/form-banner.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { ReporteGananciasComponent } from './components/reportes/reporte-gananci
     BannersComponent,
     TipoLocalComponent,
     GenericConfirmDialogComponent,
-    ReporteGananciasComponent,],
+    ReporteGananciasComponent,
+    FormBannerComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,
@@ -107,6 +109,7 @@ import { ReporteGananciasComponent } from './components/reportes/reporte-gananci
   ],entryComponents : [
     ProductoExtrasModalAeComponent
     ,GenericConfirmDialogComponent
+    ,FormBannerComponent
   ]
 })
 export class ManagementModule { }

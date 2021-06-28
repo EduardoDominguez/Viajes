@@ -9,11 +9,11 @@ import { StorageService } from 'src/app/core/services/storage.service';
 import { globals } from '../../../core/globals/globals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
-import { TipoUsuarioEnum } from 'src/app/classes/enums/TipoUsuarioEnum';
 import { ActualizaEstatusGenericoRequest } from 'src/app/classes/request/ActualizaEstatusGenericoRequest';
 import { BannerService } from 'src/app/core/services/banner.service';
 import { Banner } from 'src/app/classes/Banner';
-
+import { MatDialog } from '@angular/material/dialog';
+import { FormBannerComponent } from 'src/app/management/modals/form-banner/form-banner.component';
 
 
 @AutoUnsubscribe()
@@ -23,7 +23,7 @@ import { Banner } from 'src/app/classes/Banner';
   styleUrls: ['./banners.component.scss']
 })
 export class BannersComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = [/*'acciones', 'estatus', */'Fotografia', 'Nombre' ];
+  displayedColumns: string[] = ['acciones', 'estatus', 'Fotografia', 'Nombre' ];
   dataSource: any;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -37,7 +37,9 @@ export class BannersComponent implements OnInit, OnDestroy {
     public globales: globals,
     private router: Router,
     private route: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    public _dialogService: MatDialog
+
   ) {
     this.procesaRutas();
   }
@@ -86,7 +88,7 @@ export class BannersComponent implements OnInit, OnDestroy {
    * @param pId
    */
   onChangeEstatus(pElement: any, pId: number) {
-    let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked ? 1 : 0, this.storageService.getCurrentSession().Persona.IdPersona);
+    let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked ? 1 : 0, this.storageService.getCurrentSession().Persona.IdPersona, this.storageService.getCurrentSession().Persona.IdPersona);
     this._bannersService.actualizaEstatus(request).subscribe(
       respuesta => {
         if (respuesta.Exito) {
@@ -118,8 +120,23 @@ export class BannersComponent implements OnInit, OnDestroy {
       });
   }
 
-  public get TipoUsuario(){
-    return TipoUsuarioEnum;
+
+ /**
+   * Abre el panel para agregar un banner
+   */
+  public agregar(): void {
+    const dialogRef = this._dialogService.open(FormBannerComponent, {
+      // width: '600px',
+      panelClass: 'custom-dialog-container',
+      data: "¿Seguro que quieres cancelar este pedido?",
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getBanners();
+      }
+    });
   }
+
 }
 

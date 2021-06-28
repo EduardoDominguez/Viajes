@@ -14,6 +14,7 @@ import { EnviarNotificacionFirebaseRequest } from 'src/app/classes/request/Envia
 import { ActualizaPasswordRequest } from 'src/app/classes/request/ActualizaPasswordRequest';
 import { CreaActualizaUsuarioRequest } from 'src/app/classes/request/CreaActualizaUsuarioRequest';
 import { ActualizaEstatusGenericoRequest } from 'src/app/classes/request/ActualizaEstatusGenericoRequest';
+import { CreaActualizaBannerRequest } from 'src/app/classes/request/CreaActualizaBannerRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class BannerService {
   * @returns Observable de tipo Respuesta
   */
   actualizaEstatus(pEstatus: ActualizaEstatusGenericoRequest): Observable<Respuesta> {
-    return this.http.patch<Respuesta>(`${this.basePath}/ActualizaEstatus`, pEstatus, this.globales.HTTP_OPTIONS).pipe(
+    return this.http.patch<Respuesta>(`${this.basePath}/CambiaEstatus`, pEstatus, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );
   }
@@ -42,22 +43,22 @@ export class BannerService {
 
   /**
   * Comsume Web service para agregar persona/usuario
-  * @param pUsuario - Objeto de tipo  CreaActualizaUsuarioRequest con datos a agregar.
+  * @param pBanner - Objeto de tipo  CreaActualizaBannerRequest con datos a agregar.
   * @returns Observable de tipo Respuesta
   */
-  agregar(pUsuario: CreaActualizaUsuarioRequest): Observable<Respuesta> {
-    return this.http.post<Respuesta>(`${this.basePath}Registro`, pUsuario, this.globales.HTTP_OPTIONS).pipe(
+  agregar(pBanner: CreaActualizaBannerRequest): Observable<Respuesta> {
+    return this.http.post<Respuesta>(`${this.basePath}`, pBanner, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );
   }
 
   /**
   * Comsume Web service para editar persona/usuario
-  * @param pUsuario - Objeto de tipo  CreaActualizaUsuarioRequest con datos a editar.
+  * @param pBanner - Objeto de tipo  CreaActualizaBannerRequest con datos a editar.
   * @returns Observable de tipo Respuesta
   */
-  editar(pUsuario: CreaActualizaUsuarioRequest): Observable<Respuesta> {
-    return this.http.put<Respuesta>(`${this.basePath}Actualiza`, pUsuario, this.globales.HTTP_OPTIONS).pipe(
+  editar(pBanner: CreaActualizaBannerRequest): Observable<Respuesta> {
+    return this.http.put<Respuesta>(`${this.basePath}`, pBanner, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );
   }

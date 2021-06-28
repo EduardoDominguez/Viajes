@@ -1,0 +1,79 @@
+<div class="card-header primary-color text-white d-flex ">
+  <mat-icon aria-hidden="false" aria-label="icono persona" class="mr-3">turned_in_not</mat-icon> Banners
+</div>
+<div class="card-body">
+  <div class="row">
+
+    <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <div class="row">
+
+        <div class="form-group col-sm-12 col-md-6 col-sm-12" *ngIf="!isDisabled">
+          <mat-form-field>
+            <ngx-mat-file-input #removableInput formControlName="file" placeholder="Selecciona imagen"
+              [accept]="'.png, .jpg, .jpeg, .svg'" (change)="cambiaImagen()" required>
+            </ngx-mat-file-input>
+            <button mat-icon-button matSuffix *ngIf="!removableInput.empty"
+              (click)="removableInput.clear($event);cambiaImagen()">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <!-- <mat-error *ngIf="form.get('file').hasError('required')">
+              Por favor seleccione una imagen
+            </mat-error> -->
+            <mat-error *ngIf="form.get('file').hasError('maxContentSize')">
+              El tamaño total permitido se excede
+              {{form.get('file')?.getError('maxContentSize').maxSize | byteFormat}} ({{form.get('file')?.getError('maxContentSize').actualSize
+                                  | byteFormat}}).
+            </mat-error>
+          </mat-form-field>
+          <blockquote class="col-12">
+            <footer class="blockquote-footer text-info">Tamaño m&aacute;ximo 10 megas. </footer>
+            <footer class="blockquote-footer text-info">Formatos aceptados: .png, .jpg, .jpeg, .svg
+            </footer>
+            <!--footer class="blockquote-footer text-info">Resoluci&oacute;n aceptada (excepto .svg): 200 x
+                              200</footer>-->
+          </blockquote>
+        </div>
+        <div class="form-group col-sm-12 col-md-6">
+          <!-- <img src="" #imgPreview class="img-thumbnail mx-auto d-block" width="400px" *ngIf="form.get('file').value"/> -->
+          <img src="./assets/img/profile.png" #imgPreview class="img-profile mx-auto d-block" width="400px" />
+          <!-- <h4 *ngIf="!form.get('file').value">Ninguna imagen seleccionada</h4> -->
+        </div>
+
+        <div class="form-group col-sm-12 col-md-8">
+          <mat-form-field>
+            <input matInput placeholder="Nombre completo" formControlName="frmNombre" maxlength="250" required>
+            <mat-error *ngIf="form.get('frmNombre').hasError('required')">
+              Ingrese un nombre
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-4">
+          <mat-form-field>
+              <mat-label>Producto</mat-label>
+              <mat-select required [formControlName]="'cmbProductos'">
+                  <mat-option *ngFor="let producto of comboProductos" [value]="producto.IdProducto">
+                      <img class="icono-persona" mat-card-avatar *ngIf="producto.Fotografia" src="{{producto.Fotografia}}" alt="Imagen producto">
+                      <span>{{producto.Nombre}}</span>
+                  </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('cmbProductos').hasError('required')">
+                  Ingrese un valor
+              </mat-error>
+          </mat-form-field>
+      </div>
+
+
+        <div class="form-group col" *ngIf="!isDisabled">
+          <button type="submit" mat-raised-button class="btn-block primary-color" color="primary">Guardar</button>
+        </div>
+
+        <div class="form-group col">
+          <button type="button" mat-raised-button class="btn-block primary-color" (click)="cancelar()"
+            color="primary">Regresar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

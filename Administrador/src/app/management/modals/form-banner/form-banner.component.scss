@@ -1,0 +1,70 @@
+/****************************************************************************************
+        $IMPORTS
+****************************************************************************************/
+@import "../../../../colors.scss";
+
+/****************************************************************************************
+        $GENERALES
+****************************************************************************************/
+
+table {
+  font-size: 13px;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #eee;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+table tbody tr:hover {
+  background-color: #eee;
+  color: #000;
+  cursor: pointer;
+}
+
+thead th {
+  color: white;
+  background-color: $primary-color;
+  position: sticky;
+  top: 0;
+}
+
+/****************************************************************************************
+        $CLASSES
+****************************************************************************************/
+.table-responsive {
+  max-height: 280px;
+}
+
+.tr-active {
+  background-color: #f5d5b1 !important;
+  color: #000 !important;
+  cursor: none !important;
+}
+
+
+.img-profile{
+  border-radius: 60pc;
+  height: 150px;
+  border: 1px solid #ccc;
+  width: 150px;
+}
+
+.card-header {
+  background-color: $primary-color;
+}
+
+.mat-form-field{
+  width: 100%;
+}
+
+.icono-persona{
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+      margin-right: 35px;
+      border: 1px dashed;
+}
