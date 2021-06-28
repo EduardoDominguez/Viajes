@@ -36,7 +36,7 @@ var dateFormat = require("dateformat");
 export class ReporteGananciasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   //Seccion variables
-  displayedColumns: string[] = ['folio', 'fechaPedido', 'nombreLocal', 'nombreRepartidor', 'costoTotal', 'totalLocal', 'costoViaje', 'totalRepartidor', 'totalEmpresa'];
+  displayedColumns: string[] = ['folio', 'tipoPedido', 'fechaPedido', 'nombreLocal', 'nombreRepartidor', 'costoTotal', 'totalLocal', 'costoViaje', 'totalRepartidor', 'totalEmpresa'];
   dataSource: RptGananciaDataSource;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -44,9 +44,9 @@ export class ReporteGananciasComponent implements OnInit, OnDestroy, AfterViewIn
 
 
   //Subscribers
-  private subscriptionConsultaTipoDependencia: Subscription;
+  // private subscriptionConsultaTipoDependencia: Subscription;
   private obsDatasource: Subscription;
-  private subscriptionConsultaUA: Subscription;
+  // private subscriptionConsultaUA: Subscription;
 
   //Listas filtros
   // public listTipoDependencia: TipoDependencia[];

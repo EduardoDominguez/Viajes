@@ -65,9 +65,15 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Folio viaje </th>
             <td mat-cell *matCellDef="let element"> {{element.Folio }} </td>
           </ng-container>
+
+          <ng-container matColumnDef="tipoPedido">
+            <th mat-header-cell *matHeaderCellDef> Tipo Pedido </th>
+            <td mat-cell *matCellDef="let element"> {{element.TipoPedido }} </td>
+          </ng-container>
+
           <ng-container matColumnDef="fechaPedido">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha pedido </th>
-            <td mat-cell *matCellDef="let element"> {{element.FechaPedido }} </td>
+            <td mat-cell *matCellDef="let element"> {{element.FechaPedido | date }} </td>
           </ng-container>
 
           <ng-container matColumnDef="nombreLocal">

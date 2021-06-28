@@ -109,6 +109,7 @@ export class ReportesService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
+      // console.log("·······");
       // TODO: send the error to remote logging infrastructure
       // console.error(error); // log to console instead
 
@@ -117,8 +118,8 @@ export class ReportesService {
 
       if (result instanceof GetRptGananciaListPaginatedResponse) {
         result.Data = new PaginatedList<RptGanancia>();
-        result.Data.rows = new Array<RptGanancia>();
-        result.Data.totalRows = 0;
+        result.Data.Rows = new Array<RptGanancia>();
+        result.Data.TotalRows = 0;
       }
       // Let the app keep running by returning an empty result.
       return of(result as T);

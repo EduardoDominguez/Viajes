@@ -38,10 +38,15 @@ export class RptGananciaDataSource implements DataSource<RptGanancia> {
                 catchError(() => of([])),
                 finalize(() => this.loadingSubject.next(false))
             )
-            .subscribe(response => {
-                console.log(response)
-                this.rptGananciaSubject.next((response as GetRptGananciaListPaginatedResponse).Data.rows)
-                this.totalRowsSubject.next((response as GetRptGananciaListPaginatedResponse).Data.totalRows)
+            .subscribe((response : GetRptGananciaListPaginatedResponse) => {
+                if(response.Exito){
+                  this.rptGananciaSubject.next(response.Data.Rows)
+                  this.totalRowsSubject.next(response.Data.TotalRows)
+                }else{
+                  this.rptGananciaSubject.next(new Array<RptGanancia>())
+                  this.totalRowsSubject.next(0)
+                }
+
             });
     }
 

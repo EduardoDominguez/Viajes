@@ -1,7 +1,7 @@
 // Respuesta para consulta múltiple
 export class PaginatedList<TList> {
-  pageIndex: number = 0;
-  pageSize: number = 0;
-  totalRows: number = 0;
-  rows: TList[] = new Array<TList>();
+  PageIndex: number = 0;
+  PageSize: number = 0;
+  TotalRows: number = 0;
+  Rows: TList[] = new Array<TList>();
 }
