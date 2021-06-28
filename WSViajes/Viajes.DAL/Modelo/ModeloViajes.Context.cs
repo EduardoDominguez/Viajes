@@ -53,6 +53,7 @@ namespace Viajes.DAL.Modelo
         public virtual DbSet<TBL_TARIFA_ENVIO> TBL_TARIFA_ENVIO { get; set; }
         public virtual DbSet<CTL_ESTATUS_FACTURA> CTL_ESTATUS_FACTURA { get; set; }
         public virtual DbSet<TBL_RECHAZO_PEDIDO> TBL_RECHAZO_PEDIDO { get; set; }
+        public virtual DbSet<V_RPT_GANANCIAS> V_RPT_GANANCIAS { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

@@ -24,7 +24,7 @@ export class ComunService {
 * @param pEstatus - Objeto de tipo  ActualizaEstatusGenericoRequest con datos a actualizar.
 * @returns Observable de tipo IngresaMenuResponse
 */
-  actualizaEstatus(pEstatus: ActualizaEstatusGenericoRequest): Observable<IngresaMenuResponse> {
+  actualizaEstatus(pEstatus: ActualizaEstatusGenericoRequest<number>): Observable<IngresaMenuResponse> {
     return this.http.put<IngresaMenuResponse>(`${this.basePath}estatus`, pEstatus, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as IngresaMenuResponse),
     );

@@ -7,7 +7,7 @@ import { RptGanancia } from '../../classes/RptGanancia';
 
 export class RptGananciaDataSource implements DataSource<RptGanancia> {
 
-    private centroCostoSubject = new BehaviorSubject<RptGanancia[]>([]);
+    private rptGananciaSubject = new BehaviorSubject<RptGanancia[]>([]);
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -39,17 +39,18 @@ export class RptGananciaDataSource implements DataSource<RptGanancia> {
                 finalize(() => this.loadingSubject.next(false))
             )
             .subscribe(response => {
-                this.centroCostoSubject.next((response as GetRptGananciaListPaginatedResponse).Data.rows)
+                console.log(response)
+                this.rptGananciaSubject.next((response as GetRptGananciaListPaginatedResponse).Data.rows)
                 this.totalRowsSubject.next((response as GetRptGananciaListPaginatedResponse).Data.totalRows)
             });
     }
 
     connect(collectionViewer: CollectionViewer): Observable<RptGanancia[]> {
-        return this.centroCostoSubject.asObservable();
+        return this.rptGananciaSubject.asObservable();
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
-        this.centroCostoSubject.complete();
+        this.rptGananciaSubject.complete();
         this.loadingSubject.complete();
         this.totalRowsSubject.complete();
     }

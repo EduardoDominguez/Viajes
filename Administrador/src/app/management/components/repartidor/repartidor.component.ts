@@ -83,7 +83,7 @@ export class RepartidorComponent implements OnInit, OnDestroy {
    * @param pId
    */
   onChangeEstatus(pElement: any, pId: number) {
-    let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked ? 1 : 0, this.storageService.getCurrentSession().Persona.IdPersona);
+    let request = new ActualizaEstatusGenericoRequest<number>(pId, pElement.checked ? 1 : 0, this.storageService.getCurrentSession().Persona.IdPersona);
     this._repartidorService.actualizaEstatus(request).subscribe(
       respuesta => {
         if (respuesta.Exito) {

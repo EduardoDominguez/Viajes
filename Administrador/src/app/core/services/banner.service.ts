@@ -34,7 +34,7 @@ export class BannerService {
   * @param pEstatus - Objeto de tipo  ActualizaEstatusGenericoRequest con datos a actualizar.
   * @returns Observable de tipo Respuesta
   */
-  actualizaEstatus(pEstatus: ActualizaEstatusGenericoRequest): Observable<Respuesta> {
+  actualizaEstatus(pEstatus: ActualizaEstatusGenericoRequest<string>): Observable<Respuesta> {
     return this.http.patch<Respuesta>(`${this.basePath}/CambiaEstatus`, pEstatus, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );

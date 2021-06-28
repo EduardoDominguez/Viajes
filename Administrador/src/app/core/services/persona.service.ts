@@ -50,7 +50,7 @@ export class PersonaService {
   * @param pEstatus - Objeto de tipo  ActualizaEstatusGenericoRequest con datos a actualizar.
   * @returns Observable de tipo Respuesta
   */
-  actualizaEstatus(pEstatus: ActualizaEstatusGenericoRequest): Observable<Respuesta> {
+  actualizaEstatus(pEstatus: ActualizaEstatusGenericoRequest<number>): Observable<Respuesta> {
     return this.http.patch<Respuesta>(`${this.basePath}/ActualizaEstatus`, pEstatus, this.globales.HTTP_OPTIONS).pipe(
       map(res => res as Respuesta),
     );

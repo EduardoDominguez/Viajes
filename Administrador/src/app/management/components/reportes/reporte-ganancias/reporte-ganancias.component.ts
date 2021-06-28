@@ -8,7 +8,7 @@ import { AlertService } from 'src/app/core/services/alert.service';
 import { merge, Subscription } from 'rxjs';
 import { tap, debounceTime } from 'rxjs/operators';
 import { globals } from 'src/app/core/globals/globals';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 // import { CentroCostoAddDialogComponent } from '../centro-costo-add-dialog/centro-costo-add-dialog.component';
 // import { CentroCostoEditDialogComponent } from '../centro-costo-edit-dialog/centro-costo-edit-dialog.component';
@@ -25,6 +25,8 @@ import { RptGanancia } from 'src/app/classes/RptGanancia';
 // import { EstatusRegistro } from 'src/app/classes/enum/EstatusRegistro';
 // import { Grid } from 'src/app/classes/abstract/Grid';
 // import { NivelJerarquicoEnum } from 'src/app/classes/enum/NivelJerarquicoEnum';
+var dateFormat = require("dateformat");
+
 
 @Component({
   selector: 'app-reporte-ganancias',
@@ -56,9 +58,16 @@ export class ReporteGananciasComponent implements OnInit, OnDestroy, AfterViewIn
   public cmbUnidadAdministrativa =  new FormControl(null);
 
 
+
+ // Forms
+  public rangoFechaCreacion = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
+
   constructor(
     private _mensajesService: AlertService,
-    private _reportesSerice: ReportesService,
+    private _reportesService: ReportesService,
     public _globalesService: globals,
     public _dialogService: MatDialog,
   ) {
@@ -66,7 +75,7 @@ export class ReporteGananciasComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit() {
-    this.dataSource = new RptGananciaDataSource(this._reportesSerice);
+    this.dataSource = new RptGananciaDataSource(this._reportesService);
 
     setTimeout(() => {
       this.dataSource.loadRptGanancia(0, 10, 'fechaPedido', 'asc', this.termino_busqueda.value);
@@ -105,10 +114,25 @@ export class ReporteGananciasComponent implements OnInit, OnDestroy, AfterViewIn
    */
   clearFilter(): void {
     this.termino_busqueda.setValue("");
+    this.rangoFechaCreacion.reset();
     this.cmbTipoDependnecia.setValue(null);
     this.cmbUnidadAdministrativa.setValue(null);
     // this.listUnidadAdministrativa = new Array();
     // this.reLoadGridPage();
+  }
+
+  /**
+   * buscar con filtro
+   */
+  public buscarPorFiltro(): void {
+    // console.log(this.rangoFechaCreacion);
+    if (this.rangoFechaCreacion.invalid
+      || (this.rangoFechaCreacion.controls['start'].value != null && this.rangoFechaCreacion.controls['end'].value == null)
+      || (this.rangoFechaCreacion.controls['start'].value == null && this.rangoFechaCreacion.controls['end'].value != null))
+      this._mensajesService.showWarning("Debe ingresar una fecha inicio y fin correctas para la busqueda");
+    else
+      this.reLoadGridPage();
+
   }
 
   /**
@@ -144,8 +168,10 @@ export class ReporteGananciasComponent implements OnInit, OnDestroy, AfterViewIn
       (!this.sort.active) ? 'fechaPedido' : this.sort.active,
       (!this.sort.direction) ? 'asc' : this.sort.direction,
       this.termino_busqueda.value,
-      (this.cmbTipoDependnecia.value == null) ? null : this.cmbTipoDependnecia.value.id,
-      (this.cmbUnidadAdministrativa.value == null) ? null : this.cmbUnidadAdministrativa.value.id
+      (this.rangoFechaCreacion.invalid && !this.rangoFechaCreacion.controls["start"].value) ? '' : dateFormat(this.rangoFechaCreacion.controls["start"].value, "yyyy-mm-dd"),
+      (this.rangoFechaCreacion.invalid && !this.rangoFechaCreacion.controls["end"].value) ? '' : dateFormat(this.rangoFechaCreacion.controls["end"].value, "yyyy-mm-dd")
+      // (this.cmbTipoDependnecia.value == null) ? null : this.cmbTipoDependnecia.value.id,
+      // (this.cmbUnidadAdministrativa.value == null) ? null : this.cmbUnidadAdministrativa.value.id
     );
   }
 

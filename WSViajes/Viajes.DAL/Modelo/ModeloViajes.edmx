@@ -351,6 +351,30 @@
           <Property Name="distancia_mayor" Type="int" Nullable="false" />
           <Property Name="costo_envio" Type="money" Nullable="false" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Viajes.dbo.V_RPT_GANANCIAS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="V_RPT_GANANCIAS">
+          <Key>
+            <PropertyRef Name="id_pedido" />
+            <PropertyRef Name="costo_envio" />
+            <PropertyRef Name="fecha_pedido" />
+            <PropertyRef Name="total_repartidor" />
+            <PropertyRef Name="total_local" />
+            <PropertyRef Name="total_empresa" />
+            <PropertyRef Name="tipo_pedido" />
+          </Key>
+          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="folio" Type="nvarchar" MaxLength="20" />
+          <Property Name="costo_envio" Type="money" Nullable="false" />
+          <Property Name="fecha_pedido" Type="date" Nullable="false" />
+          <Property Name="nombre_local" Type="nvarchar" MaxLength="300" />
+          <Property Name="costo_total" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="nombre_repartidor" Type="varchar" MaxLength="350" />
+          <Property Name="total_repartidor" Type="int" Nullable="false" />
+          <Property Name="total_local" Type="int" Nullable="false" />
+          <Property Name="total_empresa" Type="int" Nullable="false" />
+          <Property Name="tipo_pedido" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <Association Name="FK__CTL_ACCES__id_pe__34C8D9D1">
           <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
           <End Role="CTL_ACCESO_PERSONA" Type="Self.CTL_ACCESO_PERSONA" Multiplicity="*" />
@@ -950,6 +974,21 @@
           <EntitySet Name="TBL_QR_TIENDA" EntityType="Self.TBL_QR_TIENDA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_RECHAZO_PEDIDO" EntityType="Self.TBL_RECHAZO_PEDIDO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_TARIFA_ENVIO" EntityType="Self.TBL_TARIFA_ENVIO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="V_RPT_GANANCIAS" EntityType="Self.V_RPT_GANANCIAS" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_RPT_GANANCIAS].[id_pedido] AS [id_pedido], 
+    [V_RPT_GANANCIAS].[folio] AS [folio], 
+    [V_RPT_GANANCIAS].[costo_envio] AS [costo_envio], 
+    [V_RPT_GANANCIAS].[fecha_pedido] AS [fecha_pedido], 
+    [V_RPT_GANANCIAS].[nombre_local] AS [nombre_local], 
+    [V_RPT_GANANCIAS].[costo_total] AS [costo_total], 
+    [V_RPT_GANANCIAS].[nombre_repartidor] AS [nombre_repartidor], 
+    [V_RPT_GANANCIAS].[total_repartidor] AS [total_repartidor], 
+    [V_RPT_GANANCIAS].[total_local] AS [total_local], 
+    [V_RPT_GANANCIAS].[total_empresa] AS [total_empresa], 
+    [V_RPT_GANANCIAS].[tipo_pedido] AS [tipo_pedido]
+    FROM [dbo].[V_RPT_GANANCIAS] AS [V_RPT_GANANCIAS]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__CTL_ACCES__id_pe__34C8D9D1" Association="Self.FK__CTL_ACCES__id_pe__34C8D9D1">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
             <End Role="CTL_ACCESO_PERSONA" EntitySet="CTL_ACCESO_PERSONA" />
@@ -2167,6 +2206,7 @@
             <Parameter Name="RET_MENSAJEERROR" Mode="InOut" Type="String" />
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
           </FunctionImport>
+          <EntitySet Name="V_RPT_GANANCIAS" EntityType="ViajesModel.V_RPT_GANANCIAS" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2248,6 +2288,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="V_RPT_GANANCIAS">
+          <Key>
+            <PropertyRef Name="id_pedido" />
+            <PropertyRef Name="costo_envio" />
+            <PropertyRef Name="fecha_pedido" />
+            <PropertyRef Name="total_repartidor" />
+            <PropertyRef Name="total_local" />
+            <PropertyRef Name="total_empresa" />
+            <PropertyRef Name="tipo_pedido" />
+          </Key>
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <Property Name="folio" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="costo_envio" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="fecha_pedido" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="nombre_local" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="costo_total" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="nombre_repartidor" Type="String" MaxLength="350" FixedLength="false" Unicode="false" />
+          <Property Name="total_repartidor" Type="Int32" Nullable="false" />
+          <Property Name="total_local" Type="Int32" Nullable="false" />
+          <Property Name="total_empresa" Type="Int32" Nullable="false" />
+          <Property Name="tipo_pedido" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2652,6 +2714,23 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SP_ACTUALIZA_PASSWORD" FunctionName="ViajesModel.Store.SP_ACTUALIZA_PASSWORD" />
           <FunctionImportMapping FunctionImportName="SP_BANNER" FunctionName="ViajesModel.Store.SP_BANNER" />
+          <EntitySetMapping Name="V_RPT_GANANCIAS">
+            <EntityTypeMapping TypeName="ViajesModel.V_RPT_GANANCIAS">
+              <MappingFragment StoreEntitySet="V_RPT_GANANCIAS">
+                <ScalarProperty Name="tipo_pedido" ColumnName="tipo_pedido" />
+                <ScalarProperty Name="total_empresa" ColumnName="total_empresa" />
+                <ScalarProperty Name="total_local" ColumnName="total_local" />
+                <ScalarProperty Name="total_repartidor" ColumnName="total_repartidor" />
+                <ScalarProperty Name="nombre_repartidor" ColumnName="nombre_repartidor" />
+                <ScalarProperty Name="costo_total" ColumnName="costo_total" />
+                <ScalarProperty Name="nombre_local" ColumnName="nombre_local" />
+                <ScalarProperty Name="fecha_pedido" ColumnName="fecha_pedido" />
+                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
+                <ScalarProperty Name="folio" ColumnName="folio" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

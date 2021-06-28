@@ -14,6 +14,7 @@ import { BannerService } from 'src/app/core/services/banner.service';
 import { Banner } from 'src/app/classes/Banner';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBannerComponent } from 'src/app/management/modals/form-banner/form-banner.component';
+import { pid } from 'process';
 
 
 @AutoUnsubscribe()
@@ -87,12 +88,13 @@ export class BannersComponent implements OnInit, OnDestroy {
    * @param pElement
    * @param pId
    */
-  onChangeEstatus(pElement: any, pId: number) {
-    let request = new ActualizaEstatusGenericoRequest(pId, pElement.checked ? 1 : 0, this.storageService.getCurrentSession().Persona.IdPersona, this.storageService.getCurrentSession().Persona.IdPersona);
+  onChangeEstatus(pElement: any, pId: string) {
+    let request = new ActualizaEstatusGenericoRequest<string>(pId, pElement.checked ? 1 : 0, this.storageService.getCurrentSession().Persona.IdPersona);
     this._bannersService.actualizaEstatus(request).subscribe(
       respuesta => {
         if (respuesta.Exito) {
           this.getBanners();
+
           this.mensajes.showSuccess(respuesta.Mensaje);
         } else {
           pElement.checked = !pElement.checked;

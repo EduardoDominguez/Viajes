@@ -10,5 +10,6 @@ export class RptGanancia {
   public TotalRepartidor: number;
   public TotalEmpresa: number;
   public FechaPedido: Date;
+  public TipoPedido: string;
 
 }

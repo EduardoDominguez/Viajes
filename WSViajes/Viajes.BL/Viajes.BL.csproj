@@ -56,6 +56,7 @@
     <Compile Include="Producto\ProductoNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QR\QRNegocio.cs" />
+    <Compile Include="Reportes\ReportesNegocio.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Viajes.DAL\Viajes.DAL.csproj">

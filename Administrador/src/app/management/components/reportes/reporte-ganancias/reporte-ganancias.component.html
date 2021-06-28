@@ -27,8 +27,23 @@
             Filtros avanzados
           </mat-panel-description>
         </mat-expansion-panel-header>
-
-
+        <div class="row">
+          <mat-form-field class="col-sm-12 col-md-6">
+            <mat-label>Rango de fechas de pedidos (clic en el icono del calendario -> )</mat-label>
+            <mat-date-range-input [formGroup]="rangoFechaCreacion" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Fecha inicio">
+                <input matEndDate formControlName="end" placeholder="Fecha fin">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+            <mat-error *ngIf="rangoFechaCreacion.controls.start.hasError('matStartDateInvalid')">Fecha de inicio
+                inv&aacute;lida</mat-error>
+            <mat-error *ngIf="rangoFechaCreacion.controls.end.hasError('matEndDateInvalid')">Fecha fin
+                inv&aacute;lida</mat-error>
+        </mat-form-field>
+        </div>
+        <br/>
+        <button mat-raised-button color="primary" (click)="buscarPorFiltro()" class="col-sm-12 col-md-2">Buscar</button>
 
       </mat-expansion-panel>
     </mat-accordion>

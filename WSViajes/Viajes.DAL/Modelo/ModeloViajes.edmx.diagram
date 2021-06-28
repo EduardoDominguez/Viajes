@@ -65,6 +65,7 @@
         <AssociationConnector Association="ViajesModel.FK_RECHAZO_CTL_PERSONA" />
         <AssociationConnector Association="ViajesModel.FK_RECHAZO_M_PEDIDO" />
         <AssociationConnector Association="ViajesModel.FK_CTL_PERSONA_CTL_LOCAL" />
+        <EntityTypeShape EntityType="ViajesModel.V_RPT_GANANCIAS" Width="1.5" PointX="8.375" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

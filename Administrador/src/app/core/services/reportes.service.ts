@@ -50,9 +50,9 @@ export class ReportesService {
     params = params.append('sortDirection', sortDirection);
     params = params.append('palabraClave', palabraClave);
     if (fechaInicial)
-      params = params.append('fechaInicial', fechaInicial.toDateString());
+      params = params.append('fechaInicial', fechaInicial.toString());
     if (fechaFinal)
-      params = params.append('fechaFinal', fechaFinal.toDateString());
+      params = params.append('fechaFinal', fechaFinal.toString());
 
     httpOptions.params = params;
 
