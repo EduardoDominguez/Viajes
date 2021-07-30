@@ -110,9 +110,16 @@
               <span>Consulta de viajes</span>
             </a>
           </li>
-          <li>
+          <!-- <li>
             <a [routerLink]="['reportes/balance']" [routerLinkActive]="['router-link-active']"
-              matTooltip="Enviar mensaje al repartidor" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              matTooltip="Reporte de ganancias" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
+              <i class="fas fa-balance-scale"></i>
+              <span>Balance</span>
+            </a>
+          </li> -->
+          <li>
+            <a [routerLink]="['reportes/general']" [routerLinkActive]="['router-link-active']"
+              matTooltip="Reporte general de pedidos" [matTooltipPosition]='globales.POSITION_OPTIONS[5]'>
               <i class="fas fa-balance-scale"></i>
               <span>Balance</span>
             </a>

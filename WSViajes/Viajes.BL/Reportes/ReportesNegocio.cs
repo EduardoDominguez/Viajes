@@ -25,5 +25,19 @@ namespace Viajes.BL.Banner
             }
         }
 
+        public async Task<E_LISTA_PAGINADA<E_RPT_GENERAL>> ConsultaReporteGeneral(E_FILTROS_REPORTE_GENERAL pFiltros)
+        {
+            try
+            {
+                ReportesOperaciones pDatos = new ReportesOperaciones();
+                var pResultado = await pDatos.ConsultaReporteGeneral(pFiltros);
+                return pResultado;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

@@ -1,13 +1,13 @@
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { Observable, BehaviorSubject, of } from "rxjs";
 import { catchError, finalize, debounceTime } from "rxjs/operators";
-import { GetRptGananciaListPaginatedResponse } from '../../classes/response/GetRptGananciaListPaginatedResponse';
+import { GetRptGeneralListPaginatedResponse } from '../../classes/response/GetRptGeneralListPaginatedResponse';
 import { ReportesService } from '../services/reportes.service';
-import { RptGanancia } from '../../classes/RptGanancia';
+import { RptGeneral } from '../../classes/RptGeneral';
 
-export class RptGananciaDataSource implements DataSource<RptGanancia> {
+export class RptGeneralDataSource implements DataSource<RptGeneral> {
 
-    private rptGananciaSubject = new BehaviorSubject<RptGanancia[]>([]);
+    private rptGeneralSubject = new BehaviorSubject<RptGeneral[]>([]);
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -21,7 +21,7 @@ export class RptGananciaDataSource implements DataSource<RptGanancia> {
 
     }
 
-    loadRptGanancia(
+    loadRptGeneral(
         pageIndex: number,
         pageSize: number,
         sortColumn: string,
@@ -33,29 +33,24 @@ export class RptGananciaDataSource implements DataSource<RptGanancia> {
 
         this.loadingSubject.next(true);
 
-        this._reportesService.getListPaginatedGanancias(pageIndex, pageSize, sortColumn, sortDirection, palabraClave, fechaInicial, fechaFinal)
+        this._reportesService.getListPaginatedGeneral(pageIndex, pageSize, sortColumn, sortDirection, palabraClave, fechaInicial, fechaFinal)
             .pipe(
                 catchError(() => of([])),
                 finalize(() => this.loadingSubject.next(false))
             )
-            .subscribe((response : GetRptGananciaListPaginatedResponse) => {
-                if(response.Exito){
-                  this.rptGananciaSubject.next(response.Data.Rows)
-                  this.totalRowsSubject.next(response.Data.TotalRows)
-                }else{
-                  this.rptGananciaSubject.next(new Array<RptGanancia>())
-                  this.totalRowsSubject.next(0)
-                }
-
+            .subscribe(response => {
+                console.log(response)
+                this.rptGeneralSubject.next((response as GetRptGeneralListPaginatedResponse).Data.Rows)
+                this.totalRowsSubject.next((response as GetRptGeneralListPaginatedResponse).Data.TotalRows)
             });
     }
 
-    connect(collectionViewer: CollectionViewer): Observable<RptGanancia[]> {
-        return this.rptGananciaSubject.asObservable();
+    connect(collectionViewer: CollectionViewer): Observable<RptGeneral[]> {
+        return this.rptGeneralSubject.asObservable();
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
-        this.rptGananciaSubject.complete();
+        this.rptGeneralSubject.complete();
         this.loadingSubject.complete();
         this.totalRowsSubject.complete();
     }

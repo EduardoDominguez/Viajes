@@ -375,6 +375,37 @@ advertencia 6002: La tabla o vista 'Viajes.dbo.V_RPT_GANANCIAS' no tiene definid
           <Property Name="total_empresa" Type="int" Nullable="false" />
           <Property Name="tipo_pedido" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Viajes.dbo.V_RPT_GENERAL' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="V_RPT_GENERAL">
+          <Key>
+            <PropertyRef Name="id_pedido" />
+            <PropertyRef Name="fecha_pedido" />
+            <PropertyRef Name="direccion_entrega" />
+            <PropertyRef Name="nombre_local" />
+            <PropertyRef Name="nombre_responsable_local" />
+            <PropertyRef Name="nombre_tipo_local" />
+            <PropertyRef Name="nombre_metodo_pago" />
+            <PropertyRef Name="costo_envio" />
+            <PropertyRef Name="tipo_pedido" />
+          </Key>
+          <Property Name="id_pedido" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="folio" Type="nvarchar" MaxLength="20" />
+          <Property Name="fecha_pedido" Type="date" Nullable="false" />
+          <Property Name="nombre_cliente" Type="varchar" MaxLength="350" />
+          <Property Name="email_cliente" Type="varchar" MaxLength="100" />
+          <Property Name="direccion_entrega" Type="varchar" MaxLength="614" Nullable="false" />
+          <Property Name="nombre_local" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="nombre_responsable_local" Type="varchar" MaxLength="350" Nullable="false" />
+          <Property Name="detalle_pedido" Type="nvarchar(max)" />
+          <Property Name="nombre_tipo_local" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="nombre_metodo_pago" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="costo_total" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="total_local" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="costo_envio" Type="money" Nullable="false" />
+          <Property Name="nombre_repartidor" Type="varchar" MaxLength="350" />
+          <Property Name="tipo_pedido" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <Association Name="FK__CTL_ACCES__id_pe__34C8D9D1">
           <End Role="CTL_PERSONA" Type="Self.CTL_PERSONA" Multiplicity="1" />
           <End Role="CTL_ACCESO_PERSONA" Type="Self.CTL_ACCESO_PERSONA" Multiplicity="*" />
@@ -988,6 +1019,26 @@ advertencia 6002: La tabla o vista 'Viajes.dbo.V_RPT_GANANCIAS' no tiene definid
     [V_RPT_GANANCIAS].[total_empresa] AS [total_empresa], 
     [V_RPT_GANANCIAS].[tipo_pedido] AS [tipo_pedido]
     FROM [dbo].[V_RPT_GANANCIAS] AS [V_RPT_GANANCIAS]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_RPT_GENERAL" EntityType="Self.V_RPT_GENERAL" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_RPT_GENERAL].[id_pedido] AS [id_pedido], 
+    [V_RPT_GENERAL].[folio] AS [folio], 
+    [V_RPT_GENERAL].[fecha_pedido] AS [fecha_pedido], 
+    [V_RPT_GENERAL].[nombre_cliente] AS [nombre_cliente], 
+    [V_RPT_GENERAL].[email_cliente] AS [email_cliente], 
+    [V_RPT_GENERAL].[direccion_entrega] AS [direccion_entrega], 
+    [V_RPT_GENERAL].[nombre_local] AS [nombre_local], 
+    [V_RPT_GENERAL].[nombre_responsable_local] AS [nombre_responsable_local], 
+    [V_RPT_GENERAL].[detalle_pedido] AS [detalle_pedido], 
+    [V_RPT_GENERAL].[nombre_tipo_local] AS [nombre_tipo_local], 
+    [V_RPT_GENERAL].[nombre_metodo_pago] AS [nombre_metodo_pago], 
+    [V_RPT_GENERAL].[costo_total] AS [costo_total], 
+    [V_RPT_GENERAL].[total_local] AS [total_local], 
+    [V_RPT_GENERAL].[costo_envio] AS [costo_envio], 
+    [V_RPT_GENERAL].[nombre_repartidor] AS [nombre_repartidor], 
+    [V_RPT_GENERAL].[tipo_pedido] AS [tipo_pedido]
+    FROM [dbo].[V_RPT_GENERAL] AS [V_RPT_GENERAL]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK__CTL_ACCES__id_pe__34C8D9D1" Association="Self.FK__CTL_ACCES__id_pe__34C8D9D1">
             <End Role="CTL_PERSONA" EntitySet="CTL_PERSONA" />
@@ -2207,6 +2258,7 @@ advertencia 6002: La tabla o vista 'Viajes.dbo.V_RPT_GANANCIAS' no tiene definid
             <Parameter Name="RET_VALORDEVUELTO" Mode="InOut" Type="String" />
           </FunctionImport>
           <EntitySet Name="V_RPT_GANANCIAS" EntityType="ViajesModel.V_RPT_GANANCIAS" />
+          <EntitySet Name="V_RPT_GENERAL" EntityType="ViajesModel.V_RPT_GENERAL" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2308,6 +2360,35 @@ advertencia 6002: La tabla o vista 'Viajes.dbo.V_RPT_GANANCIAS' no tiene definid
           <Property Name="total_repartidor" Type="Int32" Nullable="false" />
           <Property Name="total_local" Type="Int32" Nullable="false" />
           <Property Name="total_empresa" Type="Int32" Nullable="false" />
+          <Property Name="tipo_pedido" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_RPT_GENERAL">
+          <Key>
+            <PropertyRef Name="id_pedido" />
+            <PropertyRef Name="fecha_pedido" />
+            <PropertyRef Name="direccion_entrega" />
+            <PropertyRef Name="nombre_local" />
+            <PropertyRef Name="nombre_responsable_local" />
+            <PropertyRef Name="nombre_tipo_local" />
+            <PropertyRef Name="nombre_metodo_pago" />
+            <PropertyRef Name="costo_envio" />
+            <PropertyRef Name="tipo_pedido" />
+          </Key>
+          <Property Name="id_pedido" Type="Guid" Nullable="false" />
+          <Property Name="folio" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_pedido" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="nombre_cliente" Type="String" MaxLength="350" FixedLength="false" Unicode="false" />
+          <Property Name="email_cliente" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="direccion_entrega" Type="String" Nullable="false" MaxLength="614" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_local" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="nombre_responsable_local" Type="String" Nullable="false" MaxLength="350" FixedLength="false" Unicode="false" />
+          <Property Name="detalle_pedido" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nombre_tipo_local" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="nombre_metodo_pago" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="costo_total" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="total_local" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="costo_envio" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="nombre_repartidor" Type="String" MaxLength="350" FixedLength="false" Unicode="false" />
           <Property Name="tipo_pedido" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
@@ -2726,6 +2807,28 @@ advertencia 6002: La tabla o vista 'Viajes.dbo.V_RPT_GANANCIAS' no tiene definid
                 <ScalarProperty Name="nombre_local" ColumnName="nombre_local" />
                 <ScalarProperty Name="fecha_pedido" ColumnName="fecha_pedido" />
                 <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
+                <ScalarProperty Name="folio" ColumnName="folio" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_RPT_GENERAL">
+            <EntityTypeMapping TypeName="ViajesModel.V_RPT_GENERAL">
+              <MappingFragment StoreEntitySet="V_RPT_GENERAL">
+                <ScalarProperty Name="tipo_pedido" ColumnName="tipo_pedido" />
+                <ScalarProperty Name="nombre_repartidor" ColumnName="nombre_repartidor" />
+                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
+                <ScalarProperty Name="total_local" ColumnName="total_local" />
+                <ScalarProperty Name="costo_total" ColumnName="costo_total" />
+                <ScalarProperty Name="nombre_metodo_pago" ColumnName="nombre_metodo_pago" />
+                <ScalarProperty Name="nombre_tipo_local" ColumnName="nombre_tipo_local" />
+                <ScalarProperty Name="detalle_pedido" ColumnName="detalle_pedido" />
+                <ScalarProperty Name="nombre_responsable_local" ColumnName="nombre_responsable_local" />
+                <ScalarProperty Name="nombre_local" ColumnName="nombre_local" />
+                <ScalarProperty Name="direccion_entrega" ColumnName="direccion_entrega" />
+                <ScalarProperty Name="email_cliente" ColumnName="email_cliente" />
+                <ScalarProperty Name="nombre_cliente" ColumnName="nombre_cliente" />
+                <ScalarProperty Name="fecha_pedido" ColumnName="fecha_pedido" />
                 <ScalarProperty Name="folio" ColumnName="folio" />
                 <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
               </MappingFragment>

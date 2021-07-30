@@ -73,5 +73,57 @@ namespace WSViajes.Controllers
 
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
         }
+
+        [HttpGet]
+        [Route("RptGeneral")]
+        public async Task<HttpResponseMessage> RptGeneral([FromUri] FiltrosReporteGeneral pFiltros)
+        {
+            var respuesta = new ConsultaPorIdResponse<E_LISTA_PAGINADA<E_RPT_GENERAL>> { };
+            var strMetodo = "WSViajes - RptGeneral ";
+            string sid = Guid.NewGuid().ToString();
+
+            try
+            {
+                //Initialize the mapper
+                var config = new MapperConfiguration(cfg =>
+                        cfg.CreateMap<FiltrosReporteGeneral, E_FILTROS_REPORTE_GENERAL>()
+                    );
+
+                //Using automapper
+                var mapper = new Mapper(config);
+                var filtrosMap = mapper.Map<E_FILTROS_REPORTE_GENERAL>(pFiltros);
+
+                respuesta.Data = await new ReportesNegocio().ConsultaReporteGeneral(filtrosMap);
+
+                if (respuesta.Data.TotalRows > 0)
+                {
+                    respuesta.Exito = true;
+                    respuesta.Mensaje = $"Registros cargados con éxito";
+                }
+                else
+                {
+                    respuesta.CodigoError = 10000;
+                    respuesta.Mensaje = $"No existen banners.";
+                }
+
+
+            }
+            catch (ServiceException Ex)
+            {
+                respuesta.CodigoError = Ex.Codigo;
+                respuesta.Mensaje = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                string strErrGUI = Guid.NewGuid().ToString();
+                string strMensaje = "Error Interno del Servicio [GUID: " + strErrGUI + "].";
+                Log.Error(Ex, "[" + strMetodo + "]" + "[SID:" + sid + "]" + strMensaje);
+
+                respuesta.CodigoError = 10001;
+                respuesta.Mensaje = "ERROR INTERNO DEL SERVICIO [" + strErrGUI + "]";
+            }
+
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, respuesta);
+        }
     }
 }

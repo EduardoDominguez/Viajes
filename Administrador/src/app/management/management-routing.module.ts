@@ -21,6 +21,7 @@ import { UsuariosAddComponent } from './components/usuarios-add/usuarios-add.com
 import { BannersComponent } from './components/banners/banners.component';
 import { TipoLocalComponent } from './components/tipo-local/tipo-local.component';
 import { ReporteGananciasComponent } from './components/reportes/reporte-ganancias/reporte-ganancias.component';
+import { ReporteGeneralComponent } from './components/reportes/reporte-general/reporte-general.component';
 
 
 const routesChild: Routes = [
@@ -55,6 +56,7 @@ const routesChild: Routes = [
 
       { path: 'pedidos/consulta', component: PedidosComponent, canActivate: [AuthGuardService] },
       { path: 'reportes/balance', component: ReporteGananciasComponent, canActivate: [AuthGuardService] },
+      { path: 'reportes/general', component: ReporteGeneralComponent, canActivate: [AuthGuardService] },
       // { path: 'reportes/ganancias', component: RptGananciaDataSource, canActivate: [AuthGuardService] },
       { path: 'pedidos/:id', component: PedidosViewIdComponent,  canActivate: [AuthGuardService] },
 

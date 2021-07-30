@@ -56,6 +56,7 @@
     <Compile Include="Extras\E_EXTRAS_PRODUCTO.cs" />
     <Compile Include="Extras\E_FILTROS_REPORTE.cs" />
     <Compile Include="Extras\E_FILTROS_REPORTE_GANANCIAS.cs" />
+    <Compile Include="Extras\E_FILTROS_REPORTE_GENERAL.cs" />
     <Compile Include="Extras\E_LISTA_PAGINADA.cs" />
     <Compile Include="Extras\E_LOCAL.cs" />
     <Compile Include="Extras\E_LOGIN.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Extras\E_RECHAZO_PEDIDO.cs" />
     <Compile Include="Extras\E_RESPOSE_DISTANCE.cs" />
     <Compile Include="Extras\E_RPT_GANANCIAS.cs" />
+    <Compile Include="Extras\E_RPT_GENERAL.cs" />
     <Compile Include="Extras\E_TAFIRA_ENVIO.cs" />
     <Compile Include="Extras\E_TIPO_LOCAL.cs" />
     <Compile Include="Interfaz\ICRUD.cs" />

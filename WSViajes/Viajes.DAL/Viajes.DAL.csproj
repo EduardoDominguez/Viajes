@@ -300,6 +300,9 @@
     <Compile Include="Modelo\V_RPT_GANANCIAS.cs">
       <DependentUpon>ModeloViajes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\V_RPT_GENERAL.cs">
+      <DependentUpon>ModeloViajes.tt</DependentUpon>
+    </Compile>
     <Compile Include="Pedido\DetallePedidoOperaciones.cs" />
     <Compile Include="Pedido\DetallePedidoPersonalizadoOperaciones.cs" />
     <Compile Include="Pedido\EstatusOperaciones.cs" />

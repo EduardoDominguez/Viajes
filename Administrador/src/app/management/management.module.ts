@@ -45,6 +45,7 @@ import { TipoLocalComponent } from './components/tipo-local/tipo-local.component
 import { GenericConfirmDialogComponent } from './modals/generic-confirm-dialog/generic-confirm-dialog.component';
 import { ReporteGananciasComponent } from './components/reportes/reporte-ganancias/reporte-ganancias.component';
 import { FormBannerComponent } from './modals/form-banner/form-banner.component';
+import { ReporteGeneralComponent } from './components/reportes/reporte-general/reporte-general.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { FormBannerComponent } from './modals/form-banner/form-banner.component'
     TipoLocalComponent,
     GenericConfirmDialogComponent,
     ReporteGananciasComponent,
-    FormBannerComponent,],
+    FormBannerComponent,
+    ReporteGeneralComponent,],
   imports: [
     CommonModule,
     ManagementRoutingModule,
